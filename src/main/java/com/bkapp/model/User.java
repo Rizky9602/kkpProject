@@ -1,6 +1,6 @@
 package com.bkapp.model;
 
-public class user {
+public class User {
     private String idUser;
     private String userName;
     private String nama;

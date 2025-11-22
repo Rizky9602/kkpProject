@@ -5,13 +5,19 @@ public class Siswa {
     private String nis;
     private String namaSiswa;
     private String kelas;
+    private int angkatan;
     private int totalPoin;
 
-    public Siswa(int idSiswa, String nis, String namaSiswa, String kelas, int totalPoin) {
+    public Siswa(){
+
+    }
+
+    public Siswa(int idSiswa, String nis, String namaSiswa, String kelas,int angkatan, int totalPoin) {
         this.idSiswa = idSiswa;
         this.nis = nis;
         this.namaSiswa = namaSiswa;
         this.kelas = kelas;
+        this.angkatan = angkatan;
         this.totalPoin = totalPoin;
     }
 
@@ -53,5 +59,18 @@ public class Siswa {
 
     public void setTotalPoin(int totalPoin) {
         this.totalPoin = totalPoin;
+    }
+
+    public int getAngkatan() {
+        return angkatan;
+    }
+
+    public void setAngkatan(int angkatan) {
+        this.angkatan = angkatan;
+    }
+
+    @Override
+    public String toString() {
+        return nis + " - " + namaSiswa;
     }
 }

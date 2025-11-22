@@ -1,4 +1,4 @@
-package com.bkapp.dao; // (Sesuaikan nama package Anda)
+package com.bkapp.koneksi; // (Sesuaikan nama package Anda)
 
 import java.sql.Connection;
 import java.sql.DriverManager;

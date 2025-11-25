@@ -195,6 +195,7 @@ public class home extends javax.swing.JFrame {
 
     private void BTNkelolaDSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNkelolaDSActionPerformed
         // TODO add your handling code here:
+        home;
     }//GEN-LAST:event_BTNkelolaDSActionPerformed
 
     private void BTNlaporanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNlaporanActionPerformed

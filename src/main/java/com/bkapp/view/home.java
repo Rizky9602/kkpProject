@@ -65,6 +65,7 @@ public class home extends javax.swing.JFrame {
         jPanel1.setPreferredSize(new java.awt.Dimension(150, 750));
 
         jLabel1.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/logoassalam.jpg"))); // NOI18N
 
         BTNdashboard.setBackground(new java.awt.Color(110, 203, 246));
         BTNdashboard.setFont(new java.awt.Font("Sans Serif Collection", 1, 14)); // NOI18N
@@ -136,7 +137,7 @@ public class home extends javax.swing.JFrame {
                 .addComponent(BTNkelolaPS)
                 .addGap(54, 54, 54)
                 .addComponent(BTNlaporan, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(359, Short.MAX_VALUE))
+                .addContainerGap(252, Short.MAX_VALUE))
         );
 
         jPanel3.setBackground(new java.awt.Color(110, 203, 246));
@@ -194,7 +195,7 @@ public class home extends javax.swing.JFrame {
 
     private void BTNkelolaDSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNkelolaDSActionPerformed
         // TODO add your handling code here:
-        
+        home;
     }//GEN-LAST:event_BTNkelolaDSActionPerformed
 
     private void BTNlaporanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNlaporanActionPerformed

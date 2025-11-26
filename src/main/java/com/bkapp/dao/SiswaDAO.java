@@ -19,9 +19,6 @@ public class SiswaDAO {
         this.conn = KoneksiDB.getKoneksi();
     }
 
-    /**
-     * Mengambil semua data siswa untuk ditampilkan di Tabel Dashboard
-     */
     public List<Siswa> getAllSiswa() {
         List<Siswa> listSiswa = new ArrayList<>();
         String sql = "SELECT * FROM tbl_siswa ORDER BY kelas ASC, nama_siswa ASC";
@@ -47,10 +44,6 @@ public class SiswaDAO {
         return listSiswa;
     }
 
-    /**
-     * Mencari Siswa berdasarkan NIS.
-     * Digunakan saat Guru BK mengetik NIS di form input pelanggaran.
-     */
     public Siswa getSiswaByNIS(String nis) {
         Siswa s = null;
         String sql = "SELECT * FROM tbl_siswa WHERE nis = ?";
@@ -75,11 +68,6 @@ public class SiswaDAO {
         return s;
     }
 
-    /**
-     * Update Poin Siswa (Bisa tambah atau kurang).
-     * Logika "tidak boleh negatif" sebaiknya dicek SEBELUM memanggil fungsi ini
-     * atau bisa juga ditangani di dalam query SQL-nya, tapi kita handle via Java saja.
-     */
     public boolean updatePoinSiswa(int idSiswa, int poinBaru) {
         // Mencegah poin negatif di level database
         if (poinBaru < 0) {

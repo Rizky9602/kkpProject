@@ -31,7 +31,6 @@ public class UserDAO {
         String sql = "SELECT * FROM tbl_user WHERE username = ? AND password = ?";
 
         try {
-            // Kita ubah password inputan menjadi MD5 dulu agar cocok dengan database
             String passwordHash = hashMD5(password);
 
             PreparedStatement ps = conn.prepareStatement(sql);
@@ -41,7 +40,6 @@ public class UserDAO {
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-                // Jika ketemu, masukkan data ke object User
                 user = new User();
                 user.setIdUser(rs.getInt("id_user"));
                 user.setUsername(rs.getString("username"));
@@ -57,10 +55,6 @@ public class UserDAO {
         return user;
     }
 
-    /**
-     * Fungsi bantuan untuk mengubah text menjadi Hash MD5
-     * Karena kita menyimpan password dalam bentuk terenkripsi
-     */
     private String hashMD5(String password) {
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");

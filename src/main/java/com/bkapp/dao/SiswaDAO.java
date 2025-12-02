@@ -89,4 +89,27 @@ public class SiswaDAO {
             return false;
         }
     }
+    
+    public List<Siswa> getSiswaBermasalah() {
+        List<Siswa> listSiswa = new ArrayList<>();
+        // Query filter poin >= 50 dan diurutkan dari yang poinnya paling besar
+        String sql = "SELECT * FROM tbl_siswa WHERE total_poin_aktif >= 50 ORDER BY total_poin_aktif DESC";
+        
+        try {
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            
+            while (rs.next()) {
+                Siswa s = new Siswa();
+                s.setNamaSiswa(rs.getString("nama_siswa"));
+                s.setKelas(rs.getString("kelas"));
+                s.setTotalPoin(rs.getInt("total_poin_aktif"));
+                
+                listSiswa.add(s);
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Gagal Ambil Data Notifikasi: " + e.getMessage());
+        }
+        return listSiswa;
+    }
 }

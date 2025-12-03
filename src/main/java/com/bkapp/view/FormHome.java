@@ -31,11 +31,12 @@ public class FormHome extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
+        btn_Ppelanggaran = new javax.swing.JButton();
         btn_dashboard = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        btn_Pprestasi = new javax.swing.JButton();
         btn_konsultasi = new javax.swing.JButton();
         btn_laporan = new javax.swing.JButton();
+        btn_kelola = new javax.swing.JButton();
         pn_utama = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -47,7 +48,7 @@ public class FormHome extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(248, 248, 248));
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/logoassalam.jpg"))); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/logoassalam.png"))); // NOI18N
 
         jLabel2.setFont(new java.awt.Font("Sans Serif Collection", 1, 36)); // NOI18N
         jLabel2.setText("SMK Assalam Depok");
@@ -60,14 +61,14 @@ public class FormHome extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(24, 24, 24)
                 .addComponent(jLabel1)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(332, 332, 332)
+                        .addGap(314, 314, 314)
                         .addComponent(jLabel2))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(425, 425, 425)
+                        .addGap(407, 407, 407)
                         .addComponent(jLabel3)))
                 .addContainerGap(380, Short.MAX_VALUE))
         );
@@ -91,12 +92,12 @@ public class FormHome extends javax.swing.JFrame {
         jPanel2.setBackground(new java.awt.Color(110, 203, 246));
         jPanel2.setPreferredSize(new java.awt.Dimension(150, 626));
 
-        jButton1.setFont(new java.awt.Font("Sans Serif Collection", 1, 12)); // NOI18N
-        jButton1.setText("Poin Pelanggaran");
-        jButton1.setBorder(null);
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btn_Ppelanggaran.setFont(new java.awt.Font("Sans Serif Collection", 1, 12)); // NOI18N
+        btn_Ppelanggaran.setText("Poin Pelanggaran");
+        btn_Ppelanggaran.setBorder(null);
+        btn_Ppelanggaran.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btn_PpelanggaranActionPerformed(evt);
             }
         });
 
@@ -109,9 +110,14 @@ public class FormHome extends javax.swing.JFrame {
             }
         });
 
-        jButton3.setFont(new java.awt.Font("Sans Serif Collection", 1, 12)); // NOI18N
-        jButton3.setText("Poin Prestasi");
-        jButton3.setBorder(null);
+        btn_Pprestasi.setFont(new java.awt.Font("Sans Serif Collection", 1, 12)); // NOI18N
+        btn_Pprestasi.setText("Poin Prestasi");
+        btn_Pprestasi.setBorder(null);
+        btn_Pprestasi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_PprestasiActionPerformed(evt);
+            }
+        });
 
         btn_konsultasi.setFont(new java.awt.Font("Sans Serif Collection", 1, 12)); // NOI18N
         btn_konsultasi.setText("Konsultasi");
@@ -131,6 +137,15 @@ public class FormHome extends javax.swing.JFrame {
             }
         });
 
+        btn_kelola.setFont(new java.awt.Font("Sans Serif Collection", 1, 12)); // NOI18N
+        btn_kelola.setText("Kelola Poin");
+        btn_kelola.setBorder(null);
+        btn_kelola.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_kelolaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -139,10 +154,11 @@ public class FormHome extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btn_konsultasi, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 138, Short.MAX_VALUE)
+                    .addComponent(btn_Ppelanggaran, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 138, Short.MAX_VALUE)
                     .addComponent(btn_dashboard, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btn_laporan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btn_Pprestasi, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btn_laporan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btn_kelola, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -153,12 +169,14 @@ public class FormHome extends javax.swing.JFrame {
                 .addGap(35, 35, 35)
                 .addComponent(btn_konsultasi, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(35, 35, 35)
-                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btn_Pprestasi, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(35, 35, 35)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btn_Ppelanggaran, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(35, 35, 35)
+                .addComponent(btn_kelola, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(35, 35, 35)
                 .addComponent(btn_laporan, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(245, Short.MAX_VALUE))
+                .addContainerGap(170, Short.MAX_VALUE))
         );
 
         getContentPane().add(jPanel2, java.awt.BorderLayout.LINE_START);
@@ -178,9 +196,13 @@ public class FormHome extends javax.swing.JFrame {
         pn_utama.repaint();
     }//GEN-LAST:event_formWindowOpened
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void btn_PpelanggaranActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_PpelanggaranActionPerformed
+        pn_utama.removeAll();
+        pn_utama.setLayout(new java.awt.BorderLayout());
+        pn_utama.add(new PanelPelanggaran(), java.awt.BorderLayout.CENTER);
+        pn_utama.revalidate();
+        pn_utama.repaint();
+    }//GEN-LAST:event_btn_PpelanggaranActionPerformed
 
     private void btn_dashboardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_dashboardActionPerformed
         pn_utama.removeAll();
@@ -205,6 +227,22 @@ public class FormHome extends javax.swing.JFrame {
         pn_utama.revalidate();
         pn_utama.repaint();
     }//GEN-LAST:event_btn_laporanActionPerformed
+
+    private void btn_PprestasiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_PprestasiActionPerformed
+        pn_utama.removeAll();
+        pn_utama.setLayout(new java.awt.BorderLayout());
+        pn_utama.add(new PanelPrestasi(), java.awt.BorderLayout.CENTER);
+        pn_utama.revalidate();
+        pn_utama.repaint();
+    }//GEN-LAST:event_btn_PprestasiActionPerformed
+
+    private void btn_kelolaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_kelolaActionPerformed
+        pn_utama.removeAll();
+        pn_utama.setLayout(new java.awt.BorderLayout());
+        pn_utama.add(new PanelKelola(), java.awt.BorderLayout.CENTER);
+        pn_utama.revalidate();
+        pn_utama.repaint();
+    }//GEN-LAST:event_btn_kelolaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -233,8 +271,6 @@ public class FormHome extends javax.swing.JFrame {
         }
         //</editor-fold>
         //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -245,11 +281,12 @@ public class FormHome extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btn_Ppelanggaran;
+    private javax.swing.JButton btn_Pprestasi;
     private javax.swing.JButton btn_dashboard;
+    private javax.swing.JButton btn_kelola;
     private javax.swing.JButton btn_konsultasi;
     private javax.swing.JButton btn_laporan;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

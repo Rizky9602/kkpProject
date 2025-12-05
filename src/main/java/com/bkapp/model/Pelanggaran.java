@@ -1,36 +1,40 @@
 package com.bkapp.model;
 
 public class Pelanggaran {
-    private int idPelanggaran;
-    private String kodePelanggaran;
+    // Kita sesuaikan dengan tabel di screenshot Anda
+    private String kodePelanggaran; // Ini sekarang jadi Primary Key
     private String namaPelanggaran;
+    private String sanksi;          // Kolom Baru
     private int poin;
 
+    // Constructor Kosong
     public Pelanggaran() {
     }
 
-    public Pelanggaran(int idPelanggaran, String kodePelanggaran, String namaPelanggaran, int poin) {
-        this.idPelanggaran = idPelanggaran;
+    // Constructor Lengkap
+    public Pelanggaran(String kodePelanggaran, String namaPelanggaran, String sanksi, int poin) {
         this.kodePelanggaran = kodePelanggaran;
         this.namaPelanggaran = namaPelanggaran;
+        this.sanksi = sanksi;
         this.poin = poin;
     }
 
     // Getter dan Setter
-    public int getIdPelanggaran() { return idPelanggaran; }
-    public void setIdPelanggaran(int idPelanggaran) { this.idPelanggaran = idPelanggaran; }
-
     public String getKodePelanggaran() { return kodePelanggaran; }
     public void setKodePelanggaran(String kodePelanggaran) { this.kodePelanggaran = kodePelanggaran; }
 
     public String getNamaPelanggaran() { return namaPelanggaran; }
     public void setNamaPelanggaran(String namaPelanggaran) { this.namaPelanggaran = namaPelanggaran; }
 
+    public String getSanksi() { return sanksi; }
+    public void setSanksi(String sanksi) { this.sanksi = sanksi; }
+
     public int getPoin() { return poin; }
     public void setPoin(int poin) { this.poin = poin; }
-
+    
+    // Untuk tampilan di ComboBox nanti
     @Override
     public String toString() {
-        return namaPelanggaran + " (" + poin + " Poin)";
+        return kodePelanggaran + " - " + namaPelanggaran + " (" + poin + " Poin)";
     }
 }

@@ -49,7 +49,7 @@ public class FormHome extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(248, 248, 248));
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/logoassalam.jpg"))); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/logoassalam.png"))); // NOI18N
 
         jLabel2.setFont(new java.awt.Font("Sans Serif Collection", 1, 36)); // NOI18N
         jLabel2.setText("SMK Assalam Depok");

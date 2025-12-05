@@ -157,9 +157,12 @@ public class PanelPelanggaran extends javax.swing.JPanel {
         txtSanksi.setBackground(new java.awt.Color(110, 203, 246));
         txtSanksi.setColumns(20);
         txtSanksi.setFont(new java.awt.Font("Sans Serif Collection", 0, 12)); // NOI18N
+        txtSanksi.setLineWrap(true);
         txtSanksi.setRows(3);
         txtSanksi.setTabSize(7);
+        txtSanksi.setWrapStyleWord(true);
         txtSanksi.setAutoscrolls(false);
+        txtSanksi.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jScrollPane1.setViewportView(txtSanksi);
 
         jLabel1.setFont(new java.awt.Font("Sans Serif Collection", 1, 24)); // NOI18N
@@ -169,37 +172,37 @@ public class PanelPelanggaran extends javax.swing.JPanel {
         tblRiwayat.setFont(new java.awt.Font("Sans Serif Collection", 0, 12)); // NOI18N
         tblRiwayat.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "Kode Pelanggaran", "Jenis Pelanggaran", "Poin"
+                "Tanggal", "Kode Pelanggaran", "Jenis Pelanggaran", "Poin"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.Object.class, java.lang.Integer.class
+                java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Integer.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false
+                false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -221,6 +224,11 @@ public class PanelPelanggaran extends javax.swing.JPanel {
         txtTotalPoin.setEditable(false);
         txtTotalPoin.setBackground(new java.awt.Color(110, 203, 246));
         txtTotalPoin.setFont(new java.awt.Font("Sans Serif Collection", 0, 12)); // NOI18N
+        txtTotalPoin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtTotalPoinActionPerformed(evt);
+            }
+        });
 
         jLabel10.setFont(new java.awt.Font("Sans Serif Collection", 0, 12)); // NOI18N
         jLabel10.setText("Input Foto");
@@ -263,110 +271,118 @@ public class PanelPelanggaran extends javax.swing.JPanel {
                 .addGroup(sssLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(sssLayout.createSequentialGroup()
                         .addGap(416, 416, 416)
-                        .addGroup(sssLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel1)
-                            .addGroup(sssLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(sssLayout.createSequentialGroup()
-                                    .addGap(6, 6, 6)
-                                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(sssLayout.createSequentialGroup()
-                                    .addComponent(jLabel10)
-                                    .addGap(12, 12, 12)
-                                    .addComponent(txtFoto, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(btn_pilihfoto, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 326, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jLabel1))
+                    .addGroup(sssLayout.createSequentialGroup()
+                        .addGap(813, 813, 813)
+                        .addComponent(jLabel2))
                     .addGroup(sssLayout.createSequentialGroup()
                         .addGroup(sssLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, sssLayout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(237, 237, 237))
                             .addGroup(sssLayout.createSequentialGroup()
                                 .addGap(22, 22, 22)
                                 .addGroup(sssLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(sssLayout.createSequentialGroup()
-                                        .addComponent(jLabel3)
-                                        .addGap(104, 104, 104)
-                                        .addComponent(cbKelas, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(35, 35, 35)
-                                        .addComponent(jLabel9)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(txtTotalPoin, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jLabel6)
                                     .addGroup(sssLayout.createSequentialGroup()
                                         .addGroup(sssLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel5)
-                                            .addComponent(jLabel4)
-                                            .addComponent(jLabel6)
-                                            .addComponent(jLabel11))
-                                        .addGap(35, 35, 35)
-                                        .addGroup(sssLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(txtPoinInput, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(cbJenisPelanggaran, javax.swing.GroupLayout.PREFERRED_SIZE, 471, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(cbNamaSiswa, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                        .addGap(131, 131, 131)
-                        .addComponent(jLabel8))
-                    .addGroup(sssLayout.createSequentialGroup()
-                        .addGap(813, 813, 813)
-                        .addComponent(jLabel2)))
-                .addContainerGap(23, Short.MAX_VALUE))
+                                            .addGroup(sssLayout.createSequentialGroup()
+                                                .addComponent(jLabel3)
+                                                .addGap(104, 104, 104)
+                                                .addComponent(cbKelas, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGroup(sssLayout.createSequentialGroup()
+                                                .addComponent(jLabel4)
+                                                .addGap(100, 100, 100)
+                                                .addComponent(cbNamaSiswa, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addGap(29, 29, 29)
+                                        .addGroup(sssLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addGroup(sssLayout.createSequentialGroup()
+                                                .addComponent(jLabel9)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(txtTotalPoin, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGroup(sssLayout.createSequentialGroup()
+                                                .addComponent(jLabel11)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(txtPoinInput, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addGroup(sssLayout.createSequentialGroup()
+                                        .addComponent(jLabel5)
+                                        .addGap(34, 34, 34)
+                                        .addComponent(cbJenisPelanggaran, javax.swing.GroupLayout.PREFERRED_SIZE, 471, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(sssLayout.createSequentialGroup()
+                                .addGap(182, 182, 182)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 436, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, sssLayout.createSequentialGroup()
+                                .addGap(75, 75, 75)
+                                .addGroup(sssLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(sssLayout.createSequentialGroup()
+                                        .addComponent(jLabel10)
+                                        .addGap(18, 18, 18))
+                                    .addGroup(sssLayout.createSequentialGroup()
+                                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(86, 86, 86)))
+                                .addGroup(sssLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, sssLayout.createSequentialGroup()
+                                        .addComponent(txtFoto, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(btn_pilihfoto, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addGroup(sssLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(sssLayout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 326, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(sssLayout.createSequentialGroup()
+                                .addGap(81, 81, 81)
+                                .addComponent(jLabel8)))))
+                .addContainerGap(54, Short.MAX_VALUE))
         );
         sssLayout.setVerticalGroup(
             sssLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(sssLayout.createSequentialGroup()
                 .addGap(14, 14, 14)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(25, 25, 25)
+                .addGroup(sssLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cbKelas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel11)
+                    .addComponent(txtPoinInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(sssLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cbNamaSiswa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4)
+                    .addComponent(txtTotalPoin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel9))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(sssLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel5)
+                    .addComponent(cbJenisPelanggaran, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(12, 12, 12)
+                .addGroup(sssLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel6)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(sssLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btn_pilihfoto, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtFoto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel10))
                 .addGroup(sssLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(sssLayout.createSequentialGroup()
-                        .addGap(6, 6, 6)
-                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 364, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(335, 335, 335)
-                        .addComponent(jLabel2))
+                        .addGap(95, 95, 95)
+                        .addGroup(sssLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(sssLayout.createSequentialGroup()
-                        .addGap(25, 25, 25)
-                        .addGroup(sssLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(cbKelas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtTotalPoin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel9)
-                            .addComponent(jLabel3))
-                        .addGap(34, 34, 34)
-                        .addGroup(sssLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(cbNamaSiswa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4))
-                        .addGap(35, 35, 35)
-                        .addGroup(sssLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(cbJenisPelanggaran, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel5))
-                        .addGap(35, 35, 35)
-                        .addGroup(sssLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(sssLayout.createSequentialGroup()
-                                .addGroup(sssLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel6)
-                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(18, 18, 18)
-                                .addGroup(sssLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(txtPoinInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel11))
-                                .addGap(24, 24, 24)
-                                .addGroup(sssLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(sssLayout.createSequentialGroup()
-                                .addGroup(sssLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel10)
-                                    .addComponent(btn_pilihfoto, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtFoto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE))))
+            .addGroup(sssLayout.createSequentialGroup()
+                .addGap(89, 89, 89)
+                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 364, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(324, 324, 324)
+                .addComponent(jLabel2))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -383,25 +399,6 @@ public class PanelPelanggaran extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void cbNamaSiswaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbNamaSiswaActionPerformed
-        // Pastikan yang dipilih adalah Object Siswa (bukan null)
-        if (cbNamaSiswa.getSelectedItem() instanceof Siswa) {
-            Siswa s = (Siswa) cbNamaSiswa.getSelectedItem();
-            
-            // Tampilkan data poin siswa saat ini di label/textfield jika ada
-            txtTotalPoin.setText(String.valueOf(s.getTotalPoin()));
-            
-            // Refresh Tabel Kanan
-            HistoriDAO historiDao = new HistoriDAO();
-            // tblRiwayat adalah nama tabel di kanan (sesuaikan variabel Anda)
-            tblRiwayat.setModel(historiDao.getHistoriTable(s.getIdSiswa()));
-        }
-    }//GEN-LAST:event_cbNamaSiswaActionPerformed
-
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
-
     private void btn_pilihfotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_pilihfotoActionPerformed
         JFileChooser chooser = new JFileChooser();
 
@@ -417,9 +414,22 @@ public class PanelPelanggaran extends javax.swing.JPanel {
 
         if (hasil == JFileChooser.APPROVE_OPTION) {
             File file = chooser.getSelectedFile();
+            
+            // TAMBAHKAN BARIS INI (PENTING!)
+            this.fileFotoDipilih = file; 
 
-            // Tampilkan path / nama file ke textfield
             txtFoto.setText(file.getAbsolutePath());
+            
+            // (Opsional) Fitur Preview Foto
+            try {
+                javax.swing.ImageIcon icon = new javax.swing.ImageIcon(file.getAbsolutePath());
+                // Resize gambar agar muat di label
+                java.awt.Image img = icon.getImage().getScaledInstance(jLabel7.getWidth(), jLabel7.getHeight(), java.awt.Image.SCALE_SMOOTH);
+                jLabel7.setIcon(new javax.swing.ImageIcon(img));
+                jLabel7.setText(""); // Hapus tulisan "Preview"
+            } catch (Exception e) {
+                //baikan jika error preview
+            }
         }
     }//GEN-LAST:event_btn_pilihfotoActionPerformed
 
@@ -430,28 +440,47 @@ public class PanelPelanggaran extends javax.swing.JPanel {
     private void cbJenisPelanggaranActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbJenisPelanggaranActionPerformed
         if (cbJenisPelanggaran.getSelectedItem() instanceof Pelanggaran) {
             Pelanggaran p = (Pelanggaran) cbJenisPelanggaran.getSelectedItem();
-            
+
             // Isi Textfield Sanksi (Read Only)
             txtSanksi.setText(p.getSanksi());
-            
+
             // Isi Poin (Read Only) - Misal nama fieldnya txtPoinInput
-            txtPoinInput.setText(String.valueOf(p.getPoin())); 
+            txtPoinInput.setText(String.valueOf(p.getPoin()));
         }
     }//GEN-LAST:event_cbJenisPelanggaranActionPerformed
 
+    private void cbNamaSiswaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbNamaSiswaActionPerformed
+        // Pastikan yang dipilih adalah Object Siswa (bukan null)
+        if (cbNamaSiswa.getSelectedItem() instanceof Siswa) {
+            Siswa s = (Siswa) cbNamaSiswa.getSelectedItem();
+
+            // Tampilkan data poin siswa saat ini di label/textfield jika ada
+            txtTotalPoin.setText(String.valueOf(s.getTotalPoin()));
+
+            // Refresh Tabel Kanan
+            HistoriDAO historiDao = new HistoriDAO();
+            // tblRiwayat adalah nama tabel di kanan (sesuaikan variabel Anda)
+            tblRiwayat.setModel(historiDao.getHistoriTable(s.getIdSiswa()));
+        }
+    }//GEN-LAST:event_cbNamaSiswaActionPerformed
+
     private void cbKelasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbKelasActionPerformed
         if (cbKelas.getSelectedItem() == null || cbKelas.getSelectedIndex() == 0) return;
-        
+
         String kelasTerpilih = cbKelas.getSelectedItem().toString();
-        
+
         SiswaDAO dao = new SiswaDAO();
         List<Siswa> listSiswa = dao.getSiswaByKelas(kelasTerpilih);
-        
+
         cbNamaSiswa.removeAllItems(); // Pastikan variabelnya cbNamaSiswa (sesuaikan punya Anda)
         for (Siswa s : listSiswa) {
             cbNamaSiswa.addItem(s); // toString() siswa akan tampil "NIS - Nama"
         }
     }//GEN-LAST:event_cbKelasActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         if (!(cbNamaSiswa.getSelectedItem() instanceof Siswa)) {
@@ -471,21 +500,21 @@ public class PanelPelanggaran extends javax.swing.JPanel {
         // AMBIL DATA
         Siswa siswa = (Siswa) cbNamaSiswa.getSelectedItem();
         Pelanggaran pel = (Pelanggaran) cbJenisPelanggaran.getSelectedItem();
-        
+
         // 1. PROSES UPLOAD FOTO
         String pathDB = "";
         try {
             String appPath = System.getProperty("user.dir");
             File folder = new File(appPath + File.separator + "bukti_bk");
             if (!folder.exists()) folder.mkdirs();
-            
+
             String namaFile = siswa.getNis() + "_" + System.currentTimeMillis() + ".jpg";
             Path source = fileFotoDipilih.toPath();
             Path target = Paths.get(folder.getAbsolutePath() + File.separator + namaFile);
-            
+
             Files.copy(source, target, StandardCopyOption.REPLACE_EXISTING);
             pathDB = target.toString();
-            
+
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Gagal Upload Foto: " + e.getMessage());
             return;
@@ -494,22 +523,26 @@ public class PanelPelanggaran extends javax.swing.JPanel {
         // 2. SIMPAN KE DATABASE (Histori & Update Poin)
         HistoriDAO hDao = new HistoriDAO();
         SiswaDAO sDao = new SiswaDAO();
-        
+
         boolean suksesHistori = hDao.insertPelanggaran(siswa.getIdSiswa(), pel.getKodePelanggaran(), idUserLogin, pathDB);
-        
+
         if (suksesHistori) {
             // Update total poin siswa (Poin Lama + Poin Pelanggaran Baru)
             int poinBaru = siswa.getTotalPoin() + pel.getPoin();
             sDao.updatePoinSiswa(siswa.getIdSiswa(), poinBaru);
-            
+
             JOptionPane.showMessageDialog(this, "Data Berhasil Disimpan! Poin bertambah.");
-            
+
             // Reset Form atau Refresh Tabel
             cbNamaSiswaActionPerformed(null); // Refresh tabel riwayat
             fileFotoDipilih = null;
             // lblPreviewFoto.setIcon(null); // Kosongkan preview jika ada
         }
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void txtTotalPoinActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTotalPoinActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtTotalPoinActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

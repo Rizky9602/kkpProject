@@ -112,4 +112,43 @@ public class SiswaDAO {
         }
         return listSiswa;
     }
+    
+    // 1. Ambil daftar KELAS saja (Distinct) untuk Dropdown pertama
+    public List<String> getAllKelas() {
+        List<String> listKelas = new ArrayList<>();
+        String sql = "SELECT DISTINCT kelas FROM tbl_siswa ORDER BY kelas ASC";
+        try {
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                listKelas.add(rs.getString("kelas"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return listKelas;
+    }
+
+    // 2. Ambil Siswa berdasarkan KELAS yang dipilih
+    public List<Siswa> getSiswaByKelas(String kelas) {
+        List<Siswa> listSiswa = new ArrayList<>();
+        String sql = "SELECT * FROM tbl_siswa WHERE kelas = ? ORDER BY nama_siswa ASC";
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, kelas);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Siswa s = new Siswa();
+                s.setIdSiswa(rs.getInt("id_siswa"));
+                s.setNis(rs.getString("nis"));
+                s.setNamaSiswa(rs.getString("nama_siswa"));
+                s.setKelas(rs.getString("kelas"));
+                s.setTotalPoin(rs.getInt("total_poin_aktif"));
+                listSiswa.add(s);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return listSiswa;
+    }
 }

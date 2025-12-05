@@ -13,16 +13,19 @@ public class HistoriDAO {
     }
 
     // Fungsi Simpan Pelanggaran Baru
-    public boolean insertPelanggaran(int idSiswa, String kodePelanggaran, int idUser, String pathFoto) {
+    public boolean insertPelanggaran(int idSiswa, String kodePelanggaran, String pathFoto, String tglKejadian) {
+        
+        // Perhatikan tanda tanya (?) sekarang ada 5
         String sql = "INSERT INTO tbl_histori_pelanggaran "
-                   + "(id_siswa, kode_pelanggaran, id_user_pencatat, tanggal_kejadian, path_foto_bukti) "
-                   + "VALUES (?, ?, ?, NOW(), ?)";
+                   + "(id_siswa, id_pelanggaran, path_foto_bukti, tanggal_kejadian) "
+                   + "VALUES (?, ?, ?, ?)";
+                   
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1, idSiswa);
             ps.setString(2, kodePelanggaran);
-            ps.setInt(3, idUser); // ID Guru BK yang login
-            ps.setString(4, pathFoto);
+            ps.setString(3, pathFoto);
+            ps.setString(4, tglKejadian); // Masukkan tanggal di sini
             
             ps.executeUpdate();
             return true;
@@ -43,7 +46,7 @@ public class HistoriDAO {
 
         String sql = "SELECT h.tanggal_kejadian, m.kode_pelanggaran, m.nama_pelanggaran, m.poin_pelanggaran "
                    + "FROM tbl_histori_pelanggaran h "
-                   + "JOIN tbl_master_pelanggaran m ON h.kode_pelanggaran = m.kode_pelanggaran "
+                   + "JOIN tbl_master_pelanggaran m ON h.id_pelanggaran = m.kode_pelanggaran "
                    + "WHERE h.id_siswa = ? ORDER BY h.tanggal_kejadian DESC";
         
         try {
@@ -64,4 +67,22 @@ public class HistoriDAO {
         }
         return model;
     }
+    
+   // Method baru yang jauh lebih simpel dan akurat
+public String getFotoBukti(int idHistori) {
+    String path = "";
+    String sql = "SELECT path_foto_bukti FROM tbl_histori_pelanggaran WHERE id_histori = ?";
+    
+    try {
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setInt(1, idHistori);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            path = rs.getString("path_foto_bukti");
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return path;
+}
 }

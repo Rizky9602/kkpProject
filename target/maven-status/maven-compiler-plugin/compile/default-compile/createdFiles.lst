@@ -7,6 +7,7 @@ com\bkapp\view\PanelDataSiswa$1.class
 com\bkapp\view\PanelDataSiswa$4.class
 com\bkapp\view\PanelDataSiswa.class
 com\bkapp\view\PanelPelanggaran$9.class
+com\bkapp\view\PanelPelanggaran$10.class
 com\bkapp\dao\UserDAO.class
 com\bkapp\koneksi\KoneksiDB.class
 com\bkapp\view\PanelPrestasi$3.class

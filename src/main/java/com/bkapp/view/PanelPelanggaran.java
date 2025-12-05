@@ -1,8 +1,11 @@
 package com.bkapp.view;
+
 import java.io.File;
 import javax.swing.JFileChooser;
+
 import com.bkapp.dao.*;
 import com.bkapp.model.*;
+
 import java.nio.file.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -13,37 +16,35 @@ public class PanelPelanggaran extends javax.swing.JPanel {
 
     // Variabel global untuk menyimpan file foto sementara
     private File fileFotoDipilih = null;
-    
-    // Variabel User yang sedang login (Nanti dioper dari Dashboard)
-    // Untuk sementara kita hardcode ID = 1 (Admin BK)
-    private int idUserLogin = 1;
-    
+
+
     public PanelPelanggaran() {
         initComponents();
         initForm();
+        dcTanggal.setDate(new Date());
     }
-    
+
     private void initForm() {
         // 1. Isi Dropdown Jenis Pelanggaran
         MasterDAO masterDao = new MasterDAO();
         List<Pelanggaran> listPel = masterDao.getAllPelanggaran();
-        
+
         cbJenisPelanggaran.removeAllItems();
         cbJenisPelanggaran.addItem("-- Pilih Pelanggaran --");
         for (Pelanggaran p : listPel) {
-            cbJenisPelanggaran.addItem(p); // Ini akan memanggil toString() otomatis
+            cbJenisPelanggaran.addItem(p);
         }
-        
+
         // 2. Isi Dropdown Kelas
         SiswaDAO siswaDao = new SiswaDAO();
         List<String> listKelas = siswaDao.getAllKelas();
-        
+
         cbKelas.removeAllItems();
         cbKelas.addItem("-- Pilih Kelas --");
         for (String k : listKelas) {
             cbKelas.addItem(k);
         }
-        
+
         // Matikan textfield agar Read-Only sesuai permintaan
         txtSanksi.setEditable(false);
         txtTotalPoin.setEditable(false); // Atau txtPoinPelanggaran
@@ -84,6 +85,8 @@ public class PanelPelanggaran extends javax.swing.JPanel {
         jLabel7 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         txtPoinInput = new javax.swing.JTextField();
+        dcTanggal = new com.toedter.calendar.JDateChooser();
+        jLabel12 = new javax.swing.JLabel();
 
         sss.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -195,7 +198,7 @@ public class PanelPelanggaran extends javax.swing.JPanel {
                 {null, null, null, null}
             },
             new String [] {
-                "Tanggal", "Kode Pelanggaran", "Jenis Pelanggaran", "Poin"
+                "Tanggal", "Kode", "Jenis Pelanggaran", "Poin"
             }
         ) {
             Class[] types = new Class [] {
@@ -211,6 +214,12 @@ public class PanelPelanggaran extends javax.swing.JPanel {
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
+            }
+        });
+        tblRiwayat.setSelectionBackground(new java.awt.Color(110, 203, 246));
+        tblRiwayat.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblRiwayatMouseClicked(evt);
             }
         });
         jScrollPane2.setViewportView(tblRiwayat);
@@ -233,6 +242,7 @@ public class PanelPelanggaran extends javax.swing.JPanel {
         jLabel10.setFont(new java.awt.Font("Sans Serif Collection", 0, 12)); // NOI18N
         jLabel10.setText("Input Foto");
 
+        txtFoto.setEditable(false);
         txtFoto.setBackground(new java.awt.Color(110, 203, 246));
         txtFoto.setFont(new java.awt.Font("Sans Serif Collection", 0, 12)); // NOI18N
         txtFoto.addActionListener(new java.awt.event.ActionListener() {
@@ -263,6 +273,9 @@ public class PanelPelanggaran extends javax.swing.JPanel {
         txtPoinInput.setBackground(new java.awt.Color(110, 203, 246));
         txtPoinInput.setFont(new java.awt.Font("Sans Serif Collection", 0, 12)); // NOI18N
 
+        jLabel12.setFont(new java.awt.Font("Sans Serif Collection", 0, 12)); // NOI18N
+        jLabel12.setText("Tanggal Kejadian");
+
         javax.swing.GroupLayout sssLayout = new javax.swing.GroupLayout(sss);
         sss.setLayout(sssLayout);
         sssLayout.setHorizontalGroup(
@@ -278,8 +291,33 @@ public class PanelPelanggaran extends javax.swing.JPanel {
                     .addGroup(sssLayout.createSequentialGroup()
                         .addGroup(sssLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(sssLayout.createSequentialGroup()
+                                .addGap(182, 182, 182)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 436, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(sssLayout.createSequentialGroup()
                                 .addGap(22, 22, 22)
-                                .addGroup(sssLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(sssLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(sssLayout.createSequentialGroup()
+                                        .addComponent(jLabel12)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addGroup(sssLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                            .addGroup(sssLayout.createSequentialGroup()
+                                                .addGap(58, 58, 58)
+                                                .addComponent(dcTanggal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                            .addGroup(sssLayout.createSequentialGroup()
+                                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addGap(10, 10, 10)
+                                        .addComponent(jLabel10)
+                                        .addGap(18, 18, 18)
+                                        .addGroup(sssLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, sssLayout.createSequentialGroup()
+                                                .addComponent(txtFoto, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(btn_pilihfoto, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))))
                                     .addComponent(jLabel6)
                                     .addGroup(sssLayout.createSequentialGroup()
                                         .addGroup(sssLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -304,29 +342,7 @@ public class PanelPelanggaran extends javax.swing.JPanel {
                                     .addGroup(sssLayout.createSequentialGroup()
                                         .addComponent(jLabel5)
                                         .addGap(34, 34, 34)
-                                        .addComponent(cbJenisPelanggaran, javax.swing.GroupLayout.PREFERRED_SIZE, 471, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                            .addGroup(sssLayout.createSequentialGroup()
-                                .addGap(182, 182, 182)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 436, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, sssLayout.createSequentialGroup()
-                                .addGap(75, 75, 75)
-                                .addGroup(sssLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(sssLayout.createSequentialGroup()
-                                        .addComponent(jLabel10)
-                                        .addGap(18, 18, 18))
-                                    .addGroup(sssLayout.createSequentialGroup()
-                                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(86, 86, 86)))
-                                .addGroup(sssLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, sssLayout.createSequentialGroup()
-                                        .addComponent(txtFoto, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(btn_pilihfoto, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                        .addComponent(cbJenisPelanggaran, javax.swing.GroupLayout.PREFERRED_SIZE, 471, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                         .addGroup(sssLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(sssLayout.createSequentialGroup()
                                 .addGap(18, 18, 18)
@@ -362,10 +378,13 @@ public class PanelPelanggaran extends javax.swing.JPanel {
                     .addComponent(jLabel6)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(sssLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btn_pilihfoto, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtFoto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel10))
+                .addGroup(sssLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(dcTanggal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btn_pilihfoto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(sssLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(txtFoto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel10))
+                    .addComponent(jLabel12))
                 .addGroup(sssLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(sssLayout.createSequentialGroup()
                         .addGap(95, 95, 95)
@@ -407,19 +426,19 @@ public class PanelPelanggaran extends javax.swing.JPanel {
 
         // Filter hanya gambar
         chooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter(
-            "Gambar (JPG, PNG)", "jpg", "jpeg", "png"
+                "Gambar (JPG, PNG)", "jpg", "jpeg", "png"
         ));
 
         int hasil = chooser.showOpenDialog(this);
 
         if (hasil == JFileChooser.APPROVE_OPTION) {
             File file = chooser.getSelectedFile();
-            
+
             // TAMBAHKAN BARIS INI (PENTING!)
-            this.fileFotoDipilih = file; 
+            this.fileFotoDipilih = file;
 
             txtFoto.setText(file.getAbsolutePath());
-            
+
             // (Opsional) Fitur Preview Foto
             try {
                 javax.swing.ImageIcon icon = new javax.swing.ImageIcon(file.getAbsolutePath());
@@ -470,11 +489,11 @@ public class PanelPelanggaran extends javax.swing.JPanel {
         String kelasTerpilih = cbKelas.getSelectedItem().toString();
 
         SiswaDAO dao = new SiswaDAO();
-        List<Siswa> listSiswa = dao.getSiswaByKelas(kelasTerpilih);
+    List<Siswa> listSiswa = dao.getSiswaByKelas(kelasTerpilih);
 
         cbNamaSiswa.removeAllItems(); // Pastikan variabelnya cbNamaSiswa (sesuaikan punya Anda)
         for (Siswa s : listSiswa) {
-            cbNamaSiswa.addItem(s); // toString() siswa akan tampil "NIS - Nama"
+            cbNamaSiswa.addItem(s);
         }
     }//GEN-LAST:event_cbKelasActionPerformed
 
@@ -491,15 +510,22 @@ public class PanelPelanggaran extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Pilih Jenis Pelanggaran!");
             return;
         }
-        // Foto boleh kosong atau wajib? Misal wajib:
+
         if (fileFotoDipilih == null) {
             JOptionPane.showMessageDialog(this, "Harap upload bukti foto!");
             return;
         }
 
-        // AMBIL DATA
+        if (dcTanggal.getDate() == null) {
+            JOptionPane.showMessageDialog(this, "Pilih Tanggal Kejadian!");
+            return;
+        }
+
         Siswa siswa = (Siswa) cbNamaSiswa.getSelectedItem();
         Pelanggaran pel = (Pelanggaran) cbJenisPelanggaran.getSelectedItem();
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String tglStr = sdf.format(dcTanggal.getDate());
 
         // 1. PROSES UPLOAD FOTO
         String pathDB = "";
@@ -524,7 +550,12 @@ public class PanelPelanggaran extends javax.swing.JPanel {
         HistoriDAO hDao = new HistoriDAO();
         SiswaDAO sDao = new SiswaDAO();
 
-        boolean suksesHistori = hDao.insertPelanggaran(siswa.getIdSiswa(), pel.getKodePelanggaran(), idUserLogin, pathDB);
+        boolean suksesHistori = hDao.insertPelanggaran(
+                siswa.getIdSiswa(),
+                pel.getKodePelanggaran(),
+                pathDB,
+                tglStr
+        );
 
         if (suksesHistori) {
             // Update total poin siswa (Poin Lama + Poin Pelanggaran Baru)
@@ -537,6 +568,11 @@ public class PanelPelanggaran extends javax.swing.JPanel {
             cbNamaSiswaActionPerformed(null); // Refresh tabel riwayat
             fileFotoDipilih = null;
             // lblPreviewFoto.setIcon(null); // Kosongkan preview jika ada
+
+            cbNamaSiswaActionPerformed(null);
+            fileFotoDipilih = null;
+            txtFoto.setText("");
+            dcTanggal.setDate(new Date());
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -544,18 +580,115 @@ public class PanelPelanggaran extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtTotalPoinActionPerformed
 
+    private void tblRiwayatMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblRiwayatMouseClicked
+        int selectedRow = tblRiwayat.getSelectedRow();
+        
+        // Pastikan ada baris yang diklik
+        if (selectedRow != -1) {
+            try {
+                // ============================================================
+                // 1. AMBIL DATA DARI TABEL (Hati-hati urutan kolomnya!)
+                // ============================================================
+                
+                // Kolom 0: ID Histori (Disembunyikan)
+                String idStr = tblRiwayat.getValueAt(selectedRow, 0).toString();
+                int idHistori = Integer.parseInt(idStr);
+                
+                // Kolom 1: Tanggal Kejadian
+                String tglStr = tblRiwayat.getValueAt(selectedRow, 1).toString();
+                
+                // Kolom 2: Kode Pelanggaran
+                String kodePel = tblRiwayat.getValueAt(selectedRow, 2).toString();
+
+                
+                // ============================================================
+                // 2. SET TANGGAL (JDateChooser)
+                // ============================================================
+                try {
+                    java.util.Date date = null;
+                    // Cek format: Panjang (pakai jam) atau Pendek (tanggal saja)
+                    if (tglStr.length() > 10) {
+                        date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(tglStr);
+                    } else {
+                        date = new SimpleDateFormat("yyyy-MM-dd").parse(tglStr);
+                    }
+                    dcTanggal.setDate(date);
+                } catch (Exception e) {
+                    System.err.println("Gagal parsing tanggal: " + e.getMessage());
+                }
+
+                
+                // ============================================================
+                // 3. SET JENIS PELANGGARAN (ComboBox)
+                // ============================================================
+                for (int i = 0; i < cbJenisPelanggaran.getItemCount(); i++) {
+                    Object item = cbJenisPelanggaran.getItemAt(i);
+                    if (item instanceof Pelanggaran) {
+                        Pelanggaran p = (Pelanggaran) item;
+                        if (p.getKodePelanggaran().equals(kodePel)) {
+                            cbJenisPelanggaran.setSelectedIndex(i);
+                            break; // Ketemu, set, lalu berhenti looping
+                        }
+                    }
+                }
+
+                
+                // ============================================================
+                // 4. SET FOTO (Ambil Path dari Database berdasarkan ID)
+                // ============================================================
+                HistoriDAO hDao = new HistoriDAO();
+                String pathFoto = hDao.getFotoBukti(idHistori); // Menggunakan ID Histori (Akurat)
+                txtFoto.setText(pathFoto);
+
+                // --- Preview Logic ---
+                if (pathFoto != null && !pathFoto.isEmpty()) {
+                    File f = new File(pathFoto);
+                    if (f.exists()) {
+                        this.fileFotoDipilih = f; // Update variabel global
+                        
+                        try {
+                            javax.swing.ImageIcon icon = new javax.swing.ImageIcon(pathFoto);
+                            java.awt.Image img = icon.getImage().getScaledInstance(
+                                    jLabel7.getWidth(), 
+                                    jLabel7.getHeight(), 
+                                    java.awt.Image.SCALE_SMOOTH
+                            );
+                            jLabel7.setIcon(new javax.swing.ImageIcon(img));
+                            jLabel7.setText(""); // Hapus teks "Preview"
+                        } catch (Exception e) {
+                            jLabel7.setIcon(null);
+                            jLabel7.setText("Gagal Load Gambar");
+                        }
+                    } else {
+                        jLabel7.setIcon(null);
+                        jLabel7.setText("File Tidak Ditemukan");
+                    }
+                } else {
+                    jLabel7.setIcon(null);
+                    jLabel7.setText("Tidak Ada Foto");
+                }
+                
+            } catch (Exception e) {
+                System.err.println("Error MouseClicked: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }//GEN-LAST:event_tblRiwayatMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_pilihfoto;
     private javax.swing.JComboBox cbJenisPelanggaran;
     private javax.swing.JComboBox cbKelas;
     private javax.swing.JComboBox cbNamaSiswa;
+    private com.toedter.calendar.JDateChooser dcTanggal;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

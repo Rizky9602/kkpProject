@@ -23,6 +23,7 @@ com\bkapp\dao\KonselingDAO.class
 com\bkapp\model\HistoryPelanggaran.class
 com\bkapp\model\HistoryPencapaian.class
 com\bkapp\view\PanelPelanggaran$5.class
+com\bkapp\view\PanelKonsultasi$9.class
 com\bkapp\view\PanelDataSiswa$2.class
 com\bkapp\view\PanelPrestasi$6.class
 com\bkapp\model\Pencapaian.class

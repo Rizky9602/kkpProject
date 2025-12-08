@@ -10,6 +10,17 @@ import javax.swing.JOptionPane;
 import java.text.MessageFormat;
 import javax.swing.JTable;
 
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
 public class PanelKonsultasi extends javax.swing.JPanel {
 
     /**
@@ -489,26 +500,80 @@ int row = tblRiwayat.getSelectedRow();
     }//GEN-LAST:event_tblRiwayatMouseClicked
 
     private void btnCetakActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCetakActionPerformed
-if(!(cbNamaSiswa.getSelectedItem() instanceof Siswa)) {
-            JOptionPane.showMessageDialog(this, "Pilih siswa dulu untuk mencetak laporannya.");
+if (tblRiwayat.getRowCount() == 0) {
+            JOptionPane.showMessageDialog(this, "Tidak ada data untuk diexport!");
             return;
         }
-        Siswa s = (Siswa) cbNamaSiswa.getSelectedItem();
         
-        // Fitur Simple Print JTable
-        try {
-            MessageFormat header = new MessageFormat("Riwayat Konseling Siswa: " + s.getNamaSiswa() + " (" + s.getKelas() + ")");
-            MessageFormat footer = new MessageFormat("Halaman {0,number,integer}");
+        // 2. Pilih Lokasi Simpan (Save Dialog)
+        JFileChooser chooser = new JFileChooser();
+        chooser.setDialogTitle("Simpan Laporan Excel");
+        chooser.setFileFilter(new FileNameExtensionFilter("Excel File (.xlsx)", "xlsx"));
+        
+        // Nama file default: Laporan_NamaSiswa.xlsx
+        String namaSiswa = "Siswa";
+        if (cbNamaSiswa.getSelectedItem() instanceof Siswa) {
+            Siswa s = (Siswa) cbNamaSiswa.getSelectedItem();
+            namaSiswa = s.getNamaSiswa().replace(" ", "_"); // Ganti spasi dengan _
+        }
+        chooser.setSelectedFile(new File("Laporan_Konseling_" + namaSiswa + ".xlsx"));
+        
+        int userSelection = chooser.showSaveDialog(this);
+        
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            File fileToSave = chooser.getSelectedFile();
             
-            boolean complete = tblRiwayat.print(JTable.PrintMode.FIT_WIDTH, header, footer);
-            if (complete) {
-                JOptionPane.showMessageDialog(this, "Pencetakan Selesai");
-            } else {
-                JOptionPane.showMessageDialog(this, "Pencetakan Dibatalkan");
+            // Pastikan ekstensi .xlsx
+            if (!fileToSave.getAbsolutePath().endsWith(".xlsx")) {
+                fileToSave = new File(fileToSave.getAbsolutePath() + ".xlsx");
             }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Gagal Mencetak: " + e.getMessage());
-        }        // TODO add your handling code here:
+            
+            // 3. PROSES PEMBUATAN EXCEL (Apache POI)
+            try (Workbook workbook = new XSSFWorkbook()) {
+                Sheet sheet = workbook.createSheet("Riwayat Konseling");
+                
+                // --- A. MEMBUAT HEADER (JUDUL KOLOM) ---
+                Row headerRow = sheet.createRow(0);
+                
+                // Kita mulai loop dari kolom 1 (melewati kolom 0/ID yang hidden)
+                for (int i = 1; i < tblRiwayat.getColumnCount(); i++) {
+                    Cell cell = headerRow.createCell(i - 1); // Excel index mulai 0
+                    cell.setCellValue(tblRiwayat.getColumnName(i));
+                }
+                
+                // --- B. MEMBUAT ISI DATA ---
+                for (int i = 0; i < tblRiwayat.getRowCount(); i++) {
+                    Row row = sheet.createRow(i + 1); // Baris data mulai dari row 1
+                    
+                    for (int j = 1; j < tblRiwayat.getColumnCount(); j++) {
+                        Cell cell = row.createCell(j - 1);
+                        
+                        // Ambil data dari tabel, ubah jadi string agar aman
+                        Object val = tblRiwayat.getValueAt(i, j);
+                        if (val != null) {
+                            cell.setCellValue(val.toString());
+                        } else {
+                            cell.setCellValue("");
+                        }
+                    }
+                }
+                
+                // Auto Size Column (Agar lebar kolom pas)
+                for (int i = 0; i < tblRiwayat.getColumnCount() - 1; i++) {
+                    sheet.autoSizeColumn(i);
+                }
+                
+                // --- C. SIMPAN KE FILE ---
+                try (FileOutputStream out = new FileOutputStream(fileToSave)) {
+                    workbook.write(out);
+                    JOptionPane.showMessageDialog(this, "Sukses! File tersimpan di:\n" + fileToSave.getAbsolutePath());
+                }
+                
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Gagal Export Excel: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
     }//GEN-LAST:event_btnCetakActionPerformed
 
     private void cbKelasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbKelasActionPerformed

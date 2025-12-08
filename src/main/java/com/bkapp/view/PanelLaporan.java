@@ -4,10 +4,21 @@
  */
 package com.bkapp.view;
 
-/**
- *
- * @author MyBook Hype AMD
- */
+import java.io.File;
+import java.io.FileOutputStream;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import java.text.SimpleDateFormat;
+import javax.swing.table.DefaultTableModel;
+import com.bkapp.dao.LaporanDAO;
+import java.util.Date;
+import com.bkapp.dao.SiswaDAO;
+import com.bkapp.model.Siswa;
+import java.util.List;
+
 public class PanelLaporan extends javax.swing.JPanel {
 
     /**
@@ -15,6 +26,87 @@ public class PanelLaporan extends javax.swing.JPanel {
      */
     public PanelLaporan() {
         initComponents();
+        initForm();
+    }
+    
+    private void initForm() {
+        SiswaDAO dao = new SiswaDAO();
+         
+        // 1. Isi Dropdown Kelas
+        List<String> listKelas = dao.getAllKelas();
+        
+        cbPilihKelas.removeAllItems();
+        cbPilihKelas.addItem("Semua Kelas"); // Item default
+        
+        for (String k : listKelas) {
+            cbPilihKelas.addItem(k);
+        }
+        
+        // 2. Reset Dropdown Nama
+        cbPilihNama.removeAllItems();
+        cbPilihNama.addItem("Semua Siswa");
+         
+    }
+    
+    
+    // Helper Method untuk Export Excel
+    private void exportToExcel(DefaultTableModel model, String judulSheet) {
+        JFileChooser chooser = new JFileChooser();
+        chooser.setDialogTitle("Simpan Laporan " + judulSheet);
+        chooser.setFileFilter(new FileNameExtensionFilter("Excel File (.xlsx)", "xlsx"));
+        chooser.setSelectedFile(new File("Laporan_" + judulSheet.replace(" ", "_") + ".xlsx"));
+
+        int userSelection = chooser.showSaveDialog(this);
+
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            File fileToSave = chooser.getSelectedFile();
+            if (!fileToSave.getAbsolutePath().endsWith(".xlsx")) {
+                fileToSave = new File(fileToSave.getAbsolutePath() + ".xlsx");
+            }
+
+            try (Workbook workbook = new XSSFWorkbook()) {
+                Sheet sheet = workbook.createSheet(judulSheet);
+
+                // Buat Header Excel
+                Row headerRow = sheet.createRow(0);
+                for (int i = 0; i < model.getColumnCount(); i++) {
+                    Cell cell = headerRow.createCell(i);
+                    cell.setCellValue(model.getColumnName(i));
+                    
+                    // Style Header (Bold)
+                    CellStyle style = workbook.createCellStyle();
+                    Font font = workbook.createFont();
+                    font.setBold(true);
+                    style.setFont(font);
+                    cell.setCellStyle(style);
+                }
+
+                // Isi Data
+                for (int i = 0; i < model.getRowCount(); i++) {
+                    Row row = sheet.createRow(i + 1);
+                    for (int j = 0; j < model.getColumnCount(); j++) {
+                        Cell cell = row.createCell(j);
+                        Object val = model.getValueAt(i, j);
+                        cell.setCellValue(val == null ? "" : val.toString());
+                    }
+                }
+
+                // Auto Size
+                for (int i = 0; i < model.getColumnCount(); i++) {
+                    sheet.autoSizeColumn(i);
+                }
+
+                // Tulis File
+                try (FileOutputStream out = new FileOutputStream(fileToSave)) {
+                    workbook.write(out);
+                    JOptionPane.showMessageDialog(this, "Laporan berhasil disimpan!\nLokasi: " + fileToSave.getAbsolutePath());
+                }
+
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Gagal Export: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
     }
 
     /**
@@ -33,16 +125,21 @@ public class PanelLaporan extends javax.swing.JPanel {
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        cbPilihLaporan = new javax.swing.JComboBox();
         jLabel3 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox<>();
+        cbPilihKelas = new javax.swing.JComboBox<>();
         jLabel4 = new javax.swing.JLabel();
-        jComboBox3 = new javax.swing.JComboBox<>();
+        cbPilihNama = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
-        jComboBox4 = new javax.swing.JComboBox<>();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
+        tblLaporan = new javax.swing.JTable();
+        btnCetak = new javax.swing.JButton();
+        dcDari = new com.toedter.calendar.JDateChooser();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        dcSampai = new com.toedter.calendar.JDateChooser();
+        jButton3 = new javax.swing.JButton();
+        btnCek = new javax.swing.JButton();
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -52,91 +149,125 @@ public class PanelLaporan extends javax.swing.JPanel {
         jLabel2.setFont(new java.awt.Font("Sans Serif Collection", 1, 24)); // NOI18N
         jLabel2.setText("Form Laporan");
 
-        jComboBox1.setBackground(new java.awt.Color(110, 203, 246));
-        jComboBox1.setFont(new java.awt.Font("Sans Serif Collection", 0, 12)); // NOI18N
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Poin Pelanggaran", "Poin Prestasi" }));
-        jComboBox1.setBorder(null);
+        cbPilihLaporan.setBackground(new java.awt.Color(110, 203, 246));
+        cbPilihLaporan.setFont(new java.awt.Font("Sans Serif Collection", 0, 12)); // NOI18N
+        cbPilihLaporan.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Poin Pelanggaran", "Poin Prestasi" }));
+        cbPilihLaporan.setBorder(null);
 
         jLabel3.setFont(new java.awt.Font("Sans Serif Collection", 0, 12)); // NOI18N
         jLabel3.setText("Pilih Kelas");
 
-        jComboBox2.setBackground(new java.awt.Color(110, 203, 246));
-        jComboBox2.setFont(new java.awt.Font("Sans Serif Collection", 0, 12)); // NOI18N
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Semua Kelas" }));
-        jComboBox2.setBorder(null);
+        cbPilihKelas.setBackground(new java.awt.Color(110, 203, 246));
+        cbPilihKelas.setFont(new java.awt.Font("Sans Serif Collection", 0, 12)); // NOI18N
+        cbPilihKelas.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Semua Kelas" }));
+        cbPilihKelas.setBorder(null);
+        cbPilihKelas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbPilihKelasActionPerformed(evt);
+            }
+        });
 
         jLabel4.setFont(new java.awt.Font("Sans Serif Collection", 0, 12)); // NOI18N
         jLabel4.setText("Pilih Nama");
 
-        jComboBox3.setBackground(new java.awt.Color(110, 203, 246));
-        jComboBox3.setFont(new java.awt.Font("Sans Serif Collection", 0, 12)); // NOI18N
-        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Semua Siswa" }));
-        jComboBox3.setBorder(null);
+        cbPilihNama.setBackground(new java.awt.Color(110, 203, 246));
+        cbPilihNama.setFont(new java.awt.Font("Sans Serif Collection", 0, 12)); // NOI18N
+        cbPilihNama.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Semua Siswa" }));
+        cbPilihNama.setBorder(null);
 
         jLabel5.setFont(new java.awt.Font("Sans Serif Collection", 0, 12)); // NOI18N
-        jLabel5.setText("Pilih Bulan");
+        jLabel5.setText("Pilih Tanggal");
 
-        jComboBox4.setBackground(new java.awt.Color(110, 203, 246));
-        jComboBox4.setFont(new java.awt.Font("Sans Serif Collection", 0, 12)); // NOI18N
-        jComboBox4.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Januari", "Febuari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "November", "Desember", "Satu Semester" }));
-        jComboBox4.setBorder(null);
-        jComboBox4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox4ActionPerformed(evt);
-            }
-        });
-
-        jTable1.setBackground(new java.awt.Color(110, 203, 246));
-        jTable1.setFont(new java.awt.Font("Sans Serif Collection", 0, 12)); // NOI18N
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblLaporan.setBackground(new java.awt.Color(110, 203, 246));
+        tblLaporan.setFont(new java.awt.Font("Sans Serif Collection", 0, 12)); // NOI18N
+        tblLaporan.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "Nama", "Id Poin", "Jenis Poin", "Jumlah poin"
+                "Tanggal", "NIS", "Nama Siswa", "Jenis", "Poin"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
-        });
-        jScrollPane1.setViewportView(jTable1);
 
-        jButton1.setBackground(new java.awt.Color(110, 203, 246));
-        jButton1.setFont(new java.awt.Font("Sans Serif Collection", 1, 12)); // NOI18N
-        jButton1.setText("Cetak");
-        jButton1.setBorder(null);
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(tblLaporan);
+
+        btnCetak.setBackground(new java.awt.Color(110, 203, 246));
+        btnCetak.setFont(new java.awt.Font("Sans Serif Collection", 1, 14)); // NOI18N
+        btnCetak.setText("Cetak");
+        btnCetak.setBorder(null);
+        btnCetak.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCetakActionPerformed(evt);
+            }
+        });
+
+        jLabel6.setFont(new java.awt.Font("Sans Serif Collection", 0, 12)); // NOI18N
+        jLabel6.setText("Dari");
+
+        jLabel7.setFont(new java.awt.Font("Sans Serif Collection", 0, 12)); // NOI18N
+        jLabel7.setText("Sampai");
+
+        jButton3.setBackground(new java.awt.Color(255, 0, 51));
+        jButton3.setFont(new java.awt.Font("Sans Serif Collection", 1, 14)); // NOI18N
+        jButton3.setForeground(new java.awt.Color(255, 255, 255));
+        jButton3.setText("Reset");
+        jButton3.setBorder(null);
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        btnCek.setBackground(new java.awt.Color(102, 255, 102));
+        btnCek.setFont(new java.awt.Font("Sans Serif Collection", 1, 14)); // NOI18N
+        btnCek.setText("Cek");
+        btnCek.setBorder(null);
+        btnCek.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCekActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -147,22 +278,33 @@ public class PanelLaporan extends javax.swing.JPanel {
                 .addComponent(jLabel2)
                 .addGap(413, 413, 413))
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(43, 43, 43)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel5))
-                .addGap(52, 52, 52)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jComboBox1, 0, 180, Short.MAX_VALUE)
-                        .addComponent(jComboBox2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jComboBox3, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jComboBox4, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 619, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(43, 43, 43)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel7))
+                        .addGap(26, 26, 26)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(cbPilihLaporan, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cbPilihKelas, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cbPilihNama, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(dcSampai, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(dcDari, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(38, 38, 38))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(23, 23, 23)
+                        .addComponent(btnCetak, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnCek, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 617, Short.MAX_VALUE)
                 .addGap(20, 20, 20))
         );
         jPanel2Layout.setVerticalGroup(
@@ -175,21 +317,32 @@ public class PanelLaporan extends javax.swing.JPanel {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel1)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(40, 40, 40)
+                            .addComponent(cbPilihLaporan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(35, 35, 35)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cbPilihKelas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel3))
-                        .addGap(40, 40, 40)
+                        .addGap(35, 35, 35)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel4)
-                            .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(46, 46, 46)
+                            .addComponent(cbPilihNama, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(35, 35, 35)
+                        .addComponent(jLabel5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jLabel6)
+                                .addGap(28, 28, 28)
+                                .addComponent(jLabel7))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(dcDari, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(20, 20, 20)
+                                .addComponent(dcSampai, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(54, 54, 54)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel5)
-                            .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(47, 47, 47)
-                        .addComponent(jButton1))
+                            .addComponent(btnCetak, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnCek, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 477, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(88, 88, 88))
         );
@@ -208,28 +361,116 @@ public class PanelLaporan extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jComboBox4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox4ActionPerformed
+    private void btnCetakActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCetakActionPerformed
+        // 1. Validasi Tanggal
+        if (dcDari.getDate() == null || dcSampai.getDate() == null) {
+            JOptionPane.showMessageDialog(this, "Harap pilih rentang tanggal (Dari & Sampai)!");
+            return;
+        }
+        
+         if (dcSampai.getDate().before(dcDari.getDate()  ) ) {
+            JOptionPane.showMessageDialog(this, "Format tanggal salah");
+            return;
+        }
+
+        // 2. Ambil Parameter dari Form
+        String jenisLaporan = cbPilihLaporan.getSelectedItem().toString(); // "Poin Pelanggaran" atau "Poin Prestasi"
+        String kelas = cbPilihKelas.getSelectedItem().toString();
+        
+        // Handle nama siswa (Ambil nama saja jika format dropdown "NIS - Nama")
+        String namaRaw = cbPilihNama.getSelectedItem().toString();
+        String namaSiswa = namaRaw; 
+        if (namaRaw.contains("-")) {
+            namaSiswa = namaRaw.split("-")[1].trim(); // Ambil nama setelah tanda strip
+        }
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String tglDari = sdf.format(dcDari.getDate());
+        String tglSampai = sdf.format(dcSampai.getDate());
+
+        // 3. Ambil Data dari Database (Pakai DAO)
+        LaporanDAO dao = new LaporanDAO();
+        DefaultTableModel dataModel = dao.getLaporan(jenisLaporan, kelas, namaSiswa, tglDari, tglSampai);
+
+        if (dataModel.getRowCount() == 0) {
+            JOptionPane.showMessageDialog(this, "Data tidak ditemukan pada periode tersebut.");
+            return;
+        } 
+
+        tblLaporan.setModel(dataModel);
+        // 5. PROSES EXPORT EXCEL (Langsung)
+        exportToExcel(dataModel, jenisLaporan);
+    }//GEN-LAST:event_btnCetakActionPerformed
+
+    private void cbPilihKelasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbPilihKelasActionPerformed
+        String kelasTerpilih = (String) cbPilihKelas.getSelectedItem();
+        
+        // Reset dropdown nama dulu
+        cbPilihNama.removeAllItems();
+        cbPilihNama.addItem("Semua Siswa");
+        
+        // Jika yang dipilih bukan "Semua Kelas" dan tidak null
+        if (kelasTerpilih != null && !kelasTerpilih.equals("Semua Kelas")) {
+            SiswaDAO dao = new SiswaDAO();
+            List<Siswa> listSiswa = dao.getSiswaByKelas(kelasTerpilih);
+            
+            for (Siswa s : listSiswa) {
+                // Kita masukkan format "NIS - Nama" agar mudah dibaca & diproses logic cetak
+                cbPilihNama.addItem(s.getNis() + " - " + s.getNamaSiswa());
+            }
+        }
+    }//GEN-LAST:event_cbPilihKelasActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox4ActionPerformed
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void btnCekActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCekActionPerformed
+        LaporanDAO dao = new LaporanDAO();
+        String jenisLaporan = cbPilihLaporan.getSelectedItem().toString(); 
+        String kelas = cbPilihKelas.getSelectedItem().toString();
+
+        String namaRaw = cbPilihNama.getSelectedItem().toString();
+        String namaSiswa = namaRaw; 
+        
+        if (dcSampai.getDate().before(dcDari.getDate()  ) ) {
+            JOptionPane.showMessageDialog(this, "Format tanggal salah");
+            return;
+        } 
+       
+        if(dcDari.getDate() != null || dcSampai.getDate() != null ){
+         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String tglDari = sdf.format(dcDari.getDate());
+        String tglSampai = sdf.format(dcSampai.getDate());
+        
+        DefaultTableModel dataModel = dao.getLaporan(jenisLaporan, kelas, namaSiswa, tglDari, tglSampai);
+            tblLaporan.setModel(dataModel);
+        }
+    }//GEN-LAST:event_btnCekActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCek;
+    private javax.swing.JButton btnCetak;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.ButtonGroup buttonGroup2;
     private javax.swing.ButtonGroup buttonGroup3;
     private javax.swing.ButtonGroup buttonGroup4;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
-    private javax.swing.JComboBox<String> jComboBox3;
-    private javax.swing.JComboBox<String> jComboBox4;
+    private javax.swing.JComboBox<String> cbPilihKelas;
+    private javax.swing.JComboBox cbPilihLaporan;
+    private javax.swing.JComboBox<String> cbPilihNama;
+    private com.toedter.calendar.JDateChooser dcDari;
+    private com.toedter.calendar.JDateChooser dcSampai;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable tblLaporan;
     // End of variables declaration//GEN-END:variables
 }

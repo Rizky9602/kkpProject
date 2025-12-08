@@ -37,6 +37,7 @@ public class FormHome extends javax.swing.JFrame {
         btn_konsultasi = new javax.swing.JButton();
         btn_laporan = new javax.swing.JButton();
         btn_kelola = new javax.swing.JButton();
+        btn_dataSiswa = new javax.swing.JButton();
         pn_utama = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -65,12 +66,13 @@ public class FormHome extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(314, 314, 314)
-                        .addComponent(jLabel2))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 303, Short.MAX_VALUE)
+                        .addComponent(jLabel2)
+                        .addContainerGap(391, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(407, 407, 407)
-                        .addComponent(jLabel3)))
-                .addContainerGap(380, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel3)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -146,6 +148,15 @@ public class FormHome extends javax.swing.JFrame {
             }
         });
 
+        btn_dataSiswa.setFont(new java.awt.Font("Sans Serif Collection", 1, 12)); // NOI18N
+        btn_dataSiswa.setText("Kelola Siswa");
+        btn_dataSiswa.setBorder(null);
+        btn_dataSiswa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_dataSiswaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -158,7 +169,8 @@ public class FormHome extends javax.swing.JFrame {
                     .addComponent(btn_dashboard, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btn_Pprestasi, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btn_laporan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btn_kelola, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btn_kelola, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btn_dataSiswa, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -175,8 +187,10 @@ public class FormHome extends javax.swing.JFrame {
                 .addGap(35, 35, 35)
                 .addComponent(btn_kelola, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(35, 35, 35)
+                .addComponent(btn_dataSiswa, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(35, 35, 35)
                 .addComponent(btn_laporan, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(170, Short.MAX_VALUE))
+                .addContainerGap(95, Short.MAX_VALUE))
         );
 
         getContentPane().add(jPanel2, java.awt.BorderLayout.LINE_START);
@@ -244,6 +258,14 @@ public class FormHome extends javax.swing.JFrame {
         pn_utama.repaint();
     }//GEN-LAST:event_btn_kelolaActionPerformed
 
+    private void btn_dataSiswaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_dataSiswaActionPerformed
+        pn_utama.removeAll();
+        pn_utama.setLayout(new java.awt.BorderLayout());
+        pn_utama.add(new PanelDataSiswa(), java.awt.BorderLayout.CENTER);
+        pn_utama.revalidate();
+        pn_utama.repaint();
+    }//GEN-LAST:event_btn_dataSiswaActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -284,6 +306,7 @@ public class FormHome extends javax.swing.JFrame {
     private javax.swing.JButton btn_Ppelanggaran;
     private javax.swing.JButton btn_Pprestasi;
     private javax.swing.JButton btn_dashboard;
+    private javax.swing.JButton btn_dataSiswa;
     private javax.swing.JButton btn_kelola;
     private javax.swing.JButton btn_konsultasi;
     private javax.swing.JButton btn_laporan;

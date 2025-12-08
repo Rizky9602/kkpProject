@@ -14,7 +14,6 @@ import javax.swing.JOptionPane;
 
 public class PanelPelanggaran extends javax.swing.JPanel {
 
-    // Variabel global untuk menyimpan file foto sementara
     private File fileFotoDipilih = null;
 
 
@@ -25,7 +24,6 @@ public class PanelPelanggaran extends javax.swing.JPanel {
     }
 
     private void initForm() {
-        // 1. Isi Dropdown Jenis Pelanggaran
         MasterDAO masterDao = new MasterDAO();
         List<Pelanggaran> listPel = masterDao.getAllPelanggaran();
 
@@ -45,9 +43,9 @@ public class PanelPelanggaran extends javax.swing.JPanel {
             cbKelas.addItem(k);
         }
 
-        // Matikan textfield agar Read-Only sesuai permintaan
+       
         txtSanksi.setEditable(false);
-        txtTotalPoin.setEditable(false); // Atau txtPoinPelanggaran
+        txtTotalPoin.setEditable(false); 
     }
     
     // Method untuk membersihkan form inputan
@@ -350,7 +348,7 @@ public class PanelPelanggaran extends javax.swing.JPanel {
                                 .addGroup(javax.swing.GroupLayout.Alignment.LEADING, sssLayout.createSequentialGroup()
                                     .addComponent(jLabel5)
                                     .addGap(34, 34, 34)
-                                    .addComponent(cbJenisPelanggaran, javax.swing.GroupLayout.PREFERRED_SIZE, 619, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                                    .addComponent(cbJenisPelanggaran, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))))
                 .addGroup(sssLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(sssLayout.createSequentialGroup()
                         .addGap(153, 153, 153)
@@ -473,10 +471,7 @@ public class PanelPelanggaran extends javax.swing.JPanel {
         if (cbJenisPelanggaran.getSelectedItem() instanceof Pelanggaran) {
             Pelanggaran p = (Pelanggaran) cbJenisPelanggaran.getSelectedItem();
 
-            // Isi Textfield Sanksi (Read Only)
             txtSanksi.setText(p.getSanksi());
-
-            // Isi Poin (Read Only) - Misal nama fieldnya txtPoinInput
             txtPoinInput.setText(String.valueOf(p.getPoin()));
         }
     }//GEN-LAST:event_cbJenisPelanggaranActionPerformed
@@ -486,10 +481,8 @@ public class PanelPelanggaran extends javax.swing.JPanel {
         if (cbNamaSiswa.getSelectedItem() instanceof Siswa) {
             Siswa s = (Siswa) cbNamaSiswa.getSelectedItem();
 
-            // Tampilkan data poin siswa
             txtTotalPoin.setText(String.valueOf(s.getTotalPoin()));
 
-            // 1. Refresh Tabel Kanan
             HistoriDAO historiDao = new HistoriDAO();
             tblRiwayat.setModel(historiDao.getHistoriTable(s.getIdSiswa()));
             
@@ -511,7 +504,7 @@ public class PanelPelanggaran extends javax.swing.JPanel {
         SiswaDAO dao = new SiswaDAO();
     List<Siswa> listSiswa = dao.getSiswaByKelas(kelasTerpilih);
 
-        cbNamaSiswa.removeAllItems(); // Pastikan variabelnya cbNamaSiswa (sesuaikan punya Anda)
+        cbNamaSiswa.removeAllItems(); 
         for (Siswa s : listSiswa) {
             cbNamaSiswa.addItem(s);
         }
@@ -524,27 +517,22 @@ public class PanelPelanggaran extends javax.swing.JPanel {
             return;
         }
 
-        // 2. Konfirmasi Hapus
         int confirm = JOptionPane.showConfirmDialog(this, 
                 "Apakah Anda yakin ingin menghapus pelanggaran ini?\nPoin siswa akan dikurangi kembali.", 
                 "Konfirmasi Hapus", JOptionPane.YES_NO_OPTION);
         
         if (confirm == JOptionPane.YES_OPTION) {
             try {
-                // Ambil ID Histori (Kolom 0 yang tersembunyi)
                 int idHistori = Integer.parseInt(tblRiwayat.getValueAt(selectedRow, 0).toString());
                 
                 HistoriDAO hDao = new HistoriDAO();
                 SiswaDAO sDao = new SiswaDAO();
                 
-                // Ambil Poin Lama (untuk dikembalikan/dikurangi dari siswa)
                 int poinLama = hDao.getPoinLama(idHistori);
                 
-                // Lakukan Hapus
                 boolean sukses = hDao.deletePelanggaran(idHistori);
                 
                 if (sukses) {
-                    // Update Poin Siswa (Total Sekarang - Poin Pelanggaran yg dihapus)
                     if (cbNamaSiswa.getSelectedItem() instanceof Siswa) {
                         Siswa s = (Siswa) cbNamaSiswa.getSelectedItem();
                         int poinBaru = s.getTotalPoin() - poinLama;
@@ -553,6 +541,7 @@ public class PanelPelanggaran extends javax.swing.JPanel {
                         if (poinBaru < 0) poinBaru = 0; 
                         
                         sDao.updatePoinSiswa(s.getIdSiswa(), poinBaru);
+                        txtTotalPoin.setText(String.valueOf(s.getTotalPoin()));
                     }
                     
                     JOptionPane.showMessageDialog(this, "Data dihapus & Poin siswa telah disesuaikan.");
@@ -594,7 +583,6 @@ public class PanelPelanggaran extends javax.swing.JPanel {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String tglStr = sdf.format(dcTanggal.getDate());
 
-        // 1. PROSES UPLOAD FOTO
         String pathDB = "";
         try {
             String appPath = System.getProperty("user.dir");
@@ -607,13 +595,13 @@ public class PanelPelanggaran extends javax.swing.JPanel {
 
             Files.copy(source, target, StandardCopyOption.REPLACE_EXISTING);
             pathDB = target.toString();
+            txtTotalPoin.setText(String.valueOf(siswa.getTotalPoin()));
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Gagal Upload Foto: " + e.getMessage());
             return;
         }
 
-        // 2. SIMPAN KE DATABASE (Histori & Update Poin)
         HistoriDAO hDao = new HistoriDAO();
         SiswaDAO sDao = new SiswaDAO();
 
@@ -625,16 +613,12 @@ public class PanelPelanggaran extends javax.swing.JPanel {
         );
 
         if (suksesHistori) {
-            // Update total poin siswa (Poin Lama + Poin Pelanggaran Baru)
             int poinBaru = siswa.getTotalPoin() + pel.getPoin();
             sDao.updatePoinSiswa(siswa.getIdSiswa(), poinBaru);
 
             JOptionPane.showMessageDialog(this, "Data Berhasil Disimpan! Poin bertambah.");
-
-            // Reset Form atau Refresh Tabel
             cbNamaSiswaActionPerformed(null); // Refresh tabel riwayat
             fileFotoDipilih = null;
-            // lblPreviewFoto.setIcon(null); // Kosongkan preview jika ada
 
             cbNamaSiswaActionPerformed(null);
             fileFotoDipilih = null;
@@ -642,6 +626,7 @@ public class PanelPelanggaran extends javax.swing.JPanel {
             dcTanggal.setDate(new Date());
             
             resetFormInput();
+            
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -652,30 +637,16 @@ public class PanelPelanggaran extends javax.swing.JPanel {
     private void tblRiwayatMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblRiwayatMouseClicked
         int selectedRow = tblRiwayat.getSelectedRow();
         
-        // Pastikan ada baris yang diklik
         if (selectedRow != -1) {
-            try {
-                // ============================================================
-                // 1. AMBIL DATA DARI TABEL (Hati-hati urutan kolomnya!)
-                // ============================================================
-                
-                // Kolom 0: ID Histori (Disembunyikan)
+            try {            
                 String idStr = tblRiwayat.getValueAt(selectedRow, 0).toString();
                 int idHistori = Integer.parseInt(idStr);
                 
-                // Kolom 1: Tanggal Kejadian
-                String tglStr = tblRiwayat.getValueAt(selectedRow, 1).toString();
-                
-                // Kolom 2: Kode Pelanggaran
+                String tglStr = tblRiwayat.getValueAt(selectedRow, 1).toString();              
                 String kodePel = tblRiwayat.getValueAt(selectedRow, 2).toString();
 
-                
-                // ============================================================
-                // 2. SET TANGGAL (JDateChooser)
-                // ============================================================
                 try {
                     java.util.Date date = null;
-                    // Cek format: Panjang (pakai jam) atau Pendek (tanggal saja)
                     if (tglStr.length() > 10) {
                         date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(tglStr);
                     } else {
@@ -686,10 +657,6 @@ public class PanelPelanggaran extends javax.swing.JPanel {
                     System.err.println("Gagal parsing tanggal: " + e.getMessage());
                 }
 
-                
-                // ============================================================
-                // 3. SET JENIS PELANGGARAN (ComboBox)
-                // ============================================================
                 for (int i = 0; i < cbJenisPelanggaran.getItemCount(); i++) {
                     Object item = cbJenisPelanggaran.getItemAt(i);
                     if (item instanceof Pelanggaran) {
@@ -701,10 +668,6 @@ public class PanelPelanggaran extends javax.swing.JPanel {
                     }
                 }
 
-                
-                // ============================================================
-                // 4. SET FOTO (Ambil Path dari Database berdasarkan ID)
-                // ============================================================
                 HistoriDAO hDao = new HistoriDAO();
                 String pathFoto = hDao.getFotoBukti(idHistori); // Menggunakan ID Histori (Akurat)
                 txtFoto.setText(pathFoto);
@@ -752,7 +715,6 @@ public class PanelPelanggaran extends javax.swing.JPanel {
             return;
         }
         
-        // 2. Ambil Data Form
         Siswa siswa = (Siswa) cbNamaSiswa.getSelectedItem();
         Pelanggaran pelBaru = (Pelanggaran) cbJenisPelanggaran.getSelectedItem();
         
@@ -770,13 +732,9 @@ public class PanelPelanggaran extends javax.swing.JPanel {
             HistoriDAO hDao = new HistoriDAO();
             SiswaDAO sDao = new SiswaDAO();
             
-            // --- LOGIKA FOTO (PENTING) ---
-            // Jika user pilih foto baru, pakai foto baru. 
-            // Jika tidak, pakai path foto yang lama (dari textfield).
             String pathFinal = txtFoto.getText(); 
             
             if (fileFotoDipilih != null) {
-                // Proses Upload Foto Baru (Copy Paste kode upload dari tombol Simpan)
                 String appPath = System.getProperty("user.dir");
                 File folder = new File(appPath + File.separator + "bukti_bk");
                 if (!folder.exists()) folder.mkdirs();
@@ -786,28 +744,20 @@ public class PanelPelanggaran extends javax.swing.JPanel {
                 Path target = Paths.get(folder.getAbsolutePath() + File.separator + namaFile);
                 Files.copy(source, target, StandardCopyOption.REPLACE_EXISTING);
                 
-                pathFinal = target.toString(); // Ganti path lama dengan yang baru
+                pathFinal = target.toString();              
             }
             
-            // --- LOGIKA POIN ---
-            int poinLama = hDao.getPoinLama(idHistori); // Poin sebelum diedit
-            int poinBaruPelanggaran = pelBaru.getPoin(); // Poin setelah diedit
-            
-            // Hitung Total Poin Siswa yang baru
-            // Rumus: TotalSekarang - PoinLama + PoinBaru
+            int poinLama = hDao.getPoinLama(idHistori); 
+            int poinBaruPelanggaran = pelBaru.getPoin();           
             int totalPoinSiswaSekarang = siswa.getTotalPoin();
-            int totalPoinRevisi = totalPoinSiswaSekarang - poinLama + poinBaruPelanggaran;
+            int totalPoinRevisi = totalPoinSiswaSekarang - poinLama + poinBaruPelanggaran;     
             
-            // --- EKSEKUSI UPDATE ---
             boolean sukses = hDao.updatePelanggaran(idHistori, pelBaru.getKodePelanggaran(), pathFinal, tglStr);
+            txtTotalPoin.setText(String.valueOf(siswa.getTotalPoin()));
             
-            if (sukses) {
-                // Update Poin Siswa di Tabel Siswa
-                sDao.updatePoinSiswa(siswa.getIdSiswa(), totalPoinRevisi);
-                
-                JOptionPane.showMessageDialog(this, "Data Berhasil Diupdate!");
-                
-                // Refresh Tabel & Form
+            if (sukses) {              
+                sDao.updatePoinSiswa(siswa.getIdSiswa(), totalPoinRevisi);                
+                JOptionPane.showMessageDialog(this, "Data Berhasil Diupdate!");              
                 cbNamaSiswaActionPerformed(null);
                 resetFormInput();
             }

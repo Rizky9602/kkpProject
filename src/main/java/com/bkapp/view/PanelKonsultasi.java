@@ -431,7 +431,7 @@ int row = tblRiwayat.getSelectedRow();
             }
         } catch(Exception e) {
             JOptionPane.showMessageDialog(this, "Gagal Edit: " + e.getMessage());
-        }        // 1. Validasi Seleksi
+        }      
 
     }//GEN-LAST:event_btnEditActionPerformed
 

@@ -17,17 +17,37 @@ public class Pencapaian {
     }
 
     // Getter dan Setter
-    public int getIdPencapaian() { return idPencapaian; }
-    public void setIdPencapaian(int idPencapaian) { this.idPencapaian = idPencapaian; }
+    public int getIdPencapaian() {
+        return idPencapaian;
+    }
 
-    public String getKodePencapaian() { return kodePencapaian; }
-    public void setKodePencapaian(String kodePencapaian) { this.kodePencapaian = kodePencapaian; }
+    public void setIdPencapaian(int idPencapaian) {
+        this.idPencapaian = idPencapaian;
+    }
 
-    public String getNamaPencapaian() { return namaPencapaian; }
-    public void setNamaPencapaian(String namaPencapaian) { this.namaPencapaian = namaPencapaian; }
+    public String getKodePencapaian() {
+        return kodePencapaian;
+    }
 
-    public int getPoinPengurang() { return poinPengurang; }
-    public void setPoinPengurang(int poinPengurang) { this.poinPengurang = poinPengurang; }
+    public void setKodePencapaian(String kodePencapaian) {
+        this.kodePencapaian = kodePencapaian;
+    }
+
+    public String getNamaPencapaian() {
+        return namaPencapaian;
+    }
+
+    public void setNamaPencapaian(String namaPencapaian) {
+        this.namaPencapaian = namaPencapaian;
+    }
+
+    public int getPoinPengurang() {
+        return poinPengurang;
+    }
+
+    public void setPoinPengurang(int poinPengurang) {
+        this.poinPengurang = poinPengurang;
+    }
 
     @Override
     public String toString() {

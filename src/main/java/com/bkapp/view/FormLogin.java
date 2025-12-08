@@ -2,6 +2,7 @@ package com.bkapp.view;
 
 import com.bkapp.dao.UserDAO;
 import com.bkapp.model.User;
+
 import static javax.swing.JOptionPane.showMessageDialog;
 
 public class FormLogin extends javax.swing.JFrame {
@@ -10,7 +11,7 @@ public class FormLogin extends javax.swing.JFrame {
         initComponents();
     }
 
-  
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -97,14 +98,14 @@ public class FormLogin extends javax.swing.JFrame {
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 501, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 501, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -112,7 +113,7 @@ public class FormLogin extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-             String username = TFusername.getText();
+        String username = TFusername.getText();
         String password = new String(TFpassword.getPassword());
 
         if (username.isEmpty() || password.isEmpty()) {
@@ -125,7 +126,7 @@ public class FormLogin extends javax.swing.JFrame {
         if (userLogin != null) {
             new FormHome().setVisible(true);
             this.dispose();
-        }else {
+        } else {
             // LOGIN GAGAL
             javax.swing.JOptionPane.showMessageDialog(this,
                     "Login Gagal! Username atau Password salah.",
@@ -140,15 +141,15 @@ public class FormLogin extends javax.swing.JFrame {
     }//GEN-LAST:event_TFpasswordActionPerformed
 
     private void TFpasswordKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TFpasswordKeyPressed
-       if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
-        
-        // Masukkan kodingan yang ingin dijalankan di sini
-        // Contoh: Memanggil fungsi klik pada tombol Login secara otomatis
-        jButton1.doClick(); 
-        
-        // Atau bisa langsung coding logic-nya:
-        // JOptionPane.showMessageDialog(null, "Anda menekan Enter!");
-    }
+        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+
+            // Masukkan kodingan yang ingin dijalankan di sini
+            // Contoh: Memanggil fungsi klik pada tombol Login secara otomatis
+            jButton1.doClick();
+
+            // Atau bisa langsung coding logic-nya:
+            // JOptionPane.showMessageDialog(null, "Anda menekan Enter!");
+        }
     }//GEN-LAST:event_TFpasswordKeyPressed
 
     /**
@@ -158,7 +159,7 @@ public class FormLogin extends javax.swing.JFrame {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {

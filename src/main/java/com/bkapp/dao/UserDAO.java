@@ -2,6 +2,7 @@ package com.bkapp.dao;
 
 import com.bkapp.koneksi.KoneksiDB;
 import com.bkapp.model.User;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
@@ -22,6 +23,7 @@ public class UserDAO {
 
     /**
      * Fungsi untuk Login
+     *
      * @param username
      * @param password (password asli, belum di-hash)
      * @return Object User jika berhasil, null jika gagal
@@ -61,8 +63,7 @@ public class UserDAO {
             md.update(password.getBytes());
             byte[] bytes = md.digest();
             StringBuilder sb = new StringBuilder();
-            for(int i=0; i< bytes.length ;i++)
-            {
+            for (int i = 0; i < bytes.length; i++) {
                 sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
             }
             return sb.toString();

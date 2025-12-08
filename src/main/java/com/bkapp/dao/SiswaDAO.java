@@ -2,6 +2,7 @@ package com.bkapp.dao;
 
 import com.bkapp.koneksi.KoneksiDB;
 import com.bkapp.model.Siswa;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -89,22 +90,22 @@ public class SiswaDAO {
             return false;
         }
     }
-    
+
     public List<Siswa> getSiswaBermasalah() {
         List<Siswa> listSiswa = new ArrayList<>();
         // Query filter poin >= 50 dan diurutkan dari yang poinnya paling besar
         String sql = "SELECT * FROM tbl_siswa WHERE total_poin_aktif >= 50 ORDER BY total_poin_aktif DESC";
-        
+
         try {
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
-            
+
             while (rs.next()) {
                 Siswa s = new Siswa();
                 s.setNamaSiswa(rs.getString("nama_siswa"));
                 s.setKelas(rs.getString("kelas"));
                 s.setTotalPoin(rs.getInt("total_poin_aktif"));
-                
+
                 listSiswa.add(s);
             }
         } catch (SQLException e) {
@@ -112,7 +113,7 @@ public class SiswaDAO {
         }
         return listSiswa;
     }
-    
+
     // 1. Ambil daftar KELAS saja (Distinct) untuk Dropdown pertama
     public List<String> getAllKelas() {
         List<String> listKelas = new ArrayList<>();

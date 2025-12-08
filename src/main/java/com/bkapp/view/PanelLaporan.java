@@ -9,14 +9,20 @@ import java.io.FileOutputStream;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
+
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
 import java.text.SimpleDateFormat;
 import javax.swing.table.DefaultTableModel;
+
 import com.bkapp.dao.LaporanDAO;
+
 import java.util.Date;
+
 import com.bkapp.dao.SiswaDAO;
 import com.bkapp.model.Siswa;
+
 import java.util.List;
 
 public class PanelLaporan extends javax.swing.JPanel {
@@ -28,27 +34,27 @@ public class PanelLaporan extends javax.swing.JPanel {
         initComponents();
         initForm();
     }
-    
+
     private void initForm() {
         SiswaDAO dao = new SiswaDAO();
-         
+
         // 1. Isi Dropdown Kelas
         List<String> listKelas = dao.getAllKelas();
-        
+
         cbPilihKelas.removeAllItems();
         cbPilihKelas.addItem("Semua Kelas"); // Item default
-        
+
         for (String k : listKelas) {
             cbPilihKelas.addItem(k);
         }
-        
+
         // 2. Reset Dropdown Nama
         cbPilihNama.removeAllItems();
         cbPilihNama.addItem("Semua Siswa");
-         
+
     }
-    
-    
+
+
     // Helper Method untuk Export Excel
     private void exportToExcel(DefaultTableModel model, String judulSheet) {
         JFileChooser chooser = new JFileChooser();
@@ -72,7 +78,7 @@ public class PanelLaporan extends javax.swing.JPanel {
                 for (int i = 0; i < model.getColumnCount(); i++) {
                     Cell cell = headerRow.createCell(i);
                     cell.setCellValue(model.getColumnName(i));
-                    
+
                     // Style Header (Bold)
                     CellStyle style = workbook.createCellStyle();
                     Font font = workbook.createFont();
@@ -151,7 +157,7 @@ public class PanelLaporan extends javax.swing.JPanel {
 
         cbPilihLaporan.setBackground(new java.awt.Color(110, 203, 246));
         cbPilihLaporan.setFont(new java.awt.Font("Sans Serif Collection", 0, 12)); // NOI18N
-        cbPilihLaporan.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Poin Pelanggaran", "Poin Prestasi" }));
+        cbPilihLaporan.setModel(new javax.swing.DefaultComboBoxModel(new String[]{"Poin Pelanggaran", "Poin Prestasi"}));
         cbPilihLaporan.setBorder(null);
 
         jLabel3.setFont(new java.awt.Font("Sans Serif Collection", 0, 12)); // NOI18N
@@ -159,7 +165,7 @@ public class PanelLaporan extends javax.swing.JPanel {
 
         cbPilihKelas.setBackground(new java.awt.Color(110, 203, 246));
         cbPilihKelas.setFont(new java.awt.Font("Sans Serif Collection", 0, 12)); // NOI18N
-        cbPilihKelas.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Semua Kelas" }));
+        cbPilihKelas.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"Semua Kelas"}));
         cbPilihKelas.setBorder(null);
         cbPilihKelas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -172,7 +178,7 @@ public class PanelLaporan extends javax.swing.JPanel {
 
         cbPilihNama.setBackground(new java.awt.Color(110, 203, 246));
         cbPilihNama.setFont(new java.awt.Font("Sans Serif Collection", 0, 12)); // NOI18N
-        cbPilihNama.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Semua Siswa" }));
+        cbPilihNama.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"Semua Siswa"}));
         cbPilihNama.setBorder(null);
 
         jLabel5.setFont(new java.awt.Font("Sans Serif Collection", 0, 12)); // NOI18N
@@ -181,53 +187,53 @@ public class PanelLaporan extends javax.swing.JPanel {
         tblLaporan.setBackground(new java.awt.Color(110, 203, 246));
         tblLaporan.setFont(new java.awt.Font("Sans Serif Collection", 0, 12)); // NOI18N
         tblLaporan.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
-            },
-            new String [] {
-                "Tanggal", "NIS", "Nama Siswa", "Jenis", "Poin"
-            }
+                new Object[][]{
+                        {null, null, null, null, null},
+                        {null, null, null, null, null},
+                        {null, null, null, null, null},
+                        {null, null, null, null, null},
+                        {null, null, null, null, null},
+                        {null, null, null, null, null},
+                        {null, null, null, null, null},
+                        {null, null, null, null, null},
+                        {null, null, null, null, null},
+                        {null, null, null, null, null},
+                        {null, null, null, null, null},
+                        {null, null, null, null, null},
+                        {null, null, null, null, null},
+                        {null, null, null, null, null},
+                        {null, null, null, null, null},
+                        {null, null, null, null, null},
+                        {null, null, null, null, null},
+                        {null, null, null, null, null},
+                        {null, null, null, null, null},
+                        {null, null, null, null, null},
+                        {null, null, null, null, null},
+                        {null, null, null, null, null},
+                        {null, null, null, null, null},
+                        {null, null, null, null, null},
+                        {null, null, null, null, null},
+                        {null, null, null, null, null},
+                        {null, null, null, null, null},
+                        {null, null, null, null, null}
+                },
+                new String[]{
+                        "Tanggal", "NIS", "Nama Siswa", "Jenis", "Poin"
+                }
         ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class
+            Class[] types = new Class[]{
+                    java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class
             };
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+            boolean[] canEdit = new boolean[]{
+                    false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
+                return types[columnIndex];
             }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
+                return canEdit[columnIndex];
             }
         });
         jScrollPane1.setViewportView(tblLaporan);
@@ -272,92 +278,92 @@ public class PanelLaporan extends javax.swing.JPanel {
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel2)
-                .addGap(413, 413, 413))
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(43, 43, 43)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel6)
-                            .addComponent(jLabel7))
-                        .addGap(26, 26, 26)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(cbPilihLaporan, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cbPilihKelas, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cbPilihNama, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(dcSampai, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(dcDari, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(38, 38, 38))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(23, 23, 23)
-                        .addComponent(btnCetak, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnCek, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)))
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 617, Short.MAX_VALUE)
-                .addGap(20, 20, 20))
+                jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel2)
+                                .addGap(413, 413, 413))
+                        .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addGroup(jPanel2Layout.createSequentialGroup()
+                                                .addGap(43, 43, 43)
+                                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addComponent(jLabel1)
+                                                        .addComponent(jLabel3)
+                                                        .addComponent(jLabel4)
+                                                        .addComponent(jLabel5)
+                                                        .addComponent(jLabel6)
+                                                        .addComponent(jLabel7))
+                                                .addGap(26, 26, 26)
+                                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addComponent(cbPilihLaporan, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(cbPilihKelas, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(cbPilihNama, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(dcSampai, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(dcDari, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addGap(38, 38, 38))
+                                        .addGroup(jPanel2Layout.createSequentialGroup()
+                                                .addGap(23, 23, 23)
+                                                .addComponent(btnCetak, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(btnCek, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(18, 18, 18)))
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 617, Short.MAX_VALUE)
+                                .addGap(20, 20, 20))
         );
         jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel1)
-                            .addComponent(cbPilihLaporan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(35, 35, 35)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(cbPilihKelas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3))
-                        .addGap(35, 35, 35)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel4)
-                            .addComponent(cbPilihNama, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(35, 35, 35)
-                        .addComponent(jLabel5)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jLabel6)
-                                .addGap(28, 28, 28)
-                                .addComponent(jLabel7))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(dcDari, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(20, 20, 20)
-                                .addComponent(dcSampai, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(54, 54, 54)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnCetak, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnCek, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 477, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(88, 88, 88))
+                jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(jPanel2Layout.createSequentialGroup()
+                                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                        .addComponent(jLabel1)
+                                                        .addComponent(cbPilihLaporan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addGap(35, 35, 35)
+                                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                        .addComponent(cbPilihKelas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(jLabel3))
+                                                .addGap(35, 35, 35)
+                                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                        .addComponent(jLabel4)
+                                                        .addComponent(cbPilihNama, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addGap(35, 35, 35)
+                                                .addComponent(jLabel5)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addGroup(jPanel2Layout.createSequentialGroup()
+                                                                .addComponent(jLabel6)
+                                                                .addGap(28, 28, 28)
+                                                                .addComponent(jLabel7))
+                                                        .addGroup(jPanel2Layout.createSequentialGroup()
+                                                                .addComponent(dcDari, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addGap(20, 20, 20)
+                                                                .addComponent(dcSampai, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                                .addGap(54, 54, 54)
+                                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                        .addComponent(btnCetak, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(btnCek, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 477, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(88, 88, 88))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -367,8 +373,8 @@ public class PanelLaporan extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Harap pilih rentang tanggal (Dari & Sampai)!");
             return;
         }
-        
-         if (dcSampai.getDate().before(dcDari.getDate()  ) ) {
+
+        if (dcSampai.getDate().before(dcDari.getDate())) {
             JOptionPane.showMessageDialog(this, "Format tanggal salah");
             return;
         }
@@ -376,10 +382,10 @@ public class PanelLaporan extends javax.swing.JPanel {
         // 2. Ambil Parameter dari Form
         String jenisLaporan = cbPilihLaporan.getSelectedItem().toString(); // "Poin Pelanggaran" atau "Poin Prestasi"
         String kelas = cbPilihKelas.getSelectedItem().toString();
-        
+
         // Handle nama siswa (Ambil nama saja jika format dropdown "NIS - Nama")
         String namaRaw = cbPilihNama.getSelectedItem().toString();
-        String namaSiswa = namaRaw; 
+        String namaSiswa = namaRaw;
         if (namaRaw.contains("-")) {
             namaSiswa = namaRaw.split("-")[1].trim(); // Ambil nama setelah tanda strip
         }
@@ -395,7 +401,7 @@ public class PanelLaporan extends javax.swing.JPanel {
         if (dataModel.getRowCount() == 0) {
             JOptionPane.showMessageDialog(this, "Data tidak ditemukan pada periode tersebut.");
             return;
-        } 
+        }
 
         tblLaporan.setModel(dataModel);
         // 5. PROSES EXPORT EXCEL (Langsung)
@@ -404,16 +410,16 @@ public class PanelLaporan extends javax.swing.JPanel {
 
     private void cbPilihKelasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbPilihKelasActionPerformed
         String kelasTerpilih = (String) cbPilihKelas.getSelectedItem();
-        
+
         // Reset dropdown nama dulu
         cbPilihNama.removeAllItems();
         cbPilihNama.addItem("Semua Siswa");
-        
+
         // Jika yang dipilih bukan "Semua Kelas" dan tidak null
         if (kelasTerpilih != null && !kelasTerpilih.equals("Semua Kelas")) {
             SiswaDAO dao = new SiswaDAO();
             List<Siswa> listSiswa = dao.getSiswaByKelas(kelasTerpilih);
-            
+
             for (Siswa s : listSiswa) {
                 // Kita masukkan format "NIS - Nama" agar mudah dibaca & diproses logic cetak
                 cbPilihNama.addItem(s.getNis() + " - " + s.getNamaSiswa());
@@ -427,23 +433,23 @@ public class PanelLaporan extends javax.swing.JPanel {
 
     private void btnCekActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCekActionPerformed
         LaporanDAO dao = new LaporanDAO();
-        String jenisLaporan = cbPilihLaporan.getSelectedItem().toString(); 
+        String jenisLaporan = cbPilihLaporan.getSelectedItem().toString();
         String kelas = cbPilihKelas.getSelectedItem().toString();
 
         String namaRaw = cbPilihNama.getSelectedItem().toString();
-        String namaSiswa = namaRaw; 
-        
-        if (dcSampai.getDate().before(dcDari.getDate()  ) ) {
+        String namaSiswa = namaRaw;
+
+        if (dcSampai.getDate().before(dcDari.getDate())) {
             JOptionPane.showMessageDialog(this, "Format tanggal salah");
             return;
-        } 
-       
-        if(dcDari.getDate() != null || dcSampai.getDate() != null ){
-         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        String tglDari = sdf.format(dcDari.getDate());
-        String tglSampai = sdf.format(dcSampai.getDate());
-        
-        DefaultTableModel dataModel = dao.getLaporan(jenisLaporan, kelas, namaSiswa, tglDari, tglSampai);
+        }
+
+        if (dcDari.getDate() != null || dcSampai.getDate() != null) {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String tglDari = sdf.format(dcDari.getDate());
+            String tglSampai = sdf.format(dcSampai.getDate());
+
+            DefaultTableModel dataModel = dao.getLaporan(jenisLaporan, kelas, namaSiswa, tglDari, tglSampai);
             tblLaporan.setModel(dataModel);
         }
     }//GEN-LAST:event_btnCekActionPerformed

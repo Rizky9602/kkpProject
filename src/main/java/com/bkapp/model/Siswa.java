@@ -8,11 +8,11 @@ public class Siswa {
     private int angkatan;
     private int totalPoin;
 
-    public Siswa(){
+    public Siswa() {
 
     }
 
-    public Siswa(int idSiswa, String nis, String namaSiswa, String kelas,int angkatan, int totalPoin) {
+    public Siswa(int idSiswa, String nis, String namaSiswa, String kelas, int angkatan, int totalPoin) {
         this.idSiswa = idSiswa;
         this.nis = nis;
         this.namaSiswa = namaSiswa;

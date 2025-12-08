@@ -37,14 +37,17 @@ public class HistoriDAO {
 
     // Fungsi Menampilkan Riwayat Siswa Tertentu di Tabel
     public DefaultTableModel getHistoriTable(int idSiswa) {
-        // Kolom sesuai desain tabel Anda
         DefaultTableModel model = new DefaultTableModel();
-        model.addColumn("Tanggal");
-        model.addColumn("Kode");
-        model.addColumn("Pelanggaran");
-        model.addColumn("Poin");
+        
+        // URUTAN KOLOM SANGAT PENTING:
+        model.addColumn("ID");          // Index 0 (Akan disembunyikan)
+        model.addColumn("Tanggal");     // Index 1
+        model.addColumn("Kode");        // Index 2
+        model.addColumn("Pelanggaran"); // Index 3
+        model.addColumn("Poin");        // Index 4
 
-        String sql = "SELECT h.tanggal_kejadian, m.kode_pelanggaran, m.nama_pelanggaran, m.poin_pelanggaran "
+        // Update Query: Ambil h.id_histori dan gunakan h.kode_pelanggaran untuk join
+        String sql = "SELECT h.id_histori, h.tanggal_kejadian, m.kode_pelanggaran, m.nama_pelanggaran, m.poin_pelanggaran "
                    + "FROM tbl_histori_pelanggaran h "
                    + "JOIN tbl_master_pelanggaran m ON h.id_pelanggaran = m.kode_pelanggaran "
                    + "WHERE h.id_siswa = ? ORDER BY h.tanggal_kejadian DESC";
@@ -56,7 +59,8 @@ public class HistoriDAO {
             
             while(rs.next()) {
                 model.addRow(new Object[] {
-                    rs.getDate("tanggal_kejadian"), // Bisa di format dd-MM-yyyy jika mau
+                    rs.getInt("id_histori"),      // Masuk ke Kolom 0
+                    rs.getString("tanggal_kejadian"), // Masuk ke Kolom 1 (String biar aman formatnya)
                     rs.getString("kode_pelanggaran"),
                     rs.getString("nama_pelanggaran"),
                     rs.getInt("poin_pelanggaran")
@@ -85,4 +89,58 @@ public String getFotoBukti(int idHistori) {
     }
     return path;
 }
+
+// 1. Ambil Poin Pelanggaran berdasarkan ID Histori (Penting untuk hitung ulang poin)
+    public int getPoinLama(int idHistori) {
+        int poin = 0;
+        String sql = "SELECT m.poin_pelanggaran " +
+                     "FROM tbl_histori_pelanggaran h " +
+                     "JOIN tbl_master_pelanggaran m ON h.id_pelanggaran = m.kode_pelanggaran " +
+                     "WHERE h.id_histori = ?";
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, idHistori);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                poin = rs.getInt("poin_pelanggaran");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return poin;
+    }
+
+    // 2. Fungsi Update Data
+    public boolean updatePelanggaran(int idHistori, String kodePelanggaran, String pathFoto, String tglKejadian) {
+        String sql = "UPDATE tbl_histori_pelanggaran SET " +
+                     "id_pelanggaran=?, path_foto_bukti=?, tanggal_kejadian=? " +
+                     "WHERE id_histori=?";
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, kodePelanggaran);
+            ps.setString(2, pathFoto);
+            ps.setString(3, tglKejadian);
+            ps.setInt(4, idHistori);
+            ps.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Gagal Update: " + e.getMessage());
+            return false;
+        }
+    }
+
+    // 3. Fungsi Hapus Data
+    public boolean deletePelanggaran(int idHistori) {
+        String sql = "DELETE FROM tbl_histori_pelanggaran WHERE id_histori = ?";
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, idHistori);
+            ps.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Gagal Hapus: " + e.getMessage());
+            return false;
+        }
+    }
+
 }

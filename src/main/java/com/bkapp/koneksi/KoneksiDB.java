@@ -15,7 +15,7 @@ public class KoneksiDB {
 
                 String url = "jdbc:mysql://localhost:3306/db_bkapp";
                 String user = "root";
-                String pass = "rizky09";
+                String pass = "";
 
                 Class.forName(driver);
 

@@ -24,9 +24,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class PanelKonsultasi extends javax.swing.JPanel {
 
-    /**
-     * Creates new form PanelKonsultasi
-     */
+    
     public PanelKonsultasi() {
         initComponents();
         initForm();
@@ -34,7 +32,6 @@ public class PanelKonsultasi extends javax.swing.JPanel {
     }
 
     private void initForm() {
-        // 1. Isi Dropdown Kelas
         SiswaDAO dao = new SiswaDAO();
         List<String> listKelas = dao.getAllKelas();
         cbKelas.removeAllItems();
@@ -43,7 +40,6 @@ public class PanelKonsultasi extends javax.swing.JPanel {
             cbKelas.addItem(k);
         }
 
-        // 2. Isi Dropdown Status (Sesuai ENUM database)
         cbStatus.removeAllItems();
         cbStatus.addItem("Proses");
         cbStatus.addItem("Selesai");
@@ -456,7 +452,6 @@ public class PanelKonsultasi extends javax.swing.JPanel {
         Siswa s = (Siswa) cbNamaSiswa.getSelectedItem();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-        // Siapkan Data
         Konseling k = new Konseling();
         k.setIdSiswa(s.getIdSiswa());
         k.setTanggal(sdf.format(dcTanggal.getDate()));
@@ -464,7 +459,6 @@ public class PanelKonsultasi extends javax.swing.JPanel {
         k.setSolusi(txtSolusi.getText()); // Inputan kotak bawah
         k.setStatus(cbStatus.getSelectedItem().toString());
 
-        // Simpan
         KonselingDAO dao = new KonselingDAO();
         if (dao.insertKonseling(k)) {
             JOptionPane.showMessageDialog(this, "Data Konseling Berhasil Disimpan");
@@ -476,24 +470,20 @@ public class PanelKonsultasi extends javax.swing.JPanel {
     private void tblRiwayatMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblRiwayatMouseClicked
         int row = tblRiwayat.getSelectedRow();
         if (row != -1) {
-            // Urutan Kolom: 0=ID, 1=Tanggal, 2=Masalah, 3=Solusi, 4=Status
             try {
                 String tglStr = tblRiwayat.getValueAt(row, 1).toString();
                 String masalah = tblRiwayat.getValueAt(row, 2).toString();
                 String solusi = tblRiwayat.getValueAt(row, 3).toString();
                 String status = tblRiwayat.getValueAt(row, 4).toString();
 
-                // Set Tanggal
                 if (tglStr.length() > 10)
                     dcTanggal.setDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(tglStr));
                 else
                     dcTanggal.setDate(new SimpleDateFormat("yyyy-MM-dd").parse(tglStr));
 
-                // Set Text Area
                 txtDeskripsi.setText(masalah);
                 txtSolusi.setText(solusi);
 
-                // Set Status Dropdown
                 cbStatus.setSelectedItem(status);
 
             } catch (Exception e) {
@@ -508,12 +498,10 @@ public class PanelKonsultasi extends javax.swing.JPanel {
             return;
         }
 
-        // 2. Pilih Lokasi Simpan (Save Dialog)
         JFileChooser chooser = new JFileChooser();
         chooser.setDialogTitle("Simpan Laporan Excel");
         chooser.setFileFilter(new FileNameExtensionFilter("Excel File (.xlsx)", "xlsx"));
 
-        // Nama file default: Laporan_NamaSiswa.xlsx
         String namaSiswa = "Siswa";
         if (cbNamaSiswa.getSelectedItem() instanceof Siswa) {
             Siswa s = (Siswa) cbNamaSiswa.getSelectedItem();
@@ -526,32 +514,25 @@ public class PanelKonsultasi extends javax.swing.JPanel {
         if (userSelection == JFileChooser.APPROVE_OPTION) {
             File fileToSave = chooser.getSelectedFile();
 
-            // Pastikan ekstensi .xlsx
             if (!fileToSave.getAbsolutePath().endsWith(".xlsx")) {
                 fileToSave = new File(fileToSave.getAbsolutePath() + ".xlsx");
             }
 
-            // 3. PROSES PEMBUATAN EXCEL (Apache POI)
             try (Workbook workbook = new XSSFWorkbook()) {
                 Sheet sheet = workbook.createSheet("Riwayat Konseling");
-
-                // --- A. MEMBUAT HEADER (JUDUL KOLOM) ---
                 Row headerRow = sheet.createRow(0);
 
-                // Kita mulai loop dari kolom 1 (melewati kolom 0/ID yang hidden)
                 for (int i = 1; i < tblRiwayat.getColumnCount(); i++) {
-                    Cell cell = headerRow.createCell(i - 1); // Excel index mulai 0
+                    Cell cell = headerRow.createCell(i - 1);
                     cell.setCellValue(tblRiwayat.getColumnName(i));
                 }
 
-                // --- B. MEMBUAT ISI DATA ---
                 for (int i = 0; i < tblRiwayat.getRowCount(); i++) {
-                    Row row = sheet.createRow(i + 1); // Baris data mulai dari row 1
+                    Row row = sheet.createRow(i + 1);
 
                     for (int j = 1; j < tblRiwayat.getColumnCount(); j++) {
                         Cell cell = row.createCell(j - 1);
 
-                        // Ambil data dari tabel, ubah jadi string agar aman
                         Object val = tblRiwayat.getValueAt(i, j);
                         if (val != null) {
                             cell.setCellValue(val.toString());
@@ -561,12 +542,10 @@ public class PanelKonsultasi extends javax.swing.JPanel {
                     }
                 }
 
-                // Auto Size Column (Agar lebar kolom pas)
                 for (int i = 0; i < tblRiwayat.getColumnCount() - 1; i++) {
                     sheet.autoSizeColumn(i);
                 }
 
-                // --- C. SIMPAN KE FILE ---
                 try (FileOutputStream out = new FileOutputStream(fileToSave)) {
                     workbook.write(out);
                     JOptionPane.showMessageDialog(this, "Sukses! File tersimpan di:\n" + fileToSave.getAbsolutePath());
@@ -588,7 +567,7 @@ public class PanelKonsultasi extends javax.swing.JPanel {
 
         cbNamaSiswa.removeAllItems();
         for (Siswa s : listSiswa) {
-            cbNamaSiswa.addItem(s); // Masukkan Object Siswa
+            cbNamaSiswa.addItem(s);
         }
     }//GEN-LAST:event_cbKelasActionPerformed
 
@@ -599,7 +578,6 @@ public class PanelKonsultasi extends javax.swing.JPanel {
             KonselingDAO dao = new KonselingDAO();
             tblRiwayat.setModel(dao.getTableKonseling(s.getIdSiswa()));
 
-            // Sembunyikan Kolom ID (Index 0)
             if (tblRiwayat.getColumnModel().getColumnCount() > 0) {
                 tblRiwayat.getColumnModel().getColumn(0).setMinWidth(0);
                 tblRiwayat.getColumnModel().getColumn(0).setMaxWidth(0);

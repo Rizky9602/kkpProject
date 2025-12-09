@@ -1,10 +1,9 @@
 package com.bkapp.model;
 
 public class Pelanggaran {
-    // Kita sesuaikan dengan tabel di screenshot Anda
-    private String kodePelanggaran; // Ini sekarang jadi Primary Key
+    private String kodePelanggaran; 
     private String namaPelanggaran;
-    private String sanksi;          // Kolom Baru
+    private String sanksi;          
     private int poin;
 
     // Constructor Kosong

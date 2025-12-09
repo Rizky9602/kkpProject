@@ -23,6 +23,8 @@ com\bkapp\koneksi\KoneksiDB.class
 com\bkapp\view\FormHome$9.class
 com\bkapp\view\PanelPrestasi$11.class
 com\bkapp\view\PanelPrestasi$3.class
+com\bkapp\view\PanelKelola$6.class
+com\bkapp\view\PanelKelola$4.class
 com\bkapp\dao\KonselingDAO.class
 com\bkapp\model\HistoryPelanggaran.class
 com\bkapp\model\HistoryPencapaian.class
@@ -40,6 +42,7 @@ com\bkapp\view\PanelLaporan$4.class
 com\bkapp\dao\MasterDAO.class
 com\bkapp\view\PanelDataSiswa$3.class
 com\bkapp\view\PanelPelanggaran$4.class
+com\bkapp\view\PanelKelola$5.class
 com\bkapp\view\PanelPrestasi$5.class
 com\bkapp\view\PanelLaporan$5.class
 com\bkapp\view\PanelPelanggaran$7.class

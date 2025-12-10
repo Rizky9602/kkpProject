@@ -34,7 +34,7 @@ public class SiswaDAO {
                 s.setNis(rs.getString("nis"));
                 s.setNamaSiswa(rs.getString("nama_siswa"));
                 s.setKelas(rs.getString("kelas"));
-                s.setAngkatan(rs.getInt("angkatan"));
+                s.setAngkatan(rs.getInt("tahun_ajaran"));
                 s.setTotalPoin(rs.getInt("total_poin_aktif"));
 
                 listSiswa.add(s);
@@ -151,5 +151,82 @@ public class SiswaDAO {
             e.printStackTrace();
         }
         return listSiswa;
+    }
+    
+    public void importSiswaBatch(List<Siswa> listSiswa) {
+        String sql = "INSERT INTO tbl_siswa (nis, nama_siswa, kelas, angkatan, total_poin_aktif) " +
+                     "VALUES (?, ?, ?, ?, 0) " +
+                     "ON DUPLICATE KEY UPDATE " +
+                     "nama_siswa = VALUES(nama_siswa), " +
+                     "kelas = VALUES(kelas)"; 
+        
+        try {
+            conn.setAutoCommit(false); // Transaksi biar cepat
+            PreparedStatement ps = conn.prepareStatement(sql);
+            
+            for (Siswa s : listSiswa) {
+                ps.setString(1, s.getNis());
+                ps.setString(2, s.getNamaSiswa());
+                ps.setString(3, s.getKelas());
+                ps.setInt(4, s.getAngkatan());
+                ps.addBatch();
+            }
+            
+            ps.executeBatch();
+            conn.commit();
+            conn.setAutoCommit(true);
+            
+        } catch (SQLException e) {
+            try { conn.rollback(); } catch (SQLException ex) {}
+            JOptionPane.showMessageDialog(null, "Gagal Import: " + e.getMessage());
+        }
+    }
+    
+    public boolean prosesKenaikanKelas() {      
+        String sqlHapusLulus = "DELETE FROM tbl_siswa WHERE kelas LIKE 'XII %' OR kelas LIKE '12 %'";
+        
+        // Update XI -> XII
+        String sqlNaikKe12 = "UPDATE tbl_siswa SET kelas = CONCAT('XII ', SUBSTRING(kelas, 4)) " +
+                             "WHERE kelas LIKE 'XI %'";
+                             
+        // Update X -> XI
+        String sqlNaikKe11 = "UPDATE tbl_siswa SET kelas = CONCAT('XI ', SUBSTRING(kelas, 3)) " +
+                             "WHERE kelas LIKE 'X %'";
+
+        try {
+            conn.setAutoCommit(false); // Matikan auto-save agar atomik
+            
+            Statement stmt = conn.createStatement();
+            
+            // Langkah 1: Hapus Kelas 12
+            int lulus = stmt.executeUpdate(sqlHapusLulus);
+            System.out.println(lulus + " siswa kelas XII dihapus (Lulus).");
+            
+            // Langkah 2: Naikkan Kelas 11 -> 12
+            int naik12 = stmt.executeUpdate(sqlNaikKe12);
+            System.out.println(naik12 + " siswa naik ke kelas XII.");
+            
+            // Langkah 3: Naikkan Kelas 10 -> 11
+            int naik11 = stmt.executeUpdate(sqlNaikKe11);
+            System.out.println(naik11 + " siswa naik ke kelas XI.");
+            
+            conn.commit(); // Simpan perubahan
+            conn.setAutoCommit(true);
+            return true;
+            
+        } catch (SQLException e) {
+            try { conn.rollback(); } catch (SQLException ex) {}
+            JOptionPane.showMessageDialog(null, "Gagal Proses Kenaikan Kelas: " + e.getMessage());
+            return false;
+        }
+    }
+    
+    public boolean deleteSiswa(String nis) {
+        try {
+            PreparedStatement ps = conn.prepareStatement("DELETE FROM tbl_siswa WHERE nis = ?");
+            ps.setString(1, nis);
+            ps.executeUpdate();
+            return true;
+        } catch(Exception e) { return false; }
     }
 }

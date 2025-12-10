@@ -4,9 +4,20 @@
  */
 package com.bkapp.view;
 
-/**
- * @author MyBook Hype AMD
- */
+import com.bkapp.dao.MasterDAO;
+import java.io.File;
+import java.io.FileOutputStream;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.DefaultTableModel;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import javax.swing.table.TableColumnModel;
+import javax.swing.table.DefaultTableCellRenderer; // Opsional: Untuk meratakan teks (Tengah/Kanan)
+import javax.swing.JLabel; // Opsional: Untuk alignment
+
 public class PanelKelola extends javax.swing.JPanel {
 
     /**
@@ -14,6 +25,66 @@ public class PanelKelola extends javax.swing.JPanel {
      */
     public PanelKelola() {
         initComponents();
+        refreshTable();
+        setColumnWidth();
+    }
+    
+    // Helper: Reset Form
+    private void resetForm() {
+        txtKode.setText("");
+        txtJenis.setText("");
+        txtSanksi.setText("");
+        txtPoin.setText("");
+        txtKode.setEditable(true); // Aktifkan lagi kode
+        tblData.clearSelection();
+    }
+
+    // Helper: Refresh Tabel & Atur Tampilan
+    private void refreshTable() {
+        MasterDAO dao = new MasterDAO();
+        String pilihan = cbPilihAturan.getSelectedItem().toString();
+
+        if (pilihan.equals("Poin Pelanggaran")) {
+            // 1. Load Data
+            txtSanksi.setEnabled(true);
+            txtSanksi.setBackground(java.awt.Color.WHITE); 
+            tblData.setModel(dao.getTablePelanggaran());
+            
+            // 2. ATUR LEBAR KOLOM (Khusus Pelanggaran: 4 Kolom)
+            // Urutan: [0]Kode, [1]Jenis, [2]Sanksi, [3]Poin
+            TableColumnModel colModel = tblData.getColumnModel();
+            
+            colModel.getColumn(0).setPreferredWidth(50);  // Kode (Kecil)
+            colModel.getColumn(1).setPreferredWidth(200); // Jenis (Lebar)
+            colModel.getColumn(2).setPreferredWidth(200); // Sanksi (Lebar)
+            colModel.getColumn(3).setPreferredWidth(80);  // Poin (Kecil)
+
+        } else {
+            txtSanksi.setEnabled(false);
+            txtSanksi.setText("-"); 
+            txtSanksi.setBackground(java.awt.Color.LIGHT_GRAY); 
+            tblData.setModel(dao.getTablePrestasi());
+            
+            // 2. ATUR LEBAR KOLOM (Khusus Prestasi: 3 Kolom)
+            // Urutan: [0]Kode, [1]Jenis, [2]Poin
+            TableColumnModel colModel = tblData.getColumnModel();
+            
+            colModel.getColumn(0).setPreferredWidth(50);  // Kode
+            colModel.getColumn(1).setPreferredWidth(350); // Jenis (Sangat Lebar karena tidak ada sanksi)
+            colModel.getColumn(2).setPreferredWidth(80);  // Poin
+        }
+        
+        // 3. (OPSIONAL) RATA TENGAH UNTUK KOLOM POIN & KODE
+        // Agar angka poin terlihat rapi di tengah
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        
+        // Terapkan ke kolom Kode (Index 0)
+        tblData.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
+        
+        // Terapkan ke kolom Poin (Index Terakhir)
+        int lastColIndex = tblData.getColumnCount() - 1;
+        tblData.getColumnModel().getColumn(lastColIndex).setCellRenderer(centerRenderer);
     }
 
     /**
@@ -28,29 +99,32 @@ public class PanelKelola extends javax.swing.JPanel {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        tblData = new javax.swing.JTable();
+        cbPilihAturan = new javax.swing.JComboBox<>();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        txtKode = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        txtSanksi = new javax.swing.JTextArea();
+        txtJenis = new javax.swing.JTextArea();
         jScrollPane4 = new javax.swing.JScrollPane();
-        txtSanksi1 = new javax.swing.JTextArea();
-        jButton1 = new javax.swing.JButton();
-        btn_edit = new javax.swing.JButton();
-        btn_hapus = new javax.swing.JButton();
+        txtSanksi = new javax.swing.JTextArea();
+        btnSimpan = new javax.swing.JButton();
+        btnEdit = new javax.swing.JButton();
+        btnCetak = new javax.swing.JButton();
+        btnHapus = new javax.swing.JButton();
+        jLabel7 = new javax.swing.JLabel();
+        txtPoin = new javax.swing.JTextField();
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
         jLabel1.setFont(new java.awt.Font("Sans Serif Collection", 1, 24)); // NOI18N
         jLabel1.setText("Form Kelola Poin");
 
-        jTable1.setBackground(new java.awt.Color(110, 203, 246));
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblData.setBackground(new java.awt.Color(110, 203, 246));
+        tblData.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
@@ -85,15 +159,21 @@ public class PanelKelola extends javax.swing.JPanel {
                 "No", "Kode Poin", "Jenis", "Deskripsi", "Jumlah Poin"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        tblData.setGridColor(new java.awt.Color(110, 203, 246));
+        tblData.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblDataMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tblData);
 
-        jComboBox1.setBackground(new java.awt.Color(110, 203, 246));
-        jComboBox1.setFont(new java.awt.Font("Sans Serif Collection", 0, 12)); // NOI18N
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Poin Pelanggaran", "Poin Prestasi" }));
-        jComboBox1.setBorder(null);
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+        cbPilihAturan.setBackground(new java.awt.Color(110, 203, 246));
+        cbPilihAturan.setFont(new java.awt.Font("Sans Serif Collection", 0, 12)); // NOI18N
+        cbPilihAturan.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Poin Pelanggaran", "Poin Prestasi" }));
+        cbPilihAturan.setBorder(null);
+        cbPilihAturan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
+                cbPilihAturanActionPerformed(evt);
             }
         });
 
@@ -101,21 +181,21 @@ public class PanelKelola extends javax.swing.JPanel {
         jLabel2.setText("Pilih Aturan");
 
         jLabel4.setFont(new java.awt.Font("Sans Serif Collection", 0, 12)); // NOI18N
-        jLabel4.setText("Kode Poin");
+        jLabel4.setText("kode");
 
-        jTextField1.setBackground(new java.awt.Color(110, 203, 246));
-        jTextField1.setFont(new java.awt.Font("Sans Serif Collection", 0, 12)); // NOI18N
-        jTextField1.setToolTipText("");
-        jTextField1.addInputMethodListener(new java.awt.event.InputMethodListener() {
+        txtKode.setBackground(new java.awt.Color(110, 203, 246));
+        txtKode.setFont(new java.awt.Font("Sans Serif Collection", 0, 12)); // NOI18N
+        txtKode.setToolTipText("");
+        txtKode.addInputMethodListener(new java.awt.event.InputMethodListener() {
             public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
             }
             public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
-                jTextField1InputMethodTextChanged(evt);
+                txtKodeInputMethodTextChanged(evt);
             }
         });
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        txtKode.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                txtKodeActionPerformed(evt);
             }
         });
 
@@ -124,6 +204,18 @@ public class PanelKelola extends javax.swing.JPanel {
 
         jLabel6.setFont(new java.awt.Font("Sans Serif Collection", 0, 12)); // NOI18N
         jLabel6.setText("Sanksi");
+
+        txtJenis.setEditable(false);
+        txtJenis.setBackground(new java.awt.Color(110, 203, 246));
+        txtJenis.setColumns(20);
+        txtJenis.setFont(new java.awt.Font("Sans Serif Collection", 0, 12)); // NOI18N
+        txtJenis.setLineWrap(true);
+        txtJenis.setRows(3);
+        txtJenis.setTabSize(7);
+        txtJenis.setWrapStyleWord(true);
+        txtJenis.setAutoscrolls(false);
+        txtJenis.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jScrollPane3.setViewportView(txtJenis);
 
         txtSanksi.setEditable(false);
         txtSanksi.setBackground(new java.awt.Color(110, 203, 246));
@@ -135,47 +227,64 @@ public class PanelKelola extends javax.swing.JPanel {
         txtSanksi.setWrapStyleWord(true);
         txtSanksi.setAutoscrolls(false);
         txtSanksi.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jScrollPane3.setViewportView(txtSanksi);
+        jScrollPane4.setViewportView(txtSanksi);
 
-        txtSanksi1.setEditable(false);
-        txtSanksi1.setBackground(new java.awt.Color(110, 203, 246));
-        txtSanksi1.setColumns(20);
-        txtSanksi1.setFont(new java.awt.Font("Sans Serif Collection", 0, 12)); // NOI18N
-        txtSanksi1.setLineWrap(true);
-        txtSanksi1.setRows(3);
-        txtSanksi1.setTabSize(7);
-        txtSanksi1.setWrapStyleWord(true);
-        txtSanksi1.setAutoscrolls(false);
-        txtSanksi1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jScrollPane4.setViewportView(txtSanksi1);
-
-        jButton1.setBackground(new java.awt.Color(153, 255, 102));
-        jButton1.setFont(new java.awt.Font("Sans Serif Collection", 1, 12)); // NOI18N
-        jButton1.setText("Simpan");
-        jButton1.setBorder(null);
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnSimpan.setBackground(new java.awt.Color(153, 255, 102));
+        btnSimpan.setFont(new java.awt.Font("Sans Serif Collection", 1, 12)); // NOI18N
+        btnSimpan.setText("Simpan");
+        btnSimpan.setBorder(null);
+        btnSimpan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnSimpanActionPerformed(evt);
             }
         });
 
-        btn_edit.setBackground(new java.awt.Color(110, 203, 246));
-        btn_edit.setFont(new java.awt.Font("Sans Serif Collection", 1, 12)); // NOI18N
-        btn_edit.setText("Edit");
-        btn_edit.setBorder(null);
-        btn_edit.addActionListener(new java.awt.event.ActionListener() {
+        btnEdit.setBackground(new java.awt.Color(110, 203, 246));
+        btnEdit.setFont(new java.awt.Font("Sans Serif Collection", 1, 12)); // NOI18N
+        btnEdit.setText("Edit");
+        btnEdit.setBorder(null);
+        btnEdit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_editActionPerformed(evt);
+                btnEditActionPerformed(evt);
             }
         });
 
-        btn_hapus.setBackground(new java.awt.Color(255, 51, 51));
-        btn_hapus.setFont(new java.awt.Font("Sans Serif Collection", 1, 12)); // NOI18N
-        btn_hapus.setText("Hapus");
-        btn_hapus.setBorder(null);
-        btn_hapus.addActionListener(new java.awt.event.ActionListener() {
+        btnCetak.setBackground(new java.awt.Color(102, 255, 255));
+        btnCetak.setFont(new java.awt.Font("Sans Serif Collection", 1, 12)); // NOI18N
+        btnCetak.setText("Cetak");
+        btnCetak.setBorder(null);
+        btnCetak.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_hapusActionPerformed(evt);
+                btnCetakActionPerformed(evt);
+            }
+        });
+
+        btnHapus.setBackground(new java.awt.Color(255, 51, 51));
+        btnHapus.setFont(new java.awt.Font("Sans Serif Collection", 1, 12)); // NOI18N
+        btnHapus.setText("Hapus");
+        btnHapus.setBorder(null);
+        btnHapus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHapusActionPerformed(evt);
+            }
+        });
+
+        jLabel7.setFont(new java.awt.Font("Sans Serif Collection", 0, 12)); // NOI18N
+        jLabel7.setText("poin");
+
+        txtPoin.setBackground(new java.awt.Color(110, 203, 246));
+        txtPoin.setFont(new java.awt.Font("Sans Serif Collection", 0, 12)); // NOI18N
+        txtPoin.setToolTipText("");
+        txtPoin.addInputMethodListener(new java.awt.event.InputMethodListener() {
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+            }
+            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
+                txtPoinInputMethodTextChanged(evt);
+            }
+        });
+        txtPoin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtPoinActionPerformed(evt);
             }
         });
 
@@ -184,36 +293,48 @@ public class PanelKelola extends javax.swing.JPanel {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(13, Short.MAX_VALUE)
+                .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jTextField1)
-                            .addComponent(jComboBox1, 0, 333, Short.MAX_VALUE)
-                            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 333, Short.MAX_VALUE)
-                            .addComponent(jScrollPane3))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 76, Short.MAX_VALUE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 333, Short.MAX_VALUE)
+                                            .addComponent(jScrollPane3)
+                                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                                .addComponent(txtKode, javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(cbPilihAturan, javax.swing.GroupLayout.Alignment.LEADING, 0, 164, Short.MAX_VALUE)))
+                                        .addGap(18, 18, 18)
+                                        .addComponent(btnCetak, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(btnSimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(btnHapus, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(32, 32, 32))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(35, 35, 35)
+                                .addComponent(txtPoin, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 594, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel3))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btn_edit, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btn_hapus, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 519, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 64, Short.MAX_VALUE)
-                .addComponent(jLabel3)
-                .addContainerGap(36, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jLabel1)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -222,16 +343,15 @@ public class PanelKelola extends javax.swing.JPanel {
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 6, Short.MAX_VALUE)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 449, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(25, 25, 25)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(cbPilihAturan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btnCetak, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(24, 24, 24)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(txtKode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel4)))
                             .addComponent(jLabel2))
                         .addGap(25, 25, 25)
@@ -244,16 +364,23 @@ public class PanelKelola extends javax.swing.JPanel {
                             .addComponent(jLabel6))
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGap(18, 18, 18)
                                 .addComponent(jLabel3)
-                                .addContainerGap(112, Short.MAX_VALUE))
+                                .addGap(46, 46, 46))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(25, 25, 25)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btn_edit, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btn_hapus, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(48, 48, 48))))))
+                                    .addComponent(txtPoin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel7))
+                                .addGap(25, 25, 25)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(btnSimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btnHapus, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addContainerGap())))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 449, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, 0))))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -268,51 +395,216 @@ public class PanelKelola extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void txtKodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtKodeActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_txtKodeActionPerformed
 
-    private void jTextField1InputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_jTextField1InputMethodTextChanged
+    private void txtKodeInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_txtKodeInputMethodTextChanged
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1InputMethodTextChanged
+    }//GEN-LAST:event_txtKodeInputMethodTextChanged
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox1ActionPerformed
+    private void cbPilihAturanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbPilihAturanActionPerformed
+        resetForm();
+        refreshTable();
+    }//GEN-LAST:event_cbPilihAturanActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanActionPerformed
+        // Validasi
+        if(txtKode.getText().isEmpty() || txtJenis.getText().isEmpty() || txtPoin.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Lengkapi Data!");
+            return;
+        }
+
+        try {
+            String kode = txtKode.getText();
+            String jenis = txtJenis.getText();
+            int poin = Integer.parseInt(txtPoin.getText());
+            String sanksi = txtSanksi.getText();
+            
+            MasterDAO dao = new MasterDAO();
+            String pilihan = cbPilihAturan.getSelectedItem().toString();
+            boolean sukses = false;
+
+            if (pilihan.equals("Poin Pelanggaran")) {
+                sukses = dao.insertPelanggaran(kode, jenis, sanksi, poin);
+            } else {
+                sukses = dao.insertPrestasi(kode, jenis, poin);
+            }
+
+            if (sukses) {
+                JOptionPane.showMessageDialog(this, "Data Berhasil Disimpan");
+                resetForm();
+                refreshTable();
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Poin harus angka!");
+        }
+
         
+    }//GEN-LAST:event_btnSimpanActionPerformed
 
+    private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
+       if (txtKode.isEditable()) {
+            JOptionPane.showMessageDialog(this, "Klik data di tabel dulu untuk mengedit!");
+            return;
+        }
         
-    }//GEN-LAST:event_jButton1ActionPerformed
+        try {
+            String kode = txtKode.getText(); // PK (Read Only)
+            String jenis = txtJenis.getText();
+            int poin = Integer.parseInt(txtPoin.getText());
+            String sanksi = txtSanksi.getText();
+            
+            MasterDAO dao = new MasterDAO();
+            String pilihan = cbPilihAturan.getSelectedItem().toString();
+            boolean sukses = false;
 
-    private void btn_editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_editActionPerformed
-       
-    }//GEN-LAST:event_btn_editActionPerformed
+            if (pilihan.equals("Poin Pelanggaran")) {
+                sukses = dao.updatePelanggaran(kode, jenis, sanksi, poin);
+            } else {
+                sukses = dao.updatePrestasi(kode, jenis, poin);
+            }
 
-    private void btn_hapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_hapusActionPerformed
-       
-    }//GEN-LAST:event_btn_hapusActionPerformed
+            if (sukses) {
+                JOptionPane.showMessageDialog(this, "Data Berhasil Diupdate");
+                resetForm();
+                refreshTable();
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Poin harus angka!");
+        }
+    }//GEN-LAST:event_btnEditActionPerformed
+
+    private void btnCetakActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCetakActionPerformed
+       if (tblData.getRowCount() == 0) {
+            JOptionPane.showMessageDialog(this, "Tidak ada data!");
+            return;
+        }
+        
+        String judul = cbPilihAturan.getSelectedItem().toString();
+        JFileChooser chooser = new JFileChooser();
+        chooser.setSelectedFile(new File("Master_" + judul.replace(" ", "_") + ".xlsx"));
+        chooser.setFileFilter(new FileNameExtensionFilter("Excel File", "xlsx"));
+        
+        if (chooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+            try (Workbook workbook = new XSSFWorkbook()) {
+                Sheet sheet = workbook.createSheet(judul);
+                DefaultTableModel model = (DefaultTableModel) tblData.getModel();
+
+                // Header
+                Row header = sheet.createRow(0);
+                for (int i = 0; i < model.getColumnCount(); i++) {
+                    header.createCell(i).setCellValue(model.getColumnName(i));
+                }
+
+                // Data
+                for (int i = 0; i < model.getRowCount(); i++) {
+                    Row row = sheet.createRow(i + 1);
+                    for (int j = 0; j < model.getColumnCount(); j++) {
+                        Object val = model.getValueAt(i, j);
+                        row.createCell(j).setCellValue(val != null ? val.toString() : "");
+                    }
+                }
+                
+                // Save
+                File f = chooser.getSelectedFile();
+                if(!f.getName().endsWith(".xlsx")) f = new File(f.getAbsolutePath()+".xlsx");
+                
+                try (FileOutputStream out = new FileOutputStream(f)) {
+                    workbook.write(out);
+                    JOptionPane.showMessageDialog(this, "Export Berhasil!");
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Gagal Export: " + e.getMessage());
+            }
+        }
+    
+    }//GEN-LAST:event_btnCetakActionPerformed
+
+    private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
+     if (txtKode.isEditable() || txtKode.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Pilih data dulu!");
+            return;
+        }
+        
+        int confirm = JOptionPane.showConfirmDialog(this, "Hapus aturan ini?", "Konfirmasi", JOptionPane.YES_NO_OPTION);
+        if (confirm == JOptionPane.YES_OPTION) {
+            MasterDAO dao = new MasterDAO();
+            String kode = txtKode.getText();
+            String pilihan = cbPilihAturan.getSelectedItem().toString();
+            boolean sukses = false;
+
+            if (pilihan.equals("Poin Pelanggaran")) {
+                sukses = dao.deletePelanggaran(kode);
+            } else {
+                sukses = dao.deletePrestasi(kode);
+            }
+
+            if (sukses) {
+                JOptionPane.showMessageDialog(this, "Data Berhasil Dihapus");
+                resetForm();
+                refreshTable();
+            }
+        }
+    }//GEN-LAST:event_btnHapusActionPerformed
+
+    private void txtPoinInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_txtPoinInputMethodTextChanged
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPoinInputMethodTextChanged
+
+    private void txtPoinActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPoinActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPoinActionPerformed
+
+    private void tblDataMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblDataMouseClicked
+        int row = tblData.getSelectedRow();
+        if (row != -1) {
+            // Matikan edit Kode agar PK tidak berubah
+            txtKode.setEditable(false);
+            
+            // Kolom 0 = Kode, 1 = Jenis
+            txtKode.setText(tblData.getValueAt(row, 0).toString());
+            txtJenis.setText(tblData.getValueAt(row, 1).toString());
+            
+            String pilihan = cbPilihAturan.getSelectedItem().toString();
+            if (pilihan.equals("Poin Pelanggaran")) {
+                // Kolom 2 = Sanksi, 3 = Poin
+                txtSanksi.setText(tblData.getValueAt(row, 2).toString());
+                txtPoin.setText(tblData.getValueAt(row, 3).toString());
+            } else {
+                // Kolom 2 = Poin (Karena sanksi tidak ada di tabel prestasi)
+                txtPoin.setText(tblData.getValueAt(row, 2).toString());
+                txtSanksi.setText("-");
+            }
+        }
+    }//GEN-LAST:event_tblDataMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btn_edit;
-    private javax.swing.JButton btn_hapus;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JButton btnCetak;
+    private javax.swing.JButton btnEdit;
+    private javax.swing.JButton btnHapus;
+    private javax.swing.JButton btnSimpan;
+    private javax.swing.JComboBox<String> cbPilihAturan;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTable tblData;
+    private javax.swing.JTextArea txtJenis;
+    private javax.swing.JTextField txtKode;
+    private javax.swing.JTextField txtPoin;
     private javax.swing.JTextArea txtSanksi;
-    private javax.swing.JTextArea txtSanksi1;
     // End of variables declaration//GEN-END:variables
+
+    private void setColumnWidth() {
+        
+    }
 }

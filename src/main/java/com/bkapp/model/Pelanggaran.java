@@ -6,7 +6,6 @@ public class Pelanggaran {
     private String sanksi;          
     private int poin;
 
-    // Constructor Kosong
     public Pelanggaran() {
     }
 
@@ -18,7 +17,6 @@ public class Pelanggaran {
         this.poin = poin;
     }
 
-    // Getter dan Setter
     public String getKodePelanggaran() {
         return kodePelanggaran;
     }
@@ -51,7 +49,6 @@ public class Pelanggaran {
         this.poin = poin;
     }
 
-    // Untuk tampilan di ComboBox nanti
     @Override
     public String toString() {
         return kodePelanggaran + " - " + namaPelanggaran + " (" + poin + " Poin)";

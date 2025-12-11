@@ -12,7 +12,6 @@ public class PrestasiDAO {
         this.conn = KoneksiDB.getKoneksi();
     }
 
-    // 1. SIMPAN
     public boolean insertPrestasi(int idSiswa, String kode, String path, String tgl, String ket) {
         String sql = "INSERT INTO tbl_histori_pencapaian "
                    + "(id_siswa, kode_pencapaian, path_foto_bukti, tanggal_pencapaian, keterangan) "
@@ -32,14 +31,13 @@ public class PrestasiDAO {
         }
     }
 
-    // 2. AMBIL TABEL (Untuk ditampilkan di kanan)
     public DefaultTableModel getHistoriTable(int idSiswa) {
         DefaultTableModel model = new DefaultTableModel();
-        model.addColumn("ID"); // 0: Hidden
+        model.addColumn("ID");
         model.addColumn("Tanggal");
         model.addColumn("Kode");
         model.addColumn("Prestasi");
-        model.addColumn("Poin (-)"); // Poin Pengurang
+        model.addColumn("Poin (-)");
 
         String sql = "SELECT h.id_histori, h.tanggal_pencapaian, m.kode_pencapaian, m.nama_pencapaian, m.poin_pengurang, h.keterangan "
                    + "FROM tbl_histori_pencapaian h "
@@ -65,8 +63,6 @@ public class PrestasiDAO {
         return model;
     }
 
-    // 3. AMBIL FOTO & KETERANGAN (Untuk klik tabel)
-    // Return array: [0]=PathFoto, [1]=Keterangan
     public String[] getDetailPrestasi(int idHistori) {
         String[] hasil = {"", ""};
         String sql = "SELECT path_foto_bukti, keterangan FROM tbl_histori_pencapaian WHERE id_histori = ?";
@@ -84,7 +80,6 @@ public class PrestasiDAO {
         return hasil;
     }
 
-    // 4. AMBIL POIN LAMA (Untuk logic hapus/edit)
     public int getPoinLama(int idHistori) {
         int poin = 0;
         String sql = "SELECT m.poin_pengurang FROM tbl_histori_pencapaian h "
@@ -99,7 +94,6 @@ public class PrestasiDAO {
         return poin;
     }
 
-    // 5. HAPUS
     public boolean deletePrestasi(int idHistori) {
         try {
             PreparedStatement ps = conn.prepareStatement("DELETE FROM tbl_histori_pencapaian WHERE id_histori=?");
@@ -125,6 +119,5 @@ public class PrestasiDAO {
         }
         return path;
     }
-     
-     
+
 }

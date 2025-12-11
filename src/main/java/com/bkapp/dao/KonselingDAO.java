@@ -14,7 +14,6 @@ public class KonselingDAO {
         this.conn = KoneksiDB.getKoneksi();
     }
 
-    // 1. SIMPAN
     public boolean insertKonseling(Konseling k) {
         String sql = "INSERT INTO tbl_histori_konseling "
                 + "(id_siswa, tanggal_konseling, permasalahan, solusi_tindak_lanjut, hasil_konseling) "
@@ -34,7 +33,6 @@ public class KonselingDAO {
         }
     }
 
-    // 2. EDIT
     public boolean updateKonseling(Konseling k) {
         String sql = "UPDATE tbl_histori_konseling SET "
                 + "tanggal_konseling=?, permasalahan=?, solusi_tindak_lanjut=?, hasil_konseling=? "
@@ -54,7 +52,6 @@ public class KonselingDAO {
         }
     }
 
-    // 3. HAPUS
     public boolean deleteKonseling(int idKonseling) {
         String sql = "DELETE FROM tbl_histori_konseling WHERE id_konseling=?";
         try {
@@ -68,10 +65,9 @@ public class KonselingDAO {
         }
     }
 
-    // 4. TAMPIL TABEL
     public DefaultTableModel getTableKonseling(int idSiswa) {
         DefaultTableModel model = new DefaultTableModel();
-        model.addColumn("ID"); // 0: Hidden
+        model.addColumn("ID");
         model.addColumn("Tanggal");
         model.addColumn("Permasalahan");
         model.addColumn("Penyelesaian");

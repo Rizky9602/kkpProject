@@ -27,16 +27,10 @@
         private void isiTableNotifikasi() {
             SiswaDAO dao = new SiswaDAO();
             List<Siswa> listSiswa = dao.getSiswaBermasalah();
-
-            // Ambil model tabel dari JTable yang sudah Anda desain
             DefaultTableModel model = (DefaultTableModel) tblNotifikasi.getModel();
-
-            // Bersihkan data lama di tabel (jika ada) agar tidak duplikat
             model.setRowCount(0);
 
-            // Loop data siswa bermasalah
             for (Siswa s : listSiswa) {
-                // Logika Status: Jika >= 100 DO, jika >= 50 SP
                 String status;
                 if (s.getTotalPoin() >= 100) {
                     status = "DROP OUT / KELUARKAN";
@@ -44,7 +38,6 @@
                     status = "SURAT PERINGATAN (SP)";
                 }
 
-                // Masukkan baris ke tabel (Sesuai urutan kolom di desain Anda)
                 Object[] row = {
                         s.getNamaSiswa(),
                         s.getKelas(),

@@ -29,18 +29,16 @@ public class PanelKelola extends javax.swing.JPanel {
         refreshTable();
         setColumnWidth();
     }
-    
-    // Helper: Reset Form
+
     private void resetForm() {
         txtKode.setText("");
         txtJenis.setText("");
         txtSanksi.setText("");
         txtPoin.setText("");
-        txtKode.setEditable(true); // Aktifkan lagi kode
+        txtKode.setEditable(true);
         tblData.clearSelection();
     }
 
-    // Helper: Refresh Tabel & Atur Tampilan
     private void refreshTable() {
         MasterDAO dao = new MasterDAO();
         String pilihan = cbPilihAturan.getSelectedItem().toString();
@@ -50,9 +48,7 @@ public class PanelKelola extends javax.swing.JPanel {
             txtSanksi.setEnabled(true);
             txtSanksi.setBackground(java.awt.Color.WHITE); 
             tblData.setModel(dao.getTablePelanggaran());
-            
-            // 2. ATUR LEBAR KOLOM (Khusus Pelanggaran: 4 Kolom)
-            // Urutan: [0]Kode, [1]Jenis, [2]Sanksi, [3]Poin
+
             TableColumnModel colModel = tblData.getColumnModel();
             
             colModel.getColumn(0).setPreferredWidth(50);  // Kode (Kecil)
@@ -65,25 +61,19 @@ public class PanelKelola extends javax.swing.JPanel {
             txtSanksi.setText("-"); 
             txtSanksi.setBackground(java.awt.Color.LIGHT_GRAY); 
             tblData.setModel(dao.getTablePrestasi());
-            
-            // 2. ATUR LEBAR KOLOM (Khusus Prestasi: 3 Kolom)
-            // Urutan: [0]Kode, [1]Jenis, [2]Poin
+
             TableColumnModel colModel = tblData.getColumnModel();
             
             colModel.getColumn(0).setPreferredWidth(50);  // Kode
             colModel.getColumn(1).setPreferredWidth(350); // Jenis (Sangat Lebar karena tidak ada sanksi)
             colModel.getColumn(2).setPreferredWidth(80);  // Poin
         }
-        
-        // 3. (OPSIONAL) RATA TENGAH UNTUK KOLOM POIN & KODE
-        // Agar angka poin terlihat rapi di tengah
+
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-        
-        // Terapkan ke kolom Kode (Index 0)
+
         tblData.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
-        
-        // Terapkan ke kolom Poin (Index Terakhir)
+
         int lastColIndex = tblData.getColumnCount() - 1;
         tblData.getColumnModel().getColumn(lastColIndex).setCellRenderer(centerRenderer);
     }
@@ -403,7 +393,6 @@ public class PanelKelola extends javax.swing.JPanel {
     }//GEN-LAST:event_cbPilihAturanActionPerformed
 
     private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanActionPerformed
-        // Validasi
         if(txtKode.getText().isEmpty() || txtJenis.getText().isEmpty() || txtPoin.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Lengkapi Data!");
             return;
@@ -493,13 +482,11 @@ public class PanelKelola extends javax.swing.JPanel {
                 Sheet sheet = workbook.createSheet(judul);
                 DefaultTableModel model = (DefaultTableModel) tblData.getModel();
 
-                // Header
                 Row header = sheet.createRow(0);
                 for (int i = 0; i < model.getColumnCount(); i++) {
                     header.createCell(i).setCellValue(model.getColumnName(i));
                 }
 
-                // Data
                 for (int i = 0; i < model.getRowCount(); i++) {
                     Row row = sheet.createRow(i + 1);
                     for (int j = 0; j < model.getColumnCount(); j++) {
@@ -507,8 +494,7 @@ public class PanelKelola extends javax.swing.JPanel {
                         row.createCell(j).setCellValue(val != null ? val.toString() : "");
                     }
                 }
-                
-                // Save
+
                 File f = chooser.getSelectedFile();
                 if(!f.getName().endsWith(".xlsx")) f = new File(f.getAbsolutePath()+".xlsx");
                 
@@ -561,20 +547,16 @@ public class PanelKelola extends javax.swing.JPanel {
     private void tblDataMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblDataMouseClicked
         int row = tblData.getSelectedRow();
         if (row != -1) {
-            // Matikan edit Kode agar PK tidak berubah
             txtKode.setEditable(false);
-            
-            // Kolom 0 = Kode, 1 = Jenis
+
             txtKode.setText(tblData.getValueAt(row, 0).toString());
             txtJenis.setText(tblData.getValueAt(row, 1).toString());
             
             String pilihan = cbPilihAturan.getSelectedItem().toString();
             if (pilihan.equals("Poin Pelanggaran")) {
-                // Kolom 2 = Sanksi, 3 = Poin
                 txtSanksi.setText(tblData.getValueAt(row, 2).toString());
                 txtPoin.setText(tblData.getValueAt(row, 3).toString());
             } else {
-                // Kolom 2 = Poin (Karena sanksi tidak ada di tabel prestasi)
                 txtPoin.setText(tblData.getValueAt(row, 2).toString());
                 txtSanksi.setText("-");
             }

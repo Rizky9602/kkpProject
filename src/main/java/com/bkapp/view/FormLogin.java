@@ -142,13 +142,7 @@ public class FormLogin extends javax.swing.JFrame {
 
     private void TFpasswordKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TFpasswordKeyPressed
         if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
-
-            // Masukkan kodingan yang ingin dijalankan di sini
-            // Contoh: Memanggil fungsi klik pada tombol Login secara otomatis
             jButton1.doClick();
-
-            // Atau bisa langsung coding logic-nya:
-            // JOptionPane.showMessageDialog(null, "Anda menekan Enter!");
         }
     }//GEN-LAST:event_TFpasswordKeyPressed
 

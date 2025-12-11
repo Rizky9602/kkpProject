@@ -22,11 +22,10 @@ public class KoneksiDB {
                 koneksi = DriverManager.getConnection(url, user, pass);
 
             } catch (ClassNotFoundException | SQLException e) {
-                // Tampilkan pesan error jika gagal koneksi
                 JOptionPane.showMessageDialog(null,
                         "Error Koneksi Database: " + e.getMessage(),
                         "Koneksi Gagal", JOptionPane.ERROR_MESSAGE);
-                System.exit(0); // Hentikan aplikasi jika DB gagal konek
+                System.exit(0);
             }
         }
         return koneksi;

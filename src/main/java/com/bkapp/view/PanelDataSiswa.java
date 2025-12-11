@@ -49,14 +49,13 @@ public class PanelDataSiswa extends javax.swing.JPanel {
         }
         tblData.setModel(model);
     }
-    
-    // Helper: Reset Form
+
     private void resetForm() {
-        txtNis.setText(""); // NIS
-        txtKelas.setText(""); // Nama
-        txtTahunAjaran.setText(""); // Kelas
-        txtNama.setText(""); // Tahun Ajaran
-        txtNis.setEditable(true); // Aktifkan NIS lagi
+        txtNis.setText("");
+        txtKelas.setText("");
+        txtTahunAjaran.setText("");
+        txtNama.setText("");
+        txtNis.setEditable(true);
     }
 
     /**
@@ -349,22 +348,16 @@ public class PanelDataSiswa extends javax.swing.JPanel {
                 
                 List<Siswa> listImport = new ArrayList<>();
                 int totalSuccess = 0;
-                
-                // --- LOOPING ANTAR SHEET (Perubahan Utama Disini) ---
-                // Kita akan membaca sheet dari index 0 sampai index terakhir
+
                 for (int i = 0; i < workbook.getNumberOfSheets(); i++) {
                     Sheet sheet = workbook.getSheetAt(i);
-                    System.out.println("Sedang memproses Sheet: " + sheet.getSheetName()); // Debugging di output
-                    
-                    // Loop Baris per Sheet (Mulai dari 1 karena 0 header)
+                    System.out.println("Sedang memproses Sheet: " + sheet.getSheetName());
+
                     for (int r = 1; r <= sheet.getLastRowNum(); r++) {
                         Row row = sheet.getRow(r);
                         if (row == null) continue;
                         
                         try {
-                            // --- BACA DATA (Sesuai Kolom Anda: B=Tahun, C=Kelas, D=NIS, E=Nama) ---
-                            
-                            // Kolom B (Index 1): TAHUN
                             Cell cTahun = row.getCell(1);
                             String tahun = "";
                             if(cTahun != null) {
@@ -373,13 +366,11 @@ public class PanelDataSiswa extends javax.swing.JPanel {
                                 else 
                                     tahun = cTahun.getStringCellValue();
                             }
-                            
-                            // Kolom C (Index 2): KELAS
+
                             Cell cKelas = row.getCell(2);
                             String kelas = "";
                             if(cKelas != null) kelas = cKelas.getStringCellValue();
-                            
-                            // Kolom D (Index 3): NIS
+
                             Cell cNis = row.getCell(3);
                             String nis = "";
                             if(cNis != null) {
@@ -388,13 +379,11 @@ public class PanelDataSiswa extends javax.swing.JPanel {
                                 else 
                                     nis = cNis.getStringCellValue();
                             }
-                            
-                            // Kolom E (Index 4): NAMA
+
                             Cell cNama = row.getCell(4);
                             String nama = "";
                             if(cNama != null) nama = cNama.getStringCellValue().toUpperCase();
-                            
-                            // --- VALIDASI & ADD ---
+
                             if(!nis.isEmpty() && !nama.isEmpty() && !kelas.isEmpty()) {
                                 Siswa s = new Siswa();
                                 s.setNis(nis);
@@ -411,8 +400,7 @@ public class PanelDataSiswa extends javax.swing.JPanel {
                         }
                     }
                 }
-                
-                // --- SIMPAN KE DATABASE (Sekali Proses) ---
+
                 if (!listImport.isEmpty()) {
                     SiswaDAO dao = new SiswaDAO();
                     dao.importSiswaBatch(listImport);
@@ -454,12 +442,12 @@ public class PanelDataSiswa extends javax.swing.JPanel {
     private void tblDataMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblDataMouseClicked
        int row = tblData.getSelectedRow();
         if(row != -1) {
-            txtNis.setText(tblData.getValueAt(row, 0).toString()); // NIS
-            txtNama.setText(tblData.getValueAt(row, 1).toString()); // Nama
-            txtKelas.setText(tblData.getValueAt(row, 2).toString()); // Kelas
-            txtTahunAjaran.setText(tblData.getValueAt(row, 3).toString()); // Tahun
+            txtNis.setText(tblData.getValueAt(row, 0).toString());
+            txtNama.setText(tblData.getValueAt(row, 1).toString());
+            txtKelas.setText(tblData.getValueAt(row, 2).toString());
+            txtTahunAjaran.setText(tblData.getValueAt(row, 3).toString());
             
-            txtNis.setEditable(false); // NIS jadi kunci, jangan diedit
+            txtNis.setEditable(false);
         }
     }//GEN-LAST:event_tblDataMouseClicked
 
@@ -496,7 +484,7 @@ public class PanelDataSiswa extends javax.swing.JPanel {
         }
         
         Siswa s = new Siswa();
-        s.setNis(txtNis.getText()); // PK
+        s.setNis(txtNis.getText());
         s.setNamaSiswa(txtNama.getText());
         s.setKelas(txtKelas.getText());
         s.setTahunAjaran(txtTahunAjaran.getText());

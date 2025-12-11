@@ -24,7 +24,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class PanelKonsultasi extends javax.swing.JPanel {
 
-    
     public PanelKonsultasi() {
         initComponents();
         initForm();

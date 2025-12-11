@@ -27,9 +27,6 @@ import java.util.List;
 
 public class PanelLaporan extends javax.swing.JPanel {
 
-    /**
-     * Creates new form PanelLaporan
-     */
     public PanelLaporan() {
         initComponents();
         initForm();
@@ -37,8 +34,6 @@ public class PanelLaporan extends javax.swing.JPanel {
 
     private void initForm() {
         SiswaDAO dao = new SiswaDAO();
-
-        // 1. Isi Dropdown Kelas
         List<String> listKelas = dao.getAllKelas();
 
         cbPilihKelas.removeAllItems();
@@ -48,14 +43,11 @@ public class PanelLaporan extends javax.swing.JPanel {
             cbPilihKelas.addItem(k);
         }
 
-        // 2. Reset Dropdown Nama
         cbPilihNama.removeAllItems();
         cbPilihNama.addItem("Semua Siswa");
 
     }
 
-
-    // Helper Method untuk Export Excel
     private void exportToExcel(DefaultTableModel model, String judulSheet) {
         JFileChooser chooser = new JFileChooser();
         chooser.setDialogTitle("Simpan Laporan " + judulSheet);
@@ -73,13 +65,11 @@ public class PanelLaporan extends javax.swing.JPanel {
             try (Workbook workbook = new XSSFWorkbook()) {
                 Sheet sheet = workbook.createSheet(judulSheet);
 
-                // Buat Header Excel
                 Row headerRow = sheet.createRow(0);
                 for (int i = 0; i < model.getColumnCount(); i++) {
                     Cell cell = headerRow.createCell(i);
                     cell.setCellValue(model.getColumnName(i));
 
-                    // Style Header (Bold)
                     CellStyle style = workbook.createCellStyle();
                     Font font = workbook.createFont();
                     font.setBold(true);
@@ -87,7 +77,6 @@ public class PanelLaporan extends javax.swing.JPanel {
                     cell.setCellStyle(style);
                 }
 
-                // Isi Data
                 for (int i = 0; i < model.getRowCount(); i++) {
                     Row row = sheet.createRow(i + 1);
                     for (int j = 0; j < model.getColumnCount(); j++) {
@@ -97,12 +86,10 @@ public class PanelLaporan extends javax.swing.JPanel {
                     }
                 }
 
-                // Auto Size
                 for (int i = 0; i < model.getColumnCount(); i++) {
                     sheet.autoSizeColumn(i);
                 }
 
-                // Tulis File
                 try (FileOutputStream out = new FileOutputStream(fileToSave)) {
                     workbook.write(out);
                     JOptionPane.showMessageDialog(this, "Laporan berhasil disimpan!\nLokasi: " + fileToSave.getAbsolutePath());
@@ -373,7 +360,6 @@ public class PanelLaporan extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCetakActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCetakActionPerformed
-        // 1. Validasi Tanggal
         if (dcDari.getDate() == null || dcSampai.getDate() == null) {
             JOptionPane.showMessageDialog(this, "Harap pilih rentang tanggal (Dari & Sampai)!");
             return;
@@ -384,11 +370,9 @@ public class PanelLaporan extends javax.swing.JPanel {
             return;
         }
 
-        // 2. Ambil Parameter dari Form
         String jenisLaporan = cbPilihLaporan.getSelectedItem().toString(); // "Poin Pelanggaran" atau "Poin Prestasi"
         String kelas = cbPilihKelas.getSelectedItem().toString();
 
-        // Handle nama siswa (Ambil nama saja jika format dropdown "NIS - Nama")
         String namaRaw = cbPilihNama.getSelectedItem().toString();
         String namaSiswa = namaRaw;
         if (namaRaw.contains("-")) {
@@ -399,7 +383,6 @@ public class PanelLaporan extends javax.swing.JPanel {
         String tglDari = sdf.format(dcDari.getDate());
         String tglSampai = sdf.format(dcSampai.getDate());
 
-        // 3. Ambil Data dari Database (Pakai DAO)
         LaporanDAO dao = new LaporanDAO();
         DefaultTableModel dataModel = dao.getLaporan(jenisLaporan, kelas, namaSiswa, tglDari, tglSampai);
 
@@ -409,24 +392,20 @@ public class PanelLaporan extends javax.swing.JPanel {
         }
 
         tblLaporan.setModel(dataModel);
-        // 5. PROSES EXPORT EXCEL (Langsung)
         exportToExcel(dataModel, jenisLaporan);
     }//GEN-LAST:event_btnCetakActionPerformed
 
     private void cbPilihKelasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbPilihKelasActionPerformed
         String kelasTerpilih = (String) cbPilihKelas.getSelectedItem();
 
-        // Reset dropdown nama dulu
         cbPilihNama.removeAllItems();
         cbPilihNama.addItem("Semua Siswa");
 
-        // Jika yang dipilih bukan "Semua Kelas" dan tidak null
         if (kelasTerpilih != null && !kelasTerpilih.equals("Semua Kelas")) {
             SiswaDAO dao = new SiswaDAO();
             List<Siswa> listSiswa = dao.getSiswaByKelas(kelasTerpilih);
 
             for (Siswa s : listSiswa) {
-                // Kita masukkan format "NIS - Nama" agar mudah dibaca & diproses logic cetak
                 cbPilihNama.addItem(s.getNis() + " - " + s.getNamaSiswa());
             }
         }

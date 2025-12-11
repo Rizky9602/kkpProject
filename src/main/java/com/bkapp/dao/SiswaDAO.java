@@ -14,10 +14,8 @@ public class SiswaDAO {
         this.conn = KoneksiDB.getKoneksi();
     }
 
-    // Ambil Data untuk Tabel
     public List<Siswa> getAllSiswa() {
         List<Siswa> listSiswa = new ArrayList<>();
-        // Pastikan nama kolom di database sesuai (misal: 'tahun_ajaran')
         String sql = "SELECT * FROM tbl_siswa ORDER BY kelas ASC, nama_siswa ASC";
 
         try {
@@ -40,7 +38,6 @@ public class SiswaDAO {
         return listSiswa;
     }
 
-    // Insert Satu Siswa (Manual)
     public boolean insertSiswa(Siswa s) {
         String sql = "INSERT INTO tbl_siswa (nis, nama_siswa, kelas, tahun_ajaran, total_poin_aktif) VALUES (?, ?, ?, ?, 0)";
         try {
@@ -57,10 +54,7 @@ public class SiswaDAO {
         }
     }
 
-    // Import Batch (Excel)
    public void importSiswaBatch(List<Siswa> listSiswa) {
-        // Logika: Jika NIS sudah ada, UPDATE Nama, Kelas, dan Tahun Ajaran.
-        // Total Poin TIDAK DI-RESET (tetap pakai poin lama: total_poin_aktif)
         String sql = "INSERT INTO tbl_siswa (nis, nama_siswa, kelas, tahun_ajaran, total_poin_aktif) " +
                      "VALUES (?, ?, ?, ?, 0) " +
                      "ON DUPLICATE KEY UPDATE " +
@@ -90,7 +84,6 @@ public class SiswaDAO {
         }
     }
 
-    // Update Data Siswa (Tombol Edit)
     public boolean updateSiswa(Siswa s) {
         String sql = "UPDATE tbl_siswa SET nama_siswa=?, kelas=?, tahun_ajaran=? WHERE nis=?";
         try {
@@ -104,22 +97,16 @@ public class SiswaDAO {
         } catch (SQLException e) { return false; }
     }
 
-    // Hapus Siswa
     public boolean deleteSiswa(String nis) {
     String sqlCari = "SELECT id_siswa FROM tbl_siswa WHERE nis = ?";
     
     try {
-        // 1. Cari ID_SISWA berdasarkan NIS
         PreparedStatement psCari = conn.prepareStatement(sqlCari);
         psCari.setString(1, nis);
         ResultSet rs = psCari.executeQuery();
 
         if (rs.next()) {
-            // Ambil ID Siswa yang benar (Integer)
             int idSiswa = rs.getInt("id_siswa");
-
-            // 2. Hapus Data di Tabel Anak (Pelanggaran & Pencapaian & Konseling)
-            // Gunakan id_siswa sebagai kuncinya
             String sqlHapusPel = "DELETE FROM tbl_histori_pelanggaran WHERE id_siswa = ?";
             PreparedStatement psPel = conn.prepareStatement(sqlHapusPel);
             psPel.setInt(1, idSiswa);
@@ -135,7 +122,6 @@ public class SiswaDAO {
             psKon.setInt(1, idSiswa);
             psKon.executeUpdate();
 
-            // 3. Terakhir, Hapus Data Induk (Siswa)
             String sqlHapusSiswa = "DELETE FROM tbl_siswa WHERE id_siswa = ?";
             PreparedStatement psSiswa = conn.prepareStatement(sqlHapusSiswa);
             psSiswa.setInt(1, idSiswa);
@@ -158,30 +144,20 @@ public class SiswaDAO {
             conn.setAutoCommit(false);
             Statement stmt = conn.createStatement();
 
-            // 1. Hapus Kelas XII (Lulus)
             stmt.executeUpdate("DELETE FROM tbl_siswa WHERE kelas LIKE 'XII %' OR kelas LIKE '12 %'");
-
-            // 2. Naikkan XI -> XII
             stmt.executeUpdate("UPDATE tbl_siswa SET kelas = CONCAT('XII ', SUBSTRING(kelas, 4)) WHERE kelas LIKE 'XI %'");
-
-            // 3. Naikkan X -> XI
             stmt.executeUpdate("UPDATE tbl_siswa SET kelas = CONCAT('XI ', SUBSTRING(kelas, 3)) WHERE kelas LIKE 'X %'");
-
-            // 4. UPDATE TAHUN AJARAN OTOMATIS (Misal: "2025/2026" -> "2026/2027")
-            // Logika: Ambil 4 digit kiri + 1, gabung garis miring, ambil 4 digit kanan + 1
             String sqlUpdateTahun = 
                 "UPDATE tbl_siswa SET tahun_ajaran = CONCAT(" +
                 "   CAST(LEFT(tahun_ajaran, 4) AS UNSIGNED) + 1, " +
                 "   '/', " +
                 "   CAST(RIGHT(tahun_ajaran, 4) AS UNSIGNED) + 1 " +
-                ") WHERE length(tahun_ajaran) = 9"; // Pastikan formatnya benar (length 9)
-            
+                ") WHERE length(tahun_ajaran) = 9";
             stmt.executeUpdate(sqlUpdateTahun);
 
             conn.commit();
             conn.setAutoCommit(true);
             return true;
-
         } catch (SQLException e) {
             try { conn.rollback(); } catch (Exception ex) {}
             JOptionPane.showMessageDialog(null, "Gagal Kenaikan Kelas: " + e.getMessage());
@@ -191,7 +167,6 @@ public class SiswaDAO {
     
     public List<Siswa> getSiswaBermasalah() {
         List<Siswa> listSiswa = new ArrayList<>();
-        // Query filter poin >= 50 dan diurutkan dari yang poinnya paling besar
         String sql = "SELECT * FROM tbl_siswa WHERE total_poin_aktif >= 50 ORDER BY total_poin_aktif DESC";
 
         try {
@@ -203,7 +178,6 @@ public class SiswaDAO {
                 s.setNamaSiswa(rs.getString("nama_siswa"));
                 s.setKelas(rs.getString("kelas"));
                 s.setTotalPoin(rs.getInt("total_poin_aktif"));
-
                 listSiswa.add(s);
             }
         } catch (SQLException e) {
@@ -250,7 +224,6 @@ public class SiswaDAO {
     }
     
     public boolean updatePoinSiswa(int idSiswa, int poinBaru) {
-        // Mencegah poin negatif di level database
         if (poinBaru < 0) {
             poinBaru = 0;
         }

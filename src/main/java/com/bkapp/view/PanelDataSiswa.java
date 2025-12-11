@@ -179,9 +179,16 @@ public class PanelDataSiswa extends javax.swing.JPanel {
             Class[] types = new Class [] {
                 java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
             }
         });
         tblData.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -232,9 +239,9 @@ public class PanelDataSiswa extends javax.swing.JPanel {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap(53, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap(53, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel5)
                             .addComponent(jLabel6)
@@ -247,7 +254,6 @@ public class PanelDataSiswa extends javax.swing.JPanel {
                             .addComponent(txtTahunAjaran)
                             .addComponent(txtNama)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -449,9 +455,9 @@ public class PanelDataSiswa extends javax.swing.JPanel {
        int row = tblData.getSelectedRow();
         if(row != -1) {
             txtNis.setText(tblData.getValueAt(row, 0).toString()); // NIS
-            txtKelas.setText(tblData.getValueAt(row, 1).toString()); // Nama
-            txtTahunAjaran.setText(tblData.getValueAt(row, 2).toString()); // Kelas
-            txtNama.setText(tblData.getValueAt(row, 3).toString()); // Tahun
+            txtNama.setText(tblData.getValueAt(row, 1).toString()); // Nama
+            txtKelas.setText(tblData.getValueAt(row, 2).toString()); // Kelas
+            txtTahunAjaran.setText(tblData.getValueAt(row, 3).toString()); // Tahun
             
             txtNis.setEditable(false); // NIS jadi kunci, jangan diedit
         }
@@ -462,6 +468,7 @@ public class PanelDataSiswa extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "NIS dan Nama wajib diisi!");
             return;
         }
+       
         
         Siswa s = new Siswa();
         s.setNis(txtNis.getText());
@@ -470,6 +477,11 @@ public class PanelDataSiswa extends javax.swing.JPanel {
         s.setTahunAjaran(txtTahunAjaran.getText());
         
         SiswaDAO dao = new SiswaDAO();
+        
+        if(dao.cekDataSiswa(txtNis.getText())){
+            return;
+        }
+        
         if(dao.insertSiswa(s)) {
             JOptionPane.showMessageDialog(this, "Data Tersimpan");
             loadTable();

@@ -20,14 +20,6 @@ public class UserDAO {
     public UserDAO() {
         this.conn = KoneksiDB.getKoneksi();
     }
-
-    /**
-     * Fungsi untuk Login
-     *
-     * @param username
-     * @param password (password asli, belum di-hash)
-     * @return Object User jika berhasil, null jika gagal
-     */
     public User login(String username, String password) {
         User user = null;
         String sql = "SELECT * FROM tbl_user WHERE username = ? AND password = ?";

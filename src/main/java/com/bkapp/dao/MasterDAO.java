@@ -217,11 +217,25 @@ public class MasterDAO {
            PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, kode);
             ps.executeQuery();
-          JOptionPane.showMessageDialog(null, "Kode prestasi sudah tersedia");
+          JOptionPane.showMessageDialog(null, "Kode Prestasi sudah tersedia");
      return true;
      } catch (SQLException e){
          return false;
      }
     }
+    
+    public boolean cekDataPelanggaran(String kode){
+     String sql = "SELECT COUNT(*) FROM tbl_master_Pelanggaran  WHERE kode_pelanggaran= ?";   
+     try{
+           PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, kode);
+            ps.executeQuery();
+          JOptionPane.showMessageDialog(null, "Kode Pelanggaran sudah tersedia");
+     return true;
+     } catch (SQLException e){
+         return false;
+     }
+    }
+      
         
 }

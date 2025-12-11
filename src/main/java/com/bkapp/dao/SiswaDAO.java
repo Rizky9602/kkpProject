@@ -106,15 +106,53 @@ public class SiswaDAO {
 
     // Hapus Siswa
     public boolean deleteSiswa(String nis) {
-        try {
-            PreparedStatement ps = conn.prepareStatement("DELETE FROM tbl_siswa WHERE nis=?");
-            ps.setString(1, nis);
-            ps.executeUpdate();
-            return true;
-        } catch (SQLException e) { return false; }
-    }
+    String sqlCari = "SELECT id_siswa FROM tbl_siswa WHERE nis = ?";
+    
+    try {
+        // 1. Cari ID_SISWA berdasarkan NIS
+        PreparedStatement psCari = conn.prepareStatement(sqlCari);
+        psCari.setString(1, nis);
+        ResultSet rs = psCari.executeQuery();
 
-    // --- LOGIKA KENAIKAN KELAS OTOMATIS & GANTI TAHUN AJARAN ---
+        if (rs.next()) {
+            // Ambil ID Siswa yang benar (Integer)
+            int idSiswa = rs.getInt("id_siswa");
+
+            // 2. Hapus Data di Tabel Anak (Pelanggaran & Pencapaian & Konseling)
+            // Gunakan id_siswa sebagai kuncinya
+            String sqlHapusPel = "DELETE FROM tbl_histori_pelanggaran WHERE id_siswa = ?";
+            PreparedStatement psPel = conn.prepareStatement(sqlHapusPel);
+            psPel.setInt(1, idSiswa);
+            psPel.executeUpdate();
+
+            String sqlHapusPen = "DELETE FROM tbl_histori_pencapaian WHERE id_siswa = ?";
+            PreparedStatement psPen = conn.prepareStatement(sqlHapusPen);
+            psPen.setInt(1, idSiswa);
+            psPen.executeUpdate();
+            
+            String sqlHapusKon = "DELETE FROM tbl_histori_konseling WHERE id_siswa = ?";
+            PreparedStatement psKon = conn.prepareStatement(sqlHapusKon);
+            psKon.setInt(1, idSiswa);
+            psKon.executeUpdate();
+
+            // 3. Terakhir, Hapus Data Induk (Siswa)
+            String sqlHapusSiswa = "DELETE FROM tbl_siswa WHERE id_siswa = ?";
+            PreparedStatement psSiswa = conn.prepareStatement(sqlHapusSiswa);
+            psSiswa.setInt(1, idSiswa);
+            
+            psSiswa.executeUpdate();
+            return true;
+        } else {
+            System.out.println("Siswa dengan NIS " + nis + " tidak ditemukan.");
+            return false;
+        }
+
+    } catch (SQLException e) {
+        System.err.println("Gagal Hapus Siswa: " + e.getMessage());
+        return false;
+    }
+}
+
     public boolean prosesKenaikanKelas() {
         try {
             conn.setAutoCommit(false);
@@ -231,5 +269,18 @@ public class SiswaDAO {
             JOptionPane.showMessageDialog(null, "Gagal Update Poin: " + e.getMessage());
             return false;
         }
+    }
+    
+    public boolean cekDataSiswa(String kode){
+     String sql = "SELECT COUNT(*) FROM tbl_siswa  WHERE nis= ?";   
+     try{
+           PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, kode);
+            ps.executeQuery();
+          JOptionPane.showMessageDialog(null, "Nis Sudah Tersedia");
+     return true;
+     } catch (SQLException e){
+         return false;
+     }
     }
 }

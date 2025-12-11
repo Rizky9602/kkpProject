@@ -301,7 +301,7 @@ public class PanelPelanggaran extends javax.swing.JPanel {
                 .addComponent(jLabel1)
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(sssLayout.createSequentialGroup()
-                .addContainerGap(25, Short.MAX_VALUE)
+                .addGap(25, 25, 25)
                 .addGroup(sssLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(sssLayout.createSequentialGroup()
                         .addGroup(sssLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -355,10 +355,10 @@ public class PanelPelanggaran extends javax.swing.JPanel {
                                     .addComponent(cbJenisPelanggaran, javax.swing.GroupLayout.PREFERRED_SIZE, 436, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(cbNamaSiswa, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE))))))
                 .addGap(12, 12, 12)
-                .addGroup(sssLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(sssLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 403, Short.MAX_VALUE)
                     .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(13, Short.MAX_VALUE))
+                .addGap(13, 13, 13))
         );
         sssLayout.setVerticalGroup(
             sssLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

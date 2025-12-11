@@ -24,7 +24,7 @@ public class PanelPrestasi extends javax.swing.JPanel {
 
     private void initForm() {
         MasterDAO masterDao = new MasterDAO();
-        List<Pencapaian> listPre = masterDao.getAllPrestasi();
+        List<Pencapaian> listPre = masterDao.getAllPrestasi(); 
 
         cbJenisPrestasi.removeAllItems();
         cbJenisPrestasi.addItem("-- Pilih Pencapaian --");
@@ -41,8 +41,10 @@ public class PanelPrestasi extends javax.swing.JPanel {
             cbKelas.addItem(k);
         }
 
-        txtKeterangan.setEditable(false);
-        txtTotalPoin.setEditable(false); // Atau txtPoinPelanggaran
+        txtTotalPoin.setEditable(false);
+        txtPoinInput.setEditable(false);
+        txtFoto.setEditable(false);
+        btnSimpan.setEnabled(false); 
     }
 
     private void resetForm() {
@@ -67,7 +69,7 @@ public class PanelPrestasi extends javax.swing.JPanel {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        btnSimpan = new javax.swing.JButton();
         btn_edit = new javax.swing.JButton();
         btn_hapus = new javax.swing.JButton();
         cbKelas = new javax.swing.JComboBox();
@@ -106,13 +108,13 @@ public class PanelPrestasi extends javax.swing.JPanel {
         jLabel6.setFont(new java.awt.Font("Sans Serif Collection", 0, 12)); // NOI18N
         jLabel6.setText("Keterangan");
 
-        jButton1.setBackground(new java.awt.Color(153, 255, 102));
-        jButton1.setFont(new java.awt.Font("Sans Serif Collection", 1, 12)); // NOI18N
-        jButton1.setText("Simpan");
-        jButton1.setBorder(null);
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnSimpan.setBackground(new java.awt.Color(153, 255, 102));
+        btnSimpan.setFont(new java.awt.Font("Sans Serif Collection", 1, 12)); // NOI18N
+        btnSimpan.setText("Simpan");
+        btnSimpan.setBorder(null);
+        btnSimpan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnSimpanActionPerformed(evt);
             }
         });
 
@@ -302,7 +304,7 @@ public class PanelPrestasi extends javax.swing.JPanel {
                                 .addGroup(sssLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                     .addComponent(dcTanggal, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(sssLayout.createSequentialGroup()
-                                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(btnSimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                         .addComponent(btn_edit, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -386,7 +388,7 @@ public class PanelPrestasi extends javax.swing.JPanel {
                     .addGroup(sssLayout.createSequentialGroup()
                         .addGap(95, 95, 95)
                         .addGroup(sssLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnSimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btn_edit, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btn_hapus, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(sssLayout.createSequentialGroup()
@@ -417,27 +419,20 @@ public class PanelPrestasi extends javax.swing.JPanel {
 
     private void btn_pilihfotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_pilihfotoActionPerformed
         JFileChooser chooser = new JFileChooser();
-        chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        chooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter(
-                "Gambar (JPG, PNG)", "jpg", "jpeg", "png"
-        ));
-
-        int hasil = chooser.showOpenDialog(this);
-
-        if (hasil == JFileChooser.APPROVE_OPTION) {
+        chooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("Gambar", "jpg", "png", "jpeg"));
+        
+        if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             File file = chooser.getSelectedFile();
-
             this.fileFotoDipilih = file;
-
             txtFoto.setText(file.getAbsolutePath());
-
+            
+            // Preview
             try {
                 javax.swing.ImageIcon icon = new javax.swing.ImageIcon(file.getAbsolutePath());
                 java.awt.Image img = icon.getImage().getScaledInstance(jLabel7.getWidth(), jLabel7.getHeight(), java.awt.Image.SCALE_SMOOTH);
                 jLabel7.setIcon(new javax.swing.ImageIcon(img));
                 jLabel7.setText("");
-            } catch (Exception e) {
-            }
+            } catch (Exception e) {}
         }
     }//GEN-LAST:event_btn_pilihfotoActionPerformed
 
@@ -448,25 +443,28 @@ public class PanelPrestasi extends javax.swing.JPanel {
     private void cbJenisPrestasiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbJenisPrestasiActionPerformed
         if (cbJenisPrestasi.getSelectedItem() instanceof Pencapaian) {
             Pencapaian p = (Pencapaian) cbJenisPrestasi.getSelectedItem();
-    
             txtPoinInput.setText(String.valueOf(p.getPoinPengurang()));
         }
     }//GEN-LAST:event_cbJenisPrestasiActionPerformed
 
     private void cbNamaSiswaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbNamaSiswaActionPerformed
-        if (cbNamaSiswa.getSelectedItem() instanceof Siswa) {
+       if (cbNamaSiswa.getSelectedItem() instanceof Siswa) {
             Siswa s = (Siswa) cbNamaSiswa.getSelectedItem();
-
             txtTotalPoin.setText(String.valueOf(s.getTotalPoin()));
 
-            PrestasiDAO historiDao = new PrestasiDAO();
-            tblRiwayat.setModel(historiDao.getHistoriTable(s.getIdSiswa()));
-
+            // Load Tabel Riwayat Prestasi
+            PrestasiDAO pDao = new PrestasiDAO();
+            tblRiwayat.setModel(pDao.getHistoriTable(s.getIdSiswa()));
+            
+            // Sembunyikan ID
             if (tblRiwayat.getColumnModel().getColumnCount() > 0) {
                 tblRiwayat.getColumnModel().getColumn(0).setMinWidth(0);
                 tblRiwayat.getColumnModel().getColumn(0).setMaxWidth(0);
                 tblRiwayat.getColumnModel().getColumn(0).setWidth(0);
             }
+            
+            btnSimpan.setEnabled(true);
+            resetForm();
         }
     }//GEN-LAST:event_cbNamaSiswaActionPerformed
 
@@ -477,7 +475,8 @@ public class PanelPrestasi extends javax.swing.JPanel {
 
         SiswaDAO dao = new SiswaDAO();
         List<Siswa> listSiswa = dao.getSiswaByKelas(kelasTerpilih);
-
+        btnSimpan.setEnabled(true);
+         resetForm();
         cbNamaSiswa.removeAllItems();
         for (Siswa s : listSiswa) {
             cbNamaSiswa.addItem(s);
@@ -485,103 +484,81 @@ public class PanelPrestasi extends javax.swing.JPanel {
     }//GEN-LAST:event_cbKelasActionPerformed
 
     private void btn_hapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_hapusActionPerformed
-        int row = tblRiwayat.getSelectedRow();
+       int row = tblRiwayat.getSelectedRow();
         if (row == -1) { JOptionPane.showMessageDialog(this, "Pilih data!"); return; }
-        
-        if (JOptionPane.showConfirmDialog(this, "Hapus prestasi ini? Poin siswa akan bertambah kembali.", "Hapus", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+
+        if (JOptionPane.showConfirmDialog(this, "Hapus prestasi ini? Poin siswa akan BERTAMBAH.", "Hapus", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
             try {
                 int idHistori = Integer.parseInt(tblRiwayat.getValueAt(row, 0).toString());
                 
-                PrestasiDAO dao = new PrestasiDAO();
+                PrestasiDAO pDao = new PrestasiDAO();
                 SiswaDAO sDao = new SiswaDAO();
-
-                int poinPrestasiIni = dao.getPoinLama(idHistori);
-
-                if (dao.deletePrestasi(idHistori)) {
+                
+                // 1. Ambil poin yang mau dihapus
+                int poinPrestasi = pDao.getPoinLama(idHistori);
+                
+                // 2. Hapus Data
+                if (pDao.deletePrestasi(idHistori)) {
+                    // 3. Kembalikan Poin Siswa (Ditambah)
                     Siswa s = (Siswa) cbNamaSiswa.getSelectedItem();
-                    int poinBalik = s.getTotalPoin() + poinPrestasiIni;
-
+                    int poinBalik = s.getTotalPoin() + poinPrestasi;
+                    
                     sDao.updatePoinSiswa(s.getIdSiswa(), poinBalik);
                     
-                    JOptionPane.showMessageDialog(this, "Data dihapus. Poin siswa dikembalikan.");
+                    JOptionPane.showMessageDialog(this, "Terhapus. Poin siswa dikembalikan.");
                     cbNamaSiswaActionPerformed(null);
-                    resetForm();
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            } catch (Exception e) { e.printStackTrace(); }
         }
     }//GEN-LAST:event_btn_hapusActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-    if (!(cbNamaSiswa.getSelectedItem() instanceof Siswa)) {
-            JOptionPane.showMessageDialog(this, "Pilih Siswa dulu!");
-            return;
+    private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanActionPerformed
+   if (!(cbNamaSiswa.getSelectedItem() instanceof Siswa)) {
+            JOptionPane.showMessageDialog(this, "Pilih Siswa!"); return;
         }
         if (!(cbJenisPrestasi.getSelectedItem() instanceof Pencapaian)) {
-            JOptionPane.showMessageDialog(this, "Pilih Jenis Pencapaian!");
-            return;
+            JOptionPane.showMessageDialog(this, "Pilih Prestasi!"); return;
         }
-
-        if (fileFotoDipilih == null) {
-            JOptionPane.showMessageDialog(this, "Harap upload bukti foto!");
-            return;
-        }
-
         if (dcTanggal.getDate() == null) {
-            JOptionPane.showMessageDialog(this, "Pilih Tanggal Kejadian!");
-            return;
+            JOptionPane.showMessageDialog(this, "Isi Tanggal!"); return;
         }
 
         Siswa siswa = (Siswa) cbNamaSiswa.getSelectedItem();
-        Pencapaian pel = (Pencapaian) cbJenisPrestasi.getSelectedItem();
-
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String tglStr = sdf.format(dcTanggal.getDate());
-
+        Pencapaian prestasi = (Pencapaian) cbJenisPrestasi.getSelectedItem();
+        
         String pathDB = "";
         try {
-            String appPath = System.getProperty("user.dir");
-            File folder = new File(appPath + File.separator + "bukti_bk");
-            if (!folder.exists()) folder.mkdirs();
-
-            String namaFile = siswa.getNis() + "_" + System.currentTimeMillis() + ".jpg";
-            Path source = fileFotoDipilih.toPath();
-            Path target = Paths.get(folder.getAbsolutePath() + File.separator + namaFile);
-
-            Files.copy(source, target, StandardCopyOption.REPLACE_EXISTING);
-            pathDB = target.toString();
-            txtTotalPoin.setText(String.valueOf(siswa.getTotalPoin()));
-
+            if (fileFotoDipilih != null) {
+                String appPath = System.getProperty("user.dir");
+                File folder = new File(appPath + File.separator + "bukti_prestasi"); // Beda folder biar rapi
+                if (!folder.exists()) folder.mkdirs();
+                
+                String namaFile = "PRES_" + siswa.getNis() + "_" + System.currentTimeMillis() + ".jpg";
+                Files.copy(fileFotoDipilih.toPath(), new File(folder, namaFile).toPath(), StandardCopyOption.REPLACE_EXISTING);
+                pathDB = new File(folder, namaFile).getAbsolutePath();
+            }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Gagal Upload Foto: " + e.getMessage());
+            JOptionPane.showMessageDialog(this, "Gagal Upload: " + e.getMessage());
             return;
         }
-        
-        Pencapaian pres = (Pencapaian) cbJenisPrestasi.getSelectedItem();
-        
-        int poinLamaSiswa = siswa.getTotalPoin();
-        int poinBaruSiswa = poinLamaSiswa - pres.getPoinPengurang();
 
-        if (poinBaruSiswa < 0) {
-            poinBaruSiswa = 0;
-        }
+        int poinBaru = siswa.getTotalPoin() - prestasi.getPoinPengurang();
+        if (poinBaru < 0) poinBaru = 0; 
 
-        PrestasiDAO dao = new PrestasiDAO();
+        PrestasiDAO pDao = new PrestasiDAO();
         SiswaDAO sDao = new SiswaDAO();
+        
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String tgl = sdf.format(dcTanggal.getDate());
-        String ket = txtKeterangan.getText(); // Ambil dari text area
-        
-        boolean sukses = dao.insertPrestasi(siswa.getIdSiswa(), pres.getKodePencapaian(), pathDB, tgl, ket);
-        
-        if (sukses) {
-            sDao.updatePoinSiswa(siswa.getIdSiswa(), poinBaruSiswa);
-            JOptionPane.showMessageDialog(this, "Prestasi tersimpan! Poin pelanggaran berkurang.");
+        String ket = txtKeterangan.getText();
 
-            cbNamaSiswaActionPerformed(null);
-            resetForm();
+        if (pDao.insertPrestasi(siswa.getIdSiswa(), prestasi.getKodePencapaian(), pathDB, tgl, ket)) {
+            sDao.updatePoinSiswa(siswa.getIdSiswa(), poinBaru);
+            JOptionPane.showMessageDialog(this, "Berhasil! Poin siswa berkurang.");
+            
+            cbNamaSiswaActionPerformed(null); 
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnSimpanActionPerformed
 
     private void txtTotalPoinActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTotalPoinActionPerformed
         // TODO add your handling code here:
@@ -589,143 +566,104 @@ public class PanelPrestasi extends javax.swing.JPanel {
 
     private void tblRiwayatMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblRiwayatMouseClicked
         int row = tblRiwayat.getSelectedRow();
-
         if (row != -1) {
             try {
-                int idHistori = Integer.parseInt(tblRiwayat.getValueAt(row, 0).toString()); // Kolom 0 = ID
-                String tgl = tblRiwayat.getValueAt(row, 1).toString();
-                String kode = tblRiwayat.getValueAt(row, 2).toString();               
-
+                // Ambil Data dari Kolom (0=ID, 1=Tgl, 2=Kode)
+                int idHistori = Integer.parseInt(tblRiwayat.getValueAt(row, 0).toString());
                 String tglStr = tblRiwayat.getValueAt(row, 1).toString();
-                String kodePel = tblRiwayat.getValueAt(row, 2).toString();
+                String kodePre = tblRiwayat.getValueAt(row, 2).toString();
 
+                // Set Tanggal
                 try {
-                    java.util.Date date = null;
-                    if (tglStr.length() > 10) {
-                        date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(tglStr);
-                    } else {
-                        date = new SimpleDateFormat("yyyy-MM-dd").parse(tglStr);
-                    }
-                    dcTanggal.setDate(date);
-                } catch (Exception e) {
-                    System.err.println("Gagal parsing tanggal: " + e.getMessage());
-                }
+                    dcTanggal.setDate(new SimpleDateFormat("yyyy-MM-dd").parse(tglStr));
+                } catch (Exception e) {}
 
+                // Set Dropdown Prestasi
                 for (int i = 0; i < cbJenisPrestasi.getItemCount(); i++) {
                     Object item = cbJenisPrestasi.getItemAt(i);
-                    if (item instanceof Pelanggaran) {
-                        Pelanggaran p = (Pelanggaran) item;
-                        if (p.getKodePelanggaran().equals(kodePel)) {
+                    // PERBAIKAN: Cek instanceof Pencapaian (Bukan Pelanggaran)
+                    if (item instanceof Pencapaian) {
+                        Pencapaian p = (Pencapaian) item;
+                        if (p.getKodePencapaian().equals(kodePre)) {
                             cbJenisPrestasi.setSelectedIndex(i);
-                            break; 
+                            break;
                         }
                     }
                 }
 
-                PrestasiDAO dao = new PrestasiDAO();
-                String[] detail = dao.getDetailPrestasi(idHistori);
-                String pathFoto = detail[0];
-                String keterangan = detail[1];
-                txtFoto.setText(pathFoto);
-                txtKeterangan.setText(keterangan);
+                // Ambil Detail Lain (Foto & Ket)
+                PrestasiDAO pDao = new PrestasiDAO();
+                String[] detail = pDao.getDetailPrestasi(idHistori);
+                txtFoto.setText(detail[0]);
+                txtKeterangan.setText(detail[1]);
 
-                if (pathFoto != null && !pathFoto.isEmpty()) {
-                    File f = new File(pathFoto);
+                // Preview Foto
+                if (detail[0] != null && !detail[0].isEmpty()) {
+                    File f = new File(detail[0]);
                     if (f.exists()) {
                         this.fileFotoDipilih = f;
-
-                        try {
-                            javax.swing.ImageIcon icon = new javax.swing.ImageIcon(pathFoto);
-                            java.awt.Image img = icon.getImage().getScaledInstance(
-                                    jLabel7.getWidth(),
-                                    jLabel7.getHeight(),
-                                    java.awt.Image.SCALE_SMOOTH
-                            );
-                            jLabel7.setIcon(new javax.swing.ImageIcon(img));
-                            jLabel7.setText("");
-                        } catch (Exception e) {
-                            jLabel7.setIcon(null);
-                            jLabel7.setText("Gagal Load Gambar");
-                        }
-                    } else {
-                        jLabel7.setIcon(null);
-                        jLabel7.setText("File Tidak Ditemukan");
+                        javax.swing.ImageIcon icon = new javax.swing.ImageIcon(f.getAbsolutePath());
+                        java.awt.Image img = icon.getImage().getScaledInstance(jLabel7.getWidth(), jLabel7.getHeight(), java.awt.Image.SCALE_SMOOTH);
+                        jLabel7.setIcon(new javax.swing.ImageIcon(img));
+                        jLabel7.setText("");
                     }
                 } else {
-                    jLabel7.setIcon(null);
-                    jLabel7.setText("Tidak Ada Foto");
+                    jLabel7.setIcon(null); jLabel7.setText("No Image");
                 }
 
-            } catch (Exception e) {
-                System.err.println("Error MouseClicked: " + e.getMessage());
-                e.printStackTrace();
-            }
+            } catch (Exception e) { e.printStackTrace(); }
         }
+    
     }//GEN-LAST:event_tblRiwayatMouseClicked
 
     private void btn_editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_editActionPerformed
-        int selectedRow = tblRiwayat.getSelectedRow();
-        if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(this, "Pilih data riwayat yang ingin diedit!");
-            return;
-        }
-
-        Siswa siswa = (Siswa) cbNamaSiswa.getSelectedItem();
-        Pelanggaran pelBaru = (Pelanggaran) cbJenisPrestasi.getSelectedItem();
-
-        if (dcTanggal.getDate() == null) {
-            JOptionPane.showMessageDialog(this, "Tanggal tidak boleh kosong!");
-            return;
-        }
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String tglStr = sdf.format(dcTanggal.getDate());
+        int row = tblRiwayat.getSelectedRow();
+        if (row == -1) { JOptionPane.showMessageDialog(this, "Pilih data tabel!"); return; }
 
         try {
-            int idHistori = Integer.parseInt(tblRiwayat.getValueAt(selectedRow, 0).toString());
-
-            HistoriDAO hDao = new HistoriDAO();
+            int idHistori = Integer.parseInt(tblRiwayat.getValueAt(row, 0).toString());
+            Siswa siswa = (Siswa) cbNamaSiswa.getSelectedItem();
+            Pencapaian prestasiBaru = (Pencapaian) cbJenisPrestasi.getSelectedItem();
+            
+            PrestasiDAO pDao = new PrestasiDAO();
             SiswaDAO sDao = new SiswaDAO();
 
-            String pathFinal = txtFoto.getText();
+            int poinPrestasiLama = pDao.getPoinLama(idHistori);
+            int poinPrestasiBaru = prestasiBaru.getPoinPengurang();
 
+            int poinSiswaRevisi = siswa.getTotalPoin() + poinPrestasiLama - poinPrestasiBaru;
+            if (poinSiswaRevisi < 0) poinSiswaRevisi = 0;
+
+            String pathFinal = txtFoto.getText();
             if (fileFotoDipilih != null) {
                 String appPath = System.getProperty("user.dir");
-                File folder = new File(appPath + File.separator + "bukti_bk");
+                File folder = new File(appPath + File.separator + "bukti_prestasi");
                 if (!folder.exists()) folder.mkdirs();
-
-                String namaFile = siswa.getNis() + "_" + System.currentTimeMillis() + ".jpg";
-                Path source = fileFotoDipilih.toPath();
-                Path target = Paths.get(folder.getAbsolutePath() + File.separator + namaFile);
-                Files.copy(source, target, StandardCopyOption.REPLACE_EXISTING);
-
-                pathFinal = target.toString();
+                String namaFile = "PRES_EDIT_" + siswa.getNis() + "_" + System.currentTimeMillis() + ".jpg";
+                Files.copy(fileFotoDipilih.toPath(), new File(folder, namaFile).toPath(), StandardCopyOption.REPLACE_EXISTING);
+                pathFinal = new File(folder, namaFile).getAbsolutePath();
             }
 
-            int poinLama = hDao.getPoinLama(idHistori);
-            int poinBaruPelanggaran = pelBaru.getPoin();
 
-            int totalPoinSiswaSekarang = siswa.getTotalPoin();
-            int totalPoinRevisi = totalPoinSiswaSekarang - poinLama + poinBaruPelanggaran;
-
-            boolean sukses = hDao.updatePelanggaran(idHistori, pelBaru.getKodePelanggaran(), pathFinal, tglStr);
-
-            if (sukses) {
-                sDao.updatePoinSiswa(siswa.getIdSiswa(), totalPoinRevisi);
-
-                JOptionPane.showMessageDialog(this, "Data Berhasil Diupdate!");
-
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String tgl = sdf.format(dcTanggal.getDate());
+            
+            
+            if (pDao.updatePrestasi(idHistori, prestasiBaru.getKodePencapaian(), pathFinal, tgl, txtKeterangan.getText())) {
+                sDao.updatePoinSiswa(siswa.getIdSiswa(), poinSiswaRevisi);
+                JOptionPane.showMessageDialog(this, "Data Diupdate!");
                 cbNamaSiswaActionPerformed(null);
-                resetForm();
             }
 
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Gagal Edit: " + e.getMessage());
             e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error Edit: " + e.getMessage());
         }
     }//GEN-LAST:event_btn_editActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnSimpan;
     private javax.swing.JButton btn_edit;
     private javax.swing.JButton btn_hapus;
     private javax.swing.JButton btn_pilihfoto;
@@ -733,7 +671,6 @@ public class PanelPrestasi extends javax.swing.JPanel {
     private javax.swing.JComboBox cbKelas;
     private javax.swing.JComboBox cbNamaSiswa;
     private com.toedter.calendar.JDateChooser dcTanggal;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;

@@ -44,8 +44,6 @@ com\bkapp\view\PanelKelola$6.class
 com\bkapp\view\PanelKelola$4.class
 com\bkapp\view\PanelDataSiswa$9.class
 com\bkapp\dao\KonselingDAO.class
-com\bkapp\model\HistoryPelanggaran.class
-com\bkapp\model\HistoryPencapaian.class
 com\bkapp\view\PanelPelanggaran$5.class
 com\bkapp\view\PanelKelola$10.class
 com\bkapp\view\PanelKonsultasi$9.class

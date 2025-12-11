@@ -68,7 +68,7 @@ public class PanelPelanggaran extends javax.swing.JPanel {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        btnSimpan = new javax.swing.JButton();
         btn_edit = new javax.swing.JButton();
         btn_hapus = new javax.swing.JButton();
         cbKelas = new javax.swing.JComboBox();
@@ -107,13 +107,13 @@ public class PanelPelanggaran extends javax.swing.JPanel {
         jLabel6.setFont(new java.awt.Font("Sans Serif Collection", 0, 12)); // NOI18N
         jLabel6.setText("Sanksi");
 
-        jButton1.setBackground(new java.awt.Color(153, 255, 102));
-        jButton1.setFont(new java.awt.Font("Sans Serif Collection", 1, 12)); // NOI18N
-        jButton1.setText("Simpan");
-        jButton1.setBorder(null);
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnSimpan.setBackground(new java.awt.Color(153, 255, 102));
+        btnSimpan.setFont(new java.awt.Font("Sans Serif Collection", 1, 12)); // NOI18N
+        btnSimpan.setText("Simpan");
+        btnSimpan.setBorder(null);
+        btnSimpan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnSimpanActionPerformed(evt);
             }
         });
 
@@ -304,7 +304,7 @@ public class PanelPelanggaran extends javax.swing.JPanel {
                         .addGroup(sssLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(sssLayout.createSequentialGroup()
                                 .addGap(102, 102, 102)
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnSimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(btn_edit, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -402,7 +402,7 @@ public class PanelPelanggaran extends javax.swing.JPanel {
                             .addGroup(sssLayout.createSequentialGroup()
                                 .addGap(95, 95, 95)
                                 .addGroup(sssLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btnSimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(btn_edit, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(btn_hapus, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(sssLayout.createSequentialGroup()
@@ -471,6 +471,8 @@ public class PanelPelanggaran extends javax.swing.JPanel {
 
             HistoriDAO historiDao = new HistoriDAO();
             tblRiwayat.setModel(historiDao.getHistoriTable(s.getIdSiswa()));
+            btnSimpan.setEnabled(true);
+         resetFormInput();
 
             if (tblRiwayat.getColumnModel().getColumnCount() > 0) {
                 tblRiwayat.getColumnModel().getColumn(0).setMinWidth(0);
@@ -481,14 +483,18 @@ public class PanelPelanggaran extends javax.swing.JPanel {
     }//GEN-LAST:event_cbNamaSiswaActionPerformed
 
     private void cbKelasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbKelasActionPerformed
+         
+         
         if (cbKelas.getSelectedItem() == null || cbKelas.getSelectedIndex() == 0) return;
 
         String kelasTerpilih = cbKelas.getSelectedItem().toString();
 
         SiswaDAO dao = new SiswaDAO();
         List<Siswa> listSiswa = dao.getSiswaByKelas(kelasTerpilih);
-
         cbNamaSiswa.removeAllItems();
+        btnSimpan.setEnabled(true);
+         resetFormInput();
+      
         for (Siswa s : listSiswa) {
             cbNamaSiswa.addItem(s);
         }
@@ -538,7 +544,7 @@ public class PanelPelanggaran extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btn_hapusActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanActionPerformed
         if (!(cbNamaSiswa.getSelectedItem() instanceof Siswa)) {
             JOptionPane.showMessageDialog(this, "Pilih Siswa dulu!");
             return;
@@ -609,7 +615,7 @@ public class PanelPelanggaran extends javax.swing.JPanel {
             resetFormInput();
 
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnSimpanActionPerformed
 
     private void txtTotalPoinActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTotalPoinActionPerformed
         // TODO add your handling code here:
@@ -625,7 +631,7 @@ public class PanelPelanggaran extends javax.swing.JPanel {
 
                 String tglStr = tblRiwayat.getValueAt(selectedRow, 1).toString();
                 String kodePel = tblRiwayat.getValueAt(selectedRow, 2).toString();
-
+               btnSimpan.setEnabled(false);
                 try {
                     java.util.Date date = null;
                     if (tglStr.length() > 10) {
@@ -749,6 +755,7 @@ public class PanelPelanggaran extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnSimpan;
     private javax.swing.JButton btn_edit;
     private javax.swing.JButton btn_hapus;
     private javax.swing.JButton btn_pilihfoto;
@@ -756,7 +763,6 @@ public class PanelPelanggaran extends javax.swing.JPanel {
     private javax.swing.JComboBox cbKelas;
     private javax.swing.JComboBox cbNamaSiswa;
     private com.toedter.calendar.JDateChooser dcTanggal;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;

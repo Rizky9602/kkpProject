@@ -119,5 +119,19 @@ public class PrestasiDAO {
         }
         return path;
     }
+     
+     public boolean updatePrestasi(int id, String kode, String path, String tgl, String ket) {
+    String sql = "UPDATE tbl_histori_pencapaian SET kode_pencapaian=?, path_foto_bukti=?, tanggal_pencapaian=?, keterangan=? WHERE id_histori=?";
+    try {
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setString(1, kode);
+        ps.setString(2, path);
+        ps.setString(3, tgl);
+        ps.setString(4, ket);
+        ps.setInt(5, id);
+        ps.executeUpdate();
+        return true;
+    } catch (Exception e) { return false; }
+}
 
 }

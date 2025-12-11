@@ -2,6 +2,7 @@ com\bkapp\view\PanelPelanggaran$11.class
 com\bkapp\view\PanelKonsultasi$8.class
 com\bkapp\dao\PrestasiDAO.class
 com\bkapp\view\PanelDataSiswa.class
+com\bkapp\view\PanelDataSiswa$8.class
 com\bkapp\view\PanelKonsultasi$5.class
 com\bkapp\view\PanelDataSiswa$5.class
 com\bkapp\dao\UserDAO.class
@@ -11,6 +12,7 @@ com\bkapp\view\PanelPrestasi$3.class
 com\bkapp\view\PanelPrestasi$6.class
 com\bkapp\model\Pencapaian.class
 com\bkapp\view\PanelKelola$7.class
+com\bkapp\view\PanelDataSiswa$6.class
 com\bkapp\dao\SiswaDAO.class
 com\bkapp\view\PanelKonsultasi$6.class
 com\bkapp\view\PanelPelanggaran$8.class
@@ -23,11 +25,13 @@ com\bkapp\view\PanelPelanggaran$3.class
 com\bkapp\view\PanelPrestasi$10.class
 com\bkapp\view\PanelLaporan$3.class
 com\bkapp\view\PanelKelola$9.class
+com\bkapp\view\PanelDataSiswa$7.class
 com\bkapp\model\User.class
 com\bkapp\view\PanelKonsultasi$4.class
 com\bkapp\view\PanelPrestasi$4.class
 com\bkapp\view\PanelPelanggaran$6.class
 com\bkapp\model\Pelanggaran.class
+com\bkapp\view\PanelLaporan$6.class
 com\bkapp\dao\LaporanDAO.class
 com\bkapp\model\Siswa.class
 com\bkapp\view\PanelDataSiswa$1.class
@@ -38,6 +42,7 @@ com\bkapp\view\PanelPelanggaran$10.class
 com\bkapp\koneksi\KoneksiDB.class
 com\bkapp\view\PanelKelola$6.class
 com\bkapp\view\PanelKelola$4.class
+com\bkapp\view\PanelDataSiswa$9.class
 com\bkapp\dao\KonselingDAO.class
 com\bkapp\model\HistoryPelanggaran.class
 com\bkapp\model\HistoryPencapaian.class

@@ -210,4 +210,18 @@ public class MasterDAO {
             return false; 
         }
     }
+    
+    public boolean cekDataPrestasi(String kode){
+     String sql = "SELECT COUNT(*) FROM tbl_master_pencapaian  WHERE kode_pencapaian= ?";   
+     try{
+           PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, kode);
+            ps.executeQuery();
+          JOptionPane.showMessageDialog(null, "Kode prestasi sudah tersedia");
+     return true;
+     } catch (SQLException e){
+         return false;
+     }
+    }
+        
 }

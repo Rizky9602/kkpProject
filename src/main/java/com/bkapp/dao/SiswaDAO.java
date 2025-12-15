@@ -2,6 +2,7 @@ package com.bkapp.dao;
 
 import com.bkapp.koneksi.KoneksiDB;
 import com.bkapp.model.Siswa;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,18 +55,18 @@ public class SiswaDAO {
         }
     }
 
-   public void importSiswaBatch(List<Siswa> listSiswa) {
+    public void importSiswaBatch(List<Siswa> listSiswa) {
         String sql = "INSERT INTO tbl_siswa (nis, nama_siswa, kelas, tahun_ajaran, total_poin_aktif) " +
-                     "VALUES (?, ?, ?, ?, 0) " +
-                     "ON DUPLICATE KEY UPDATE " +
-                     "nama_siswa = VALUES(nama_siswa), " +
-                     "kelas = VALUES(kelas), " +
-                     "tahun_ajaran = VALUES(tahun_ajaran)";
-        
+                "VALUES (?, ?, ?, ?, 0) " +
+                "ON DUPLICATE KEY UPDATE " +
+                "nama_siswa = VALUES(nama_siswa), " +
+                "kelas = VALUES(kelas), " +
+                "tahun_ajaran = VALUES(tahun_ajaran)";
+
         try {
-            conn.setAutoCommit(false); // Mode Transaksi (Cepat)
+            conn.setAutoCommit(false);
             PreparedStatement ps = conn.prepareStatement(sql);
-            
+
             for (Siswa s : listSiswa) {
                 ps.setString(1, s.getNis());
                 ps.setString(2, s.getNamaSiswa());
@@ -73,13 +74,16 @@ public class SiswaDAO {
                 ps.setString(4, s.getTahunAjaran());
                 ps.addBatch();
             }
-            
+
             ps.executeBatch();
             conn.commit();
             conn.setAutoCommit(true);
-            
+
         } catch (SQLException e) {
-            try { conn.rollback(); } catch (SQLException ex) {}
+            try {
+                conn.rollback();
+            } catch (SQLException ex) {
+            }
             JOptionPane.showMessageDialog(null, "Gagal Import Batch: " + e.getMessage());
         }
     }
@@ -94,77 +98,118 @@ public class SiswaDAO {
             ps.setString(4, s.getNis());
             ps.executeUpdate();
             return true;
-        } catch (SQLException e) { return false; }
+        } catch (SQLException e) {
+            return false;
+        }
     }
 
     public boolean deleteSiswa(String nis) {
-    String sqlCari = "SELECT id_siswa FROM tbl_siswa WHERE nis = ?";
-    
-    try {
-        PreparedStatement psCari = conn.prepareStatement(sqlCari);
-        psCari.setString(1, nis);
-        ResultSet rs = psCari.executeQuery();
+        String sqlCari = "SELECT id_siswa FROM tbl_siswa WHERE nis = ?";
 
-        if (rs.next()) {
-            int idSiswa = rs.getInt("id_siswa");
-            String sqlHapusPel = "DELETE FROM tbl_histori_pelanggaran WHERE id_siswa = ?";
-            PreparedStatement psPel = conn.prepareStatement(sqlHapusPel);
-            psPel.setInt(1, idSiswa);
-            psPel.executeUpdate();
+        try {
+            PreparedStatement psCari = conn.prepareStatement(sqlCari);
+            psCari.setString(1, nis);
+            ResultSet rs = psCari.executeQuery();
 
-            String sqlHapusPen = "DELETE FROM tbl_histori_pencapaian WHERE id_siswa = ?";
-            PreparedStatement psPen = conn.prepareStatement(sqlHapusPen);
-            psPen.setInt(1, idSiswa);
-            psPen.executeUpdate();
-            
-            String sqlHapusKon = "DELETE FROM tbl_histori_konseling WHERE id_siswa = ?";
-            PreparedStatement psKon = conn.prepareStatement(sqlHapusKon);
-            psKon.setInt(1, idSiswa);
-            psKon.executeUpdate();
+            if (rs.next()) {
+                int idSiswa = rs.getInt("id_siswa");
+                String sqlHapusPel = "DELETE FROM tbl_histori_pelanggaran WHERE id_siswa = ?";
+                PreparedStatement psPel = conn.prepareStatement(sqlHapusPel);
+                psPel.setInt(1, idSiswa);
+                psPel.executeUpdate();
 
-            String sqlHapusSiswa = "DELETE FROM tbl_siswa WHERE id_siswa = ?";
-            PreparedStatement psSiswa = conn.prepareStatement(sqlHapusSiswa);
-            psSiswa.setInt(1, idSiswa);
-            
-            psSiswa.executeUpdate();
-            return true;
-        } else {
-            System.out.println("Siswa dengan NIS " + nis + " tidak ditemukan.");
+                String sqlHapusPen = "DELETE FROM tbl_histori_pencapaian WHERE id_siswa = ?";
+                PreparedStatement psPen = conn.prepareStatement(sqlHapusPen);
+                psPen.setInt(1, idSiswa);
+                psPen.executeUpdate();
+
+                String sqlHapusKon = "DELETE FROM tbl_histori_konseling WHERE id_siswa = ?";
+                PreparedStatement psKon = conn.prepareStatement(sqlHapusKon);
+                psKon.setInt(1, idSiswa);
+                psKon.executeUpdate();
+
+                String sqlHapusSiswa = "DELETE FROM tbl_siswa WHERE id_siswa = ?";
+                PreparedStatement psSiswa = conn.prepareStatement(sqlHapusSiswa);
+                psSiswa.setInt(1, idSiswa);
+
+                psSiswa.executeUpdate();
+                return true;
+            } else {
+                System.out.println("Siswa dengan NIS " + nis + " tidak ditemukan.");
+                return false;
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Gagal Hapus Siswa: " + e.getMessage());
             return false;
         }
-
-    } catch (SQLException e) {
-        System.err.println("Gagal Hapus Siswa: " + e.getMessage());
-        return false;
     }
-}
 
     public boolean prosesKenaikanKelas() {
+        String sqlCariLulus = "SELECT id_siswa FROM tbl_siswa WHERE kelas LIKE 'XII %' OR kelas LIKE '12 %'";
+
+        Statement stmtCari = null;
+        Statement stmtEksekusi = null;
+        ResultSet rs = null;
+
         try {
             conn.setAutoCommit(false);
-            Statement stmt = conn.createStatement();
 
-            stmt.executeUpdate("DELETE FROM tbl_siswa WHERE kelas LIKE 'XII %' OR kelas LIKE '12 %'");
-            stmt.executeUpdate("UPDATE tbl_siswa SET kelas = CONCAT('XII ', SUBSTRING(kelas, 4)) WHERE kelas LIKE 'XI %'");
-            stmt.executeUpdate("UPDATE tbl_siswa SET kelas = CONCAT('XI ', SUBSTRING(kelas, 3)) WHERE kelas LIKE 'X %'");
-            String sqlUpdateTahun = 
-                "UPDATE tbl_siswa SET tahun_ajaran = CONCAT(" +
-                "   CAST(LEFT(tahun_ajaran, 4) AS UNSIGNED) + 1, " +
-                "   '/', " +
-                "   CAST(RIGHT(tahun_ajaran, 4) AS UNSIGNED) + 1 " +
-                ") WHERE length(tahun_ajaran) = 9";
-            stmt.executeUpdate(sqlUpdateTahun);
+            stmtCari = conn.createStatement();
+            stmtEksekusi = conn.createStatement();
+
+            rs = stmtCari.executeQuery(sqlCariLulus);
+
+            while (rs.next()) {
+                int idSiswa = rs.getInt("id_siswa");
+                stmtEksekusi.executeUpdate("DELETE FROM tbl_histori_pelanggaran WHERE id_siswa = " + idSiswa);
+                stmtEksekusi.executeUpdate("DELETE FROM tbl_histori_pencapaian WHERE id_siswa = " + idSiswa);
+                stmtEksekusi.executeUpdate("DELETE FROM tbl_histori_konseling WHERE id_siswa = " + idSiswa);
+            }
+            rs.close();
+            stmtEksekusi.executeUpdate("DELETE FROM tbl_siswa WHERE kelas LIKE 'XII %' OR kelas LIKE '12 %'");
+            stmtEksekusi.executeUpdate("UPDATE tbl_siswa SET kelas = CONCAT('XII ', SUBSTRING(kelas, 4)) WHERE kelas LIKE 'XI %'");
+            stmtEksekusi.executeUpdate("UPDATE tbl_siswa SET kelas = CONCAT('XI ', SUBSTRING(kelas, 3)) WHERE kelas LIKE 'X %'");
+
+            String sqlUpdateTahun =
+                    "UPDATE tbl_siswa SET tahun_ajaran = CONCAT(" +
+                            "   CAST(LEFT(tahun_ajaran, 4) AS UNSIGNED) + 1, " +
+                            "   '/', " +
+                            "   CAST(RIGHT(tahun_ajaran, 4) AS UNSIGNED) + 1 " +
+                            ") WHERE length(tahun_ajaran) = 9";
+
+            stmtEksekusi.executeUpdate(sqlUpdateTahun);
 
             conn.commit();
             conn.setAutoCommit(true);
             return true;
+
         } catch (SQLException e) {
-            try { conn.rollback(); } catch (Exception ex) {}
-            JOptionPane.showMessageDialog(null, "Gagal Kenaikan Kelas: " + e.getMessage());
+            try {
+                conn.rollback();
+                conn.setAutoCommit(true);
+            } catch (SQLException ex) {
+            }
+
+            JOptionPane.showMessageDialog(null, "Gagal Proses Kenaikan Kelas: " + e.getMessage());
+            e.printStackTrace();
             return false;
+        } finally {
+            try {
+                if (rs != null) rs.close();
+            } catch (Exception e) {
+            }
+            try {
+                if (stmtCari != null) stmtCari.close();
+            } catch (Exception e) {
+            }
+            try {
+                if (stmtEksekusi != null) stmtEksekusi.close();
+            } catch (Exception e) {
+            }
         }
     }
-    
+
     public List<Siswa> getSiswaBermasalah() {
         List<Siswa> listSiswa = new ArrayList<>();
         String sql = "SELECT * FROM tbl_siswa WHERE total_poin_aktif >= 50 ORDER BY total_poin_aktif DESC";
@@ -185,7 +230,7 @@ public class SiswaDAO {
         }
         return listSiswa;
     }
-    
+
     public List<String> getAllKelas() {
         List<String> listKelas = new ArrayList<>();
         String sql = "SELECT DISTINCT kelas FROM tbl_siswa ORDER BY kelas ASC";
@@ -200,7 +245,7 @@ public class SiswaDAO {
         }
         return listKelas;
     }
-    
+
     public List<Siswa> getSiswaByKelas(String kelas) {
         List<Siswa> listSiswa = new ArrayList<>();
         String sql = "SELECT * FROM tbl_siswa WHERE kelas = ? ORDER BY nama_siswa ASC";
@@ -222,7 +267,7 @@ public class SiswaDAO {
         }
         return listSiswa;
     }
-    
+
     public boolean updatePoinSiswa(int idSiswa, int poinBaru) {
         if (poinBaru < 0) {
             poinBaru = 0;
@@ -236,24 +281,24 @@ public class SiswaDAO {
             ps.setInt(2, idSiswa);
 
             int rowUpdated = ps.executeUpdate();
-            return rowUpdated > 0; // Mengembalikan true jika sukses update
+            return rowUpdated > 0;
 
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Gagal Update Poin: " + e.getMessage());
             return false;
         }
     }
-    
-    public boolean cekDataSiswa(String kode){
-     String sql = "SELECT COUNT(*) FROM tbl_siswa  WHERE nis= ?";   
-     try{
-           PreparedStatement ps = conn.prepareStatement(sql);
+
+    public boolean cekDataSiswa(String kode) {
+        String sql = "SELECT COUNT(*) FROM tbl_siswa  WHERE nis= ?";
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, kode);
             ps.executeQuery();
-          JOptionPane.showMessageDialog(null, "Nis Sudah Tersedia");
-     return true;
-     } catch (SQLException e){
-         return false;
-     }
+            JOptionPane.showMessageDialog(null, "Nis Sudah Tersedia");
+            return true;
+        } catch (SQLException e) {
+            return false;
+        }
     }
 }

@@ -10,9 +10,7 @@
     import java.util.List;
     import javax.swing.table.DefaultTableModel;
 
-    /**
-     * @author MyBook Hype AMD
-     */
+
     public class PanelHome extends javax.swing.JPanel {
 
         /**

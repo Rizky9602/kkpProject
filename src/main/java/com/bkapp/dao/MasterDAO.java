@@ -29,7 +29,7 @@ public class MasterDAO {
                 Pelanggaran p = new Pelanggaran();
                 p.setKodePelanggaran(rs.getString("kode_pelanggaran"));
                 p.setNamaPelanggaran(rs.getString("nama_pelanggaran"));
-                p.setSanksi(rs.getString("sanksi")); // Ambil sanksi
+                p.setSanksi(rs.getString("sanksi"));
                 p.setPoin(rs.getInt("poin_pelanggaran"));
 
                 list.add(p);
@@ -88,7 +88,7 @@ public class MasterDAO {
     }
 
     public boolean insertPelanggaran(String kode, String nama, String sanksi, int poin) {
-        String sql = "INSERT INTO tbl_master_pelanggaran VALUES (?, ?, ?, ?)"; // Urutan kolom di DB harus sesuai
+        String sql = "INSERT INTO tbl_master_pelanggaran VALUES (?, ?, ?, ?)";
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, kode);
@@ -203,16 +203,24 @@ public class MasterDAO {
     }
 
     public boolean cekDataPrestasi(String kode) {
-        String sql = "SELECT COUNT(*) FROM tbl_master_pencapaian  WHERE kode_pencapaian= ?";
+        String sql = "SELECT COUNT(*) FROM tbl_master_pencapaian WHERE kode_pencapaian = ?";
+
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, kode);
-            ps.executeQuery();
-            JOptionPane.showMessageDialog(null, "Kode Prestasi sudah tersedia");
-            return true;
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                int jumlah = rs.getInt(1);
+
+                return jumlah > 0;
+            }
+
         } catch (SQLException e) {
-            return false;
+            System.err.println("Error Cek Data: " + e.getMessage());
         }
+
+        return false;
     }
 
     public boolean cekDataPelanggaran(String kode) {
@@ -220,12 +228,17 @@ public class MasterDAO {
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, kode);
-            ps.executeQuery();
-            JOptionPane.showMessageDialog(null, "Kode Pelanggaran sudah tersedia");
-            return true;
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                int jumlah = rs.getInt(1);
+
+                return jumlah > 0;
+            }
         } catch (SQLException e) {
-            return false;
+            System.err.println("Error Cek Data: " + e.getMessage());
         }
+        return false;
     }
 
 }

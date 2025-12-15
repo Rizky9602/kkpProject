@@ -4,7 +4,7 @@ public class Pencapaian {
     private String kodePencapaian;
     private String namaPencapaian;
     private int poinPengurang;
-    
+
 
     public Pencapaian() {
     }

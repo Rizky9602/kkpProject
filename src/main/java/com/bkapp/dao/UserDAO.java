@@ -20,6 +20,7 @@ public class UserDAO {
     public UserDAO() {
         this.conn = KoneksiDB.getKoneksi();
     }
+
     public User login(String username, String password) {
         User user = null;
         String sql = "SELECT * FROM tbl_user WHERE username = ? AND password = ?";
@@ -37,7 +38,7 @@ public class UserDAO {
                 user = new User();
                 user.setIdUser(rs.getInt("id_user"));
                 user.setUsername(rs.getString("username"));
-                user.setPassword(rs.getString("password")); // simpan hash-nya saja
+                user.setPassword(rs.getString("password"));
                 user.setNamaLengkap(rs.getString("nama_lengkap"));
                 user.setRole(rs.getString("role"));
             }

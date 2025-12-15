@@ -1,15 +1,14 @@
 package com.bkapp.model;
 
 public class Pelanggaran {
-    private String kodePelanggaran; 
+    private String kodePelanggaran;
     private String namaPelanggaran;
-    private String sanksi;          
+    private String sanksi;
     private int poin;
 
     public Pelanggaran() {
     }
 
-    // Constructor Lengkap
     public Pelanggaran(String kodePelanggaran, String namaPelanggaran, String sanksi, int poin) {
         this.kodePelanggaran = kodePelanggaran;
         this.namaPelanggaran = namaPelanggaran;

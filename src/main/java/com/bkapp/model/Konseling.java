@@ -11,7 +11,6 @@ public class Konseling {
     public Konseling() {
     }
 
-    // Getter & Setter
     public int getIdKonseling() {
         return idKonseling;
     }

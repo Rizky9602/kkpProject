@@ -56,8 +56,8 @@ public class LaporanDAO {
 
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString(1, tglDari + " 00:00:00"); // Awal hari
-            ps.setString(2, tglSampai + " 23:59:59"); // Akhir hari
+            ps.setString(1, tglDari + " 00:00:00");
+            ps.setString(2, tglSampai + " 23:59:59");
 
             ResultSet rs = ps.executeQuery();
 
@@ -67,7 +67,7 @@ public class LaporanDAO {
                         rs.getString("nis"),
                         rs.getString("nama_siswa"),
                         rs.getString("kelas"),
-                        rs.getString("jenis"), // Pelanggaran atau Prestasi
+                        rs.getString("jenis"),
                         rs.getInt("poin")
                 });
             }

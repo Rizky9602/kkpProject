@@ -2,10 +2,8 @@ package com.bkapp.view;
 
 import java.io.File;
 import javax.swing.JFileChooser;
-
 import com.bkapp.dao.*;
 import com.bkapp.model.*;
-
 import java.nio.file.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -425,8 +423,7 @@ public class PanelPrestasi extends javax.swing.JPanel {
             File file = chooser.getSelectedFile();
             this.fileFotoDipilih = file;
             txtFoto.setText(file.getAbsolutePath());
-            
-            // Preview
+
             try {
                 javax.swing.ImageIcon icon = new javax.swing.ImageIcon(file.getAbsolutePath());
                 java.awt.Image img = icon.getImage().getScaledInstance(jLabel7.getWidth(), jLabel7.getHeight(), java.awt.Image.SCALE_SMOOTH);
@@ -453,7 +450,7 @@ public class PanelPrestasi extends javax.swing.JPanel {
             txtTotalPoin.setText(String.valueOf(s.getTotalPoin()));
 
             // Load Tabel Riwayat Prestasi
-            PrestasiDAO pDao = new PrestasiDAO();
+            HistoriPencapaianDAO pDao = new HistoriPencapaianDAO();
             tblRiwayat.setModel(pDao.getHistoriTable(s.getIdSiswa()));
             
             // Sembunyikan ID
@@ -470,7 +467,8 @@ public class PanelPrestasi extends javax.swing.JPanel {
 
     private void cbKelasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbKelasActionPerformed
         if (cbKelas.getSelectedItem() == null || cbKelas.getSelectedIndex() == 0) return;
-
+        btnSimpan.setEnabled(true);
+       
         String kelasTerpilih = cbKelas.getSelectedItem().toString();
 
         SiswaDAO dao = new SiswaDAO();
@@ -491,15 +489,11 @@ public class PanelPrestasi extends javax.swing.JPanel {
             try {
                 int idHistori = Integer.parseInt(tblRiwayat.getValueAt(row, 0).toString());
                 
-                PrestasiDAO pDao = new PrestasiDAO();
+                HistoriPencapaianDAO pDao = new HistoriPencapaianDAO();
                 SiswaDAO sDao = new SiswaDAO();
-                
-                // 1. Ambil poin yang mau dihapus
                 int poinPrestasi = pDao.getPoinLama(idHistori);
-                
-                // 2. Hapus Data
-                if (pDao.deletePrestasi(idHistori)) {
-                    // 3. Kembalikan Poin Siswa (Ditambah)
+
+                if (pDao.deletePencapaian(idHistori)) {
                     Siswa s = (Siswa) cbNamaSiswa.getSelectedItem();
                     int poinBalik = s.getTotalPoin() + poinPrestasi;
                     
@@ -530,7 +524,7 @@ public class PanelPrestasi extends javax.swing.JPanel {
         try {
             if (fileFotoDipilih != null) {
                 String appPath = System.getProperty("user.dir");
-                File folder = new File(appPath + File.separator + "bukti_prestasi"); // Beda folder biar rapi
+                File folder = new File(appPath + File.separator + "bukti_prestasi");
                 if (!folder.exists()) folder.mkdirs();
                 
                 String namaFile = "PRES_" + siswa.getNis() + "_" + System.currentTimeMillis() + ".jpg";
@@ -545,14 +539,14 @@ public class PanelPrestasi extends javax.swing.JPanel {
         int poinBaru = siswa.getTotalPoin() - prestasi.getPoinPengurang();
         if (poinBaru < 0) poinBaru = 0; 
 
-        PrestasiDAO pDao = new PrestasiDAO();
+        HistoriPencapaianDAO pDao = new HistoriPencapaianDAO();
         SiswaDAO sDao = new SiswaDAO();
         
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String tgl = sdf.format(dcTanggal.getDate());
         String ket = txtKeterangan.getText();
 
-        if (pDao.insertPrestasi(siswa.getIdSiswa(), prestasi.getKodePencapaian(), pathDB, tgl, ket)) {
+        if (pDao.insertPencapaian(siswa.getIdSiswa(), prestasi.getKodePencapaian(), pathDB, tgl, ket)) {
             sDao.updatePoinSiswa(siswa.getIdSiswa(), poinBaru);
             JOptionPane.showMessageDialog(this, "Berhasil! Poin siswa berkurang.");
             
@@ -568,20 +562,17 @@ public class PanelPrestasi extends javax.swing.JPanel {
         int row = tblRiwayat.getSelectedRow();
         if (row != -1) {
             try {
-                // Ambil Data dari Kolom (0=ID, 1=Tgl, 2=Kode)
+                btnSimpan.setEnabled(false);
                 int idHistori = Integer.parseInt(tblRiwayat.getValueAt(row, 0).toString());
                 String tglStr = tblRiwayat.getValueAt(row, 1).toString();
                 String kodePre = tblRiwayat.getValueAt(row, 2).toString();
 
-                // Set Tanggal
                 try {
                     dcTanggal.setDate(new SimpleDateFormat("yyyy-MM-dd").parse(tglStr));
                 } catch (Exception e) {}
 
-                // Set Dropdown Prestasi
                 for (int i = 0; i < cbJenisPrestasi.getItemCount(); i++) {
                     Object item = cbJenisPrestasi.getItemAt(i);
-                    // PERBAIKAN: Cek instanceof Pencapaian (Bukan Pelanggaran)
                     if (item instanceof Pencapaian) {
                         Pencapaian p = (Pencapaian) item;
                         if (p.getKodePencapaian().equals(kodePre)) {
@@ -591,13 +582,11 @@ public class PanelPrestasi extends javax.swing.JPanel {
                     }
                 }
 
-                // Ambil Detail Lain (Foto & Ket)
-                PrestasiDAO pDao = new PrestasiDAO();
-                String[] detail = pDao.getDetailPrestasi(idHistori);
+                HistoriPencapaianDAO pDao = new HistoriPencapaianDAO();
+                String[] detail = pDao.getDetailPencapaian(idHistori);
                 txtFoto.setText(detail[0]);
                 txtKeterangan.setText(detail[1]);
 
-                // Preview Foto
                 if (detail[0] != null && !detail[0].isEmpty()) {
                     File f = new File(detail[0]);
                     if (f.exists()) {
@@ -625,7 +614,7 @@ public class PanelPrestasi extends javax.swing.JPanel {
             Siswa siswa = (Siswa) cbNamaSiswa.getSelectedItem();
             Pencapaian prestasiBaru = (Pencapaian) cbJenisPrestasi.getSelectedItem();
             
-            PrestasiDAO pDao = new PrestasiDAO();
+            HistoriPencapaianDAO pDao = new HistoriPencapaianDAO();
             SiswaDAO sDao = new SiswaDAO();
 
             int poinPrestasiLama = pDao.getPoinLama(idHistori);
@@ -649,7 +638,7 @@ public class PanelPrestasi extends javax.swing.JPanel {
             String tgl = sdf.format(dcTanggal.getDate());
             
             
-            if (pDao.updatePrestasi(idHistori, prestasiBaru.getKodePencapaian(), pathFinal, tgl, txtKeterangan.getText())) {
+            if (pDao.updatePencapaian(idHistori, prestasiBaru.getKodePencapaian(), pathFinal, tgl, txtKeterangan.getText())) {
                 sDao.updatePoinSiswa(siswa.getIdSiswa(), poinSiswaRevisi);
                 JOptionPane.showMessageDialog(this, "Data Diupdate!");
                 cbNamaSiswaActionPerformed(null);

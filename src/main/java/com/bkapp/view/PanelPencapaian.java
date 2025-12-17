@@ -10,11 +10,11 @@ import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
 
-public class PanelPrestasi extends javax.swing.JPanel {
+public class PanelPencapaian extends javax.swing.JPanel {
 
     private File fileFotoDipilih = null;
 
-    public PanelPrestasi() {
+    public PanelPencapaian() {
         initComponents();
         initForm();
         dcTanggal.setDate(new Date());
@@ -223,6 +223,7 @@ public class PanelPrestasi extends javax.swing.JPanel {
             }
         });
         tblRiwayat.setSelectionBackground(new java.awt.Color(110, 203, 246));
+        tblRiwayat.setShowGrid(false);
         tblRiwayat.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblRiwayatMouseClicked(evt);

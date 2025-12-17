@@ -4,7 +4,6 @@ C:\Users\rizky\Dokumen\Kuliah\Semester 5\PBO\kkpProject\src\main\java\com\bkapp\
 C:\Users\rizky\Dokumen\Kuliah\Semester 5\PBO\kkpProject\src\main\java\com\bkapp\view\PanelLaporan.java
 C:\Users\rizky\Dokumen\Kuliah\Semester 5\PBO\kkpProject\src\main\java\com\bkapp\model\Siswa.java
 C:\Users\rizky\Dokumen\Kuliah\Semester 5\PBO\kkpProject\src\main\java\com\bkapp\model\Pelanggaran.java
-C:\Users\rizky\Dokumen\Kuliah\Semester 5\PBO\kkpProject\src\main\java\com\bkapp\view\PanelPrestasi.java
 C:\Users\rizky\Dokumen\Kuliah\Semester 5\PBO\kkpProject\src\main\java\com\bkapp\view\FormHome.java
 C:\Users\rizky\Dokumen\Kuliah\Semester 5\PBO\kkpProject\src\main\java\com\bkapp\koneksi\KoneksiDB.java
 C:\Users\rizky\Dokumen\Kuliah\Semester 5\PBO\kkpProject\src\main\java\com\bkapp\dao\SiswaDAO.java
@@ -13,6 +12,7 @@ C:\Users\rizky\Dokumen\Kuliah\Semester 5\PBO\kkpProject\src\main\java\com\bkapp\
 C:\Users\rizky\Dokumen\Kuliah\Semester 5\PBO\kkpProject\src\main\java\com\bkapp\model\Konseling.java
 C:\Users\rizky\Dokumen\Kuliah\Semester 5\PBO\kkpProject\src\main\java\com\bkapp\view\PanelHome.java
 C:\Users\rizky\Dokumen\Kuliah\Semester 5\PBO\kkpProject\src\main\java\com\bkapp\model\Pencapaian.java
+C:\Users\rizky\Dokumen\Kuliah\Semester 5\PBO\kkpProject\src\main\java\com\bkapp\view\PanelPencapaian.java
 C:\Users\rizky\Dokumen\Kuliah\Semester 5\PBO\kkpProject\src\main\java\com\bkapp\dao\UserDAO.java
 C:\Users\rizky\Dokumen\Kuliah\Semester 5\PBO\kkpProject\src\main\java\com\bkapp\view\FormLogin.java
 C:\Users\rizky\Dokumen\Kuliah\Semester 5\PBO\kkpProject\src\main\java\com\bkapp\dao\HistoriPencapaianDAO.java

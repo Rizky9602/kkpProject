@@ -28,6 +28,27 @@ public class PanelPencapaian extends javax.swing.JPanel {
         cbJenisPrestasi.addItem("-- Pilih Pencapaian --");
         for (Pencapaian p : listPre) {
             cbJenisPrestasi.addItem(p);
+            
+            cbJenisPrestasi.setRenderer(new javax.swing.DefaultListCellRenderer() {
+            @Override
+            public java.awt.Component getListCellRendererComponent(javax.swing.JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                if (value != null) {
+                    setToolTipText(value.toString()); 
+                }
+                return this;
+            }
+        });
+        
+        ((javax.swing.JComponent) cbJenisPrestasi.getRenderer()).setToolTipText(
+            cbJenisPrestasi.getSelectedItem() != null ? cbJenisPrestasi.getSelectedItem().toString() : ""
+        );
+        
+        cbJenisPrestasi.addActionListener(evt -> {
+            if (cbJenisPrestasi.getSelectedItem() != null) {
+                cbJenisPrestasi.setToolTipText(cbJenisPrestasi.getSelectedItem().toString());
+            }
+        });
         }
 
         SiswaDAO siswaDao = new SiswaDAO();
@@ -323,7 +344,9 @@ public class PanelPencapaian extends javax.swing.JPanel {
                                     .addComponent(cbJenisPrestasi, javax.swing.GroupLayout.PREFERRED_SIZE, 436, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 436, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(sssLayout.createSequentialGroup()
-                                        .addComponent(cbNamaSiswa, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGroup(sssLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(cbNamaSiswa, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(cbKelas, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE))
                                         .addGap(18, 18, 18)
                                         .addGroup(sssLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(jLabel9)
@@ -331,10 +354,7 @@ public class PanelPencapaian extends javax.swing.JPanel {
                                         .addGap(21, 21, 21)
                                         .addGroup(sssLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                             .addComponent(txtTotalPoin, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(txtPoinInput, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, sssLayout.createSequentialGroup()
-                                .addComponent(cbKelas, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(237, 237, 237))))
+                                            .addComponent(txtPoinInput, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
                     .addComponent(jLabel4)
                     .addComponent(jLabel3)
                     .addComponent(jLabel5)

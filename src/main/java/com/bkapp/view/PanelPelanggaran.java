@@ -44,6 +44,27 @@ public class PanelPelanggaran extends javax.swing.JPanel {
 
         txtSanksi.setEditable(false);
         txtTotalPoin.setEditable(false);
+        
+        cbJenisPelanggaran.setRenderer(new javax.swing.DefaultListCellRenderer() {
+            @Override
+            public java.awt.Component getListCellRendererComponent(javax.swing.JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                if (value != null) {
+                    setToolTipText(value.toString()); 
+                }
+                return this;
+            }
+        });
+        
+        ((javax.swing.JComponent) cbJenisPelanggaran.getRenderer()).setToolTipText(
+            cbJenisPelanggaran.getSelectedItem() != null ? cbJenisPelanggaran.getSelectedItem().toString() : ""
+        );
+        
+        cbJenisPelanggaran.addActionListener(evt -> {
+            if (cbJenisPelanggaran.getSelectedItem() != null) {
+                cbJenisPelanggaran.setToolTipText(cbJenisPelanggaran.getSelectedItem().toString());
+            }
+        });
     }
 
     private void resetFormInput() {
@@ -224,6 +245,7 @@ public class PanelPelanggaran extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
+        tblRiwayat.setGridColor(new java.awt.Color(110, 203, 246));
         tblRiwayat.setSelectionBackground(new java.awt.Color(110, 203, 246));
         tblRiwayat.setShowGrid(false);
         tblRiwayat.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -465,11 +487,16 @@ public class PanelPelanggaran extends javax.swing.JPanel {
     }//GEN-LAST:event_cbJenisPelanggaranActionPerformed
 
     private void cbNamaSiswaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbNamaSiswaActionPerformed
-        if (cbNamaSiswa.getSelectedItem() instanceof Siswa) {
+      if (cbNamaSiswa.getSelectedItem() instanceof Siswa) {
             Siswa s = (Siswa) cbNamaSiswa.getSelectedItem();
             btnSimpan.setEnabled(true);
-            txtTotalPoin.setText(String.valueOf(s.getTotalPoin()));
 
+            SiswaDAO sDao = new SiswaDAO();
+            int realTotalPoin = sDao.recalculateTotalPoin(s.getIdSiswa());
+            
+            txtTotalPoin.setText(String.valueOf(realTotalPoin));
+
+            s.setTotalPoin(realTotalPoin);
             HistoriPelanggaranDAO historiDao = new HistoriPelanggaranDAO();
             tblRiwayat.setModel(historiDao.getHistoriTable(s.getIdSiswa()));
             btnSimpan.setEnabled(true);

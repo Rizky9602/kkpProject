@@ -15,6 +15,7 @@ import javax.swing.table.DefaultTableModel;
 import com.bkapp.dao.LaporanDAO;
 import com.bkapp.dao.SiswaDAO;
 import com.bkapp.model.Siswa;
+import java.util.Date;
 
 import java.util.List;
 
@@ -23,7 +24,11 @@ public class PanelLaporan extends javax.swing.JPanel {
     public PanelLaporan() {
         initComponents();
         initForm();
+        dcDari.setDate(new Date());
+        dcSampai.setDate(new Date());
     }
+    
+    
 
     private void initForm() {
         SiswaDAO dao = new SiswaDAO();
@@ -119,7 +124,6 @@ public class PanelLaporan extends javax.swing.JPanel {
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         dcSampai = new com.toedter.calendar.JDateChooser();
-        jButton3 = new javax.swing.JButton();
         btnCek = new javax.swing.JButton();
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
@@ -235,17 +239,6 @@ public class PanelLaporan extends javax.swing.JPanel {
         jLabel7.setFont(new java.awt.Font("Sans Serif Collection", 0, 12)); // NOI18N
         jLabel7.setText("Sampai");
 
-        jButton3.setBackground(new java.awt.Color(255, 0, 51));
-        jButton3.setFont(new java.awt.Font("Sans Serif Collection", 1, 14)); // NOI18N
-        jButton3.setForeground(new java.awt.Color(255, 255, 255));
-        jButton3.setText("Reset");
-        jButton3.setBorder(null);
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
-        });
-
         btnCek.setBackground(new java.awt.Color(102, 255, 102));
         btnCek.setFont(new java.awt.Font("Sans Serif Collection", 1, 14)); // NOI18N
         btnCek.setText("Cek");
@@ -260,10 +253,6 @@ public class PanelLaporan extends javax.swing.JPanel {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel2)
-                .addGap(413, 413, 413))
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel2Layout.createSequentialGroup()
@@ -283,21 +272,23 @@ public class PanelLaporan extends javax.swing.JPanel {
                             .addComponent(dcSampai, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(dcDari, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(38, 38, 38))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(23, 23, 23)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addContainerGap()
                         .addComponent(btnCetak, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
                         .addComponent(btnCek, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)))
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 617, Short.MAX_VALUE)
+                        .addGap(71, 71, 71)))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 619, Short.MAX_VALUE)
                 .addGap(20, 20, 20))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel2)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap()
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -328,7 +319,6 @@ public class PanelLaporan extends javax.swing.JPanel {
                         .addGap(54, 54, 54)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnCetak, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnCek, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 477, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(88, 88, 88))
@@ -385,6 +375,8 @@ public class PanelLaporan extends javax.swing.JPanel {
     }//GEN-LAST:event_btnCetakActionPerformed
 
     private void cbPilihKelasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbPilihKelasActionPerformed
+     
+        
         String kelasTerpilih = (String) cbPilihKelas.getSelectedItem();
 
         cbPilihNama.removeAllItems();
@@ -400,11 +392,12 @@ public class PanelLaporan extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_cbPilihKelasActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
-
     private void btnCekActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCekActionPerformed
+        if (dcDari.getDate() == null || dcSampai.getDate() == null) {
+            JOptionPane.showMessageDialog(this, "Harap pilih rentang tanggal (Dari & Sampai)!");
+            return;
+        }
+        
         LaporanDAO dao = new LaporanDAO();
         String jenisLaporan = cbPilihLaporan.getSelectedItem().toString();
         String kelas = cbPilihKelas.getSelectedItem().toString();
@@ -412,10 +405,7 @@ public class PanelLaporan extends javax.swing.JPanel {
         String namaRaw = cbPilihNama.getSelectedItem().toString();
         String namaSiswa = namaRaw;
 
-        if (dcSampai.getDate().before(dcDari.getDate())) {
-            JOptionPane.showMessageDialog(this, "Format tanggal salah");
-            return;
-        }
+        
 
         if (dcDari.getDate() != null || dcSampai.getDate() != null) {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -424,6 +414,11 @@ public class PanelLaporan extends javax.swing.JPanel {
 
             DefaultTableModel dataModel = dao.getLaporan(jenisLaporan, kelas, namaSiswa, tglDari, tglSampai);
             tblLaporan.setModel(dataModel);
+            
+            if (dataModel.getRowCount() == 0) {
+            JOptionPane.showMessageDialog(this, "Data tidak ditemukan pada periode tersebut.");
+            return;
+        }
         }
     }//GEN-LAST:event_btnCekActionPerformed
 
@@ -444,7 +439,6 @@ public class PanelLaporan extends javax.swing.JPanel {
     private javax.swing.JComboBox<String> cbPilihNama;
     private com.toedter.calendar.JDateChooser dcDari;
     private com.toedter.calendar.JDateChooser dcSampai;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

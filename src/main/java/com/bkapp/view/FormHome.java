@@ -1,5 +1,8 @@
 package com.bkapp.view;
 
+import java.awt.Color;
+import javax.swing.JButton;
+
 public class FormHome extends javax.swing.JFrame {
 
     String userRole;
@@ -11,6 +14,7 @@ public class FormHome extends javax.swing.JFrame {
     public FormHome(String userRole) {
         initComponents();
         this.userRole = userRole;
+        hakAkses();
     }
 
     public void hakAkses() {
@@ -18,12 +22,36 @@ public class FormHome extends javax.swing.JFrame {
             btn_konsultasi.setVisible(false);
             btn_kelola.setVisible(false);
             btn_dataSiswa.setVisible(false);
+            btn_Ppelanggaran.setVisible(false);
+            btn_Pprestasi.setVisible(false);
         } else {
             btn_konsultasi.setVisible(true);
             btn_kelola.setVisible(true);
             btn_dataSiswa.setVisible(true);
         }
     }
+    
+    Color defaultColor = new Color(255,255,255); 
+    
+    Color activeColor = new Color(238, 238, 238); 
+
+    private void resetButtonColor() {
+        btn_dashboard.setBackground(defaultColor);
+        btn_konsultasi.setBackground(defaultColor);
+        btn_Pprestasi.setBackground(defaultColor);
+        btn_Ppelanggaran.setBackground(defaultColor);
+        btn_kelola.setBackground(defaultColor);
+        btn_dataSiswa.setBackground(defaultColor);
+        btn_laporan1.setBackground(defaultColor);
+    }
+
+    private void setButtonActive(JButton button) {
+        resetButtonColor();
+        
+        button.setBackground(activeColor);
+    }
+    
+    
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -97,6 +125,8 @@ public class FormHome extends javax.swing.JFrame {
         btn_Ppelanggaran.setFont(new java.awt.Font("Sans Serif Collection", 1, 12)); // NOI18N
         btn_Ppelanggaran.setText("Poin Pelanggaran");
         btn_Ppelanggaran.setBorder(null);
+        btn_Ppelanggaran.setBorderPainted(false);
+        btn_Ppelanggaran.setFocusPainted(false);
         btn_Ppelanggaran.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_PpelanggaranActionPerformed(evt);
@@ -106,6 +136,7 @@ public class FormHome extends javax.swing.JFrame {
         btn_dashboard.setFont(new java.awt.Font("Sans Serif Collection", 1, 12)); // NOI18N
         btn_dashboard.setText("Dashboard");
         btn_dashboard.setBorder(null);
+        btn_dashboard.setFocusPainted(false);
         btn_dashboard.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_dashboardActionPerformed(evt);
@@ -115,6 +146,8 @@ public class FormHome extends javax.swing.JFrame {
         btn_Pprestasi.setFont(new java.awt.Font("Sans Serif Collection", 1, 12)); // NOI18N
         btn_Pprestasi.setText("Poin Prestasi");
         btn_Pprestasi.setBorder(null);
+        btn_Pprestasi.setBorderPainted(false);
+        btn_Pprestasi.setFocusPainted(false);
         btn_Pprestasi.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_PprestasiActionPerformed(evt);
@@ -124,6 +157,8 @@ public class FormHome extends javax.swing.JFrame {
         btn_konsultasi.setFont(new java.awt.Font("Sans Serif Collection", 1, 12)); // NOI18N
         btn_konsultasi.setText("Konsultasi");
         btn_konsultasi.setBorder(null);
+        btn_konsultasi.setBorderPainted(false);
+        btn_konsultasi.setFocusPainted(false);
         btn_konsultasi.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_konsultasiActionPerformed(evt);
@@ -144,6 +179,8 @@ public class FormHome extends javax.swing.JFrame {
         btn_kelola.setFont(new java.awt.Font("Sans Serif Collection", 1, 12)); // NOI18N
         btn_kelola.setText("Kelola Poin");
         btn_kelola.setBorder(null);
+        btn_kelola.setBorderPainted(false);
+        btn_kelola.setFocusPainted(false);
         btn_kelola.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_kelolaActionPerformed(evt);
@@ -153,6 +190,8 @@ public class FormHome extends javax.swing.JFrame {
         btn_dataSiswa.setFont(new java.awt.Font("Sans Serif Collection", 1, 12)); // NOI18N
         btn_dataSiswa.setText("Kelola Siswa");
         btn_dataSiswa.setBorder(null);
+        btn_dataSiswa.setFocusPainted(false);
+        btn_dataSiswa.setFocusable(false);
         btn_dataSiswa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_dataSiswaActionPerformed(evt);
@@ -162,6 +201,7 @@ public class FormHome extends javax.swing.JFrame {
         btn_laporan1.setFont(new java.awt.Font("Sans Serif Collection", 1, 12)); // NOI18N
         btn_laporan1.setText("Laporan");
         btn_laporan1.setBorder(null);
+        btn_laporan1.setFocusPainted(false);
         btn_laporan1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_laporan1ActionPerformed(evt);
@@ -200,9 +240,9 @@ public class FormHome extends javax.swing.JFrame {
                 .addComponent(btn_kelola, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(35, 35, 35)
                 .addComponent(btn_dataSiswa, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26)
+                .addGap(35, 35, 35)
                 .addComponent(btn_laporan1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
                 .addComponent(btn_logOut, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(25, 25, 25))
         );
@@ -217,6 +257,14 @@ public class FormHome extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        setButtonActive(btn_dashboard); 
+        
+        pn_utama.removeAll();
+        pn_utama.setLayout(new java.awt.BorderLayout());
+        pn_utama.add(new PanelHome(), java.awt.BorderLayout.CENTER);
+        pn_utama.revalidate();
+        pn_utama.repaint();
+        
         pn_utama.removeAll();
         pn_utama.setLayout(new java.awt.BorderLayout());
         pn_utama.add(new PanelHome(), java.awt.BorderLayout.CENTER);
@@ -225,6 +273,9 @@ public class FormHome extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowOpened
 
     private void btn_PpelanggaranActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_PpelanggaranActionPerformed
+        setButtonActive(btn_Ppelanggaran); 
+        pn_utama.removeAll();
+        
         pn_utama.removeAll();
         pn_utama.setLayout(new java.awt.BorderLayout());
         pn_utama.add(new PanelPelanggaran(), java.awt.BorderLayout.CENTER);
@@ -233,6 +284,9 @@ public class FormHome extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_PpelanggaranActionPerformed
 
     private void btn_dashboardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_dashboardActionPerformed
+        setButtonActive(btn_dashboard);
+        pn_utama.removeAll();
+        
         pn_utama.removeAll();
         pn_utama.setLayout(new java.awt.BorderLayout());
         pn_utama.add(new PanelHome(), java.awt.BorderLayout.CENTER);
@@ -241,6 +295,9 @@ public class FormHome extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_dashboardActionPerformed
 
     private void btn_konsultasiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_konsultasiActionPerformed
+        setButtonActive(btn_konsultasi); 
+        pn_utama.removeAll();
+        
         pn_utama.removeAll();
         pn_utama.setLayout(new java.awt.BorderLayout());
         pn_utama.add(new PanelKonsultasi(), java.awt.BorderLayout.CENTER);
@@ -254,6 +311,9 @@ public class FormHome extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_logOutActionPerformed
 
     private void btn_PprestasiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_PprestasiActionPerformed
+       setButtonActive(btn_Pprestasi); 
+        pn_utama.removeAll();
+        
         pn_utama.removeAll();
         pn_utama.setLayout(new java.awt.BorderLayout());
         pn_utama.add(new PanelPencapaian(), java.awt.BorderLayout.CENTER);
@@ -262,6 +322,9 @@ public class FormHome extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_PprestasiActionPerformed
 
     private void btn_kelolaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_kelolaActionPerformed
+       setButtonActive(btn_kelola); 
+        pn_utama.removeAll();
+        
         pn_utama.removeAll();
         pn_utama.setLayout(new java.awt.BorderLayout());
         pn_utama.add(new PanelKelola(), java.awt.BorderLayout.CENTER);
@@ -270,6 +333,9 @@ public class FormHome extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_kelolaActionPerformed
 
     private void btn_dataSiswaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_dataSiswaActionPerformed
+        setButtonActive(btn_dataSiswa); 
+        pn_utama.removeAll();
+        
         pn_utama.removeAll();
         pn_utama.setLayout(new java.awt.BorderLayout());
         pn_utama.add(new PanelDataSiswa(), java.awt.BorderLayout.CENTER);
@@ -278,6 +344,9 @@ public class FormHome extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_dataSiswaActionPerformed
 
     private void btn_laporan1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_laporan1ActionPerformed
+       setButtonActive(btn_laporan1); 
+        pn_utama.removeAll();
+        
         pn_utama.removeAll();
         pn_utama.setLayout(new java.awt.BorderLayout());
         pn_utama.add(new PanelLaporan(), java.awt.BorderLayout.CENTER);

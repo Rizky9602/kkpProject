@@ -133,4 +133,38 @@ public class HistoriPelanggaranDAO {
             return false;
         }
     }
+    
+    // ... inside SiswaDAO class ...
+
+    public int recalculateTotalPoin(int idSiswa) {
+        int totalPoin = 0;
+        // Query to sum up points from violation history
+        String sqlSum = "SELECT SUM(m.poin_pelanggaran) AS total " +
+                        "FROM tbl_histori_pelanggaran h " +
+                        "JOIN tbl_master_pelanggaran m ON h.id_pelanggaran = m.kode_pelanggaran " +
+                        "WHERE h.id_siswa = ?";
+        
+        String sqlUpdate = "UPDATE tbl_siswa SET total_poin_aktif = ? WHERE id_siswa = ?";
+
+        try {
+            PreparedStatement psSum = conn.prepareStatement(sqlSum);
+            psSum.setInt(1, idSiswa);
+            ResultSet rs = psSum.executeQuery();
+            
+            if (rs.next()) {
+                totalPoin = rs.getInt("total");
+            }
+
+            PreparedStatement psUpdate = conn.prepareStatement(sqlUpdate);
+            psUpdate.setInt(1, totalPoin);
+            psUpdate.setInt(2, idSiswa);
+            psUpdate.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+        return totalPoin;
+    }
+    
 }

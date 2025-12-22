@@ -22,6 +22,7 @@ public class PanelKelola extends javax.swing.JPanel {
         initComponents();
         refreshTable();
         setColumnWidth();
+        tblData.setFillsViewportHeight(true); 
     }
 
     private void resetForm() {

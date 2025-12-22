@@ -18,14 +18,16 @@
          */
         public PanelHome() {
             initComponents();
-
+        tblRiwayat.setFillsViewportHeight(true); 
+        
+        jScrollPane1.getViewport().setBackground(new java.awt.Color(110, 203, 246));
             isiTableNotifikasi();
         }
 
         private void isiTableNotifikasi() {
             SiswaDAO dao = new SiswaDAO();
             List<Siswa> listSiswa = dao.getSiswaBermasalah();
-            DefaultTableModel model = (DefaultTableModel) tblNotifikasi.getModel();
+            DefaultTableModel model = (DefaultTableModel) tblRiwayat.getModel();
             model.setRowCount(0);
 
             for (Siswa s : listSiswa) {
@@ -59,7 +61,7 @@
         jLabel1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblNotifikasi = new javax.swing.JTable();
+        tblRiwayat = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
 
         setLayout(new java.awt.CardLayout());
@@ -71,9 +73,9 @@
 
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/logoresize.png"))); // NOI18N
 
-        tblNotifikasi.setBackground(new java.awt.Color(110, 203, 246));
-        tblNotifikasi.setFont(new java.awt.Font("Sans Serif Collection", 0, 14)); // NOI18N
-        tblNotifikasi.setModel(new javax.swing.table.DefaultTableModel(
+        tblRiwayat.setBackground(new java.awt.Color(110, 203, 246));
+        tblRiwayat.setFont(new java.awt.Font("Sans Serif Collection", 0, 14)); // NOI18N
+        tblRiwayat.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -120,11 +122,11 @@
                 return canEdit [columnIndex];
             }
         });
-        tblNotifikasi.setEnabled(false);
-        tblNotifikasi.setGridColor(new java.awt.Color(110, 203, 246));
-        tblNotifikasi.setInheritsPopupMenu(true);
-        tblNotifikasi.setSelectionBackground(new java.awt.Color(110, 203, 246));
-        jScrollPane1.setViewportView(tblNotifikasi);
+        tblRiwayat.setEnabled(false);
+        tblRiwayat.setGridColor(new java.awt.Color(110, 203, 246));
+        tblRiwayat.setInheritsPopupMenu(true);
+        tblRiwayat.setSelectionBackground(new java.awt.Color(110, 203, 246));
+        jScrollPane1.setViewportView(tblRiwayat);
 
         jLabel2.setFont(new java.awt.Font("Sans Serif Collection", 1, 12)); // NOI18N
         jLabel2.setText("Notifikasi");
@@ -171,6 +173,6 @@
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tblNotifikasi;
+    private javax.swing.JTable tblRiwayat;
     // End of variables declaration//GEN-END:variables
     }

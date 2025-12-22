@@ -18,6 +18,7 @@ public class PanelDataSiswa extends javax.swing.JPanel {
     public PanelDataSiswa() {
         initComponents();
         loadTable();
+        tblData.setFillsViewportHeight(true); 
     }
 
     private void loadTable() {

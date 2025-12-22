@@ -26,6 +26,7 @@ public class PanelPelanggaran extends javax.swing.JPanel {
         MasterDAO masterDao = new MasterDAO();
         List<Pelanggaran> listPel = masterDao.getAllPelanggaran();
 
+        
         cbJenisPelanggaran.removeAllItems();
         cbJenisPelanggaran.addItem("-- Pilih Pelanggaran --");
         for (Pelanggaran p : listPel) {
@@ -40,6 +41,10 @@ public class PanelPelanggaran extends javax.swing.JPanel {
         for (String k : listKelas) {
             cbKelas.addItem(k);
         }
+        
+        tblRiwayat.setFillsViewportHeight(true); 
+        
+        jScrollPane1.getViewport().setBackground(new java.awt.Color(110, 203, 246));
 
 
         txtSanksi.setEditable(false);

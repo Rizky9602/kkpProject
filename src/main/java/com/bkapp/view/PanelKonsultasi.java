@@ -32,6 +32,8 @@ public class PanelKonsultasi extends javax.swing.JPanel {
         List<String> listKelas = dao.getAllKelas();
         cbKelas.removeAllItems();
         cbKelas.addItem("-- Pilih Kelas --");
+        tblRiwayat.setFillsViewportHeight(true); 
+        
         for (String k : listKelas) {
             cbKelas.addItem(k);
         }

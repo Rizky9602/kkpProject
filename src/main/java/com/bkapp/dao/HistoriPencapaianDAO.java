@@ -1,7 +1,6 @@
-package com.bkapp.dao;
+    package com.bkapp.dao;
 
 import com.bkapp.koneksi.KoneksiDB;
-
 import java.sql.*;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -97,12 +96,40 @@ public class HistoriPencapaianDAO {
     }
 
     public boolean deletePencapaian(int idHistori) {
+        String pathFoto = "";
+        String sqlGet = "SELECT path_foto_bukti FROM tbl_histori_pencapaian WHERE id_histori = ?";
+        
         try {
-            PreparedStatement ps = conn.prepareStatement("DELETE FROM tbl_histori_pencapaian WHERE id_histori=?");
+            PreparedStatement psGet = conn.prepareStatement(sqlGet);
+            psGet.setInt(1, idHistori);
+            ResultSet rs = psGet.executeQuery();
+            if (rs.next()) {
+                pathFoto = rs.getString("path_foto_bukti");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        String sql = "DELETE FROM tbl_histori_pencapaian WHERE id_histori = ?";
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1, idHistori);
-            ps.executeUpdate();
+            int rows = ps.executeUpdate();
+
+            if (rows > 0 && pathFoto != null && !pathFoto.isEmpty()) {
+                try {
+                    java.io.File file = new java.io.File(pathFoto);
+                    if (file.exists()) {
+                        file.delete(); 
+                    }
+                } catch (Exception ex) {
+                    System.err.println("Gagal hapus file fisik: " + ex.getMessage());
+                }
+            }
+            
             return true;
-        } catch (Exception e) {
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Gagal Hapus: " + e.getMessage());
             return false;
         }
     }

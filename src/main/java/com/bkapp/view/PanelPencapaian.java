@@ -26,6 +26,10 @@ public class PanelPencapaian extends javax.swing.JPanel {
 
         cbJenisPrestasi.removeAllItems();
         cbJenisPrestasi.addItem("-- Pilih Pencapaian --");
+        
+        tblRiwayat.setFillsViewportHeight(true); 
+        
+        jScrollPane1.getViewport().setBackground(new java.awt.Color(110, 203, 246));
         for (Pencapaian p : listPre) {
             cbJenisPrestasi.addItem(p);
             
@@ -470,11 +474,9 @@ public class PanelPencapaian extends javax.swing.JPanel {
             Siswa s = (Siswa) cbNamaSiswa.getSelectedItem();
             txtTotalPoin.setText(String.valueOf(s.getTotalPoin()));
 
-            // Load Tabel Riwayat Prestasi
             HistoriPencapaianDAO pDao = new HistoriPencapaianDAO();
             tblRiwayat.setModel(pDao.getHistoriTable(s.getIdSiswa()));
-            
-            // Sembunyikan ID
+
             if (tblRiwayat.getColumnModel().getColumnCount() > 0) {
                 tblRiwayat.getColumnModel().getColumn(0).setMinWidth(0);
                 tblRiwayat.getColumnModel().getColumn(0).setMaxWidth(0);
@@ -570,9 +572,9 @@ public class PanelPencapaian extends javax.swing.JPanel {
         if (pDao.insertPencapaian(siswa.getIdSiswa(), prestasi.getKodePencapaian(), pathDB, tgl, ket)) {
             sDao.updatePoinSiswa(siswa.getIdSiswa(), poinBaru);
             JOptionPane.showMessageDialog(this, "Berhasil! Poin siswa berkurang.");
-            
             cbNamaSiswaActionPerformed(null); 
         }
+        
     }//GEN-LAST:event_btnSimpanActionPerformed
 
     private void txtTotalPoinActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTotalPoinActionPerformed

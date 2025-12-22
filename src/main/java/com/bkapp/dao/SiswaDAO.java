@@ -145,57 +145,84 @@ public class SiswaDAO {
         }
     }
 
-  public boolean prosesKenaikanKelas() {
-    String sqlCariLulus = "SELECT id_siswa FROM tbl_siswa WHERE kelas LIKE 'XII %' OR kelas LIKE '12 %'";
-
-    Statement stmtCari = null;
-    Statement stmtEksekusi = null;
-    ResultSet rs = null;
-
-    try {
-        conn.setAutoCommit(false); // Mulai Transaksi
-
-        stmtCari = conn.createStatement();
-        stmtEksekusi = conn.createStatement();
-
-        stmtEksekusi.executeUpdate("DELETE FROM tbl_histori_pelanggaran"); 
-        stmtEksekusi.executeUpdate("DELETE FROM tbl_histori_pencapaian");
-        stmtEksekusi.executeUpdate("DELETE FROM tbl_histori_konseling");
-
-        stmtEksekusi.executeUpdate("DELETE FROM tbl_siswa WHERE kelas LIKE 'XII %' OR kelas LIKE '12 %'");
-        stmtEksekusi.executeUpdate("UPDATE tbl_siswa SET kelas = CONCAT('XII ', SUBSTRING(kelas, 4)) WHERE kelas LIKE 'XI %'");
-        stmtEksekusi.executeUpdate("UPDATE tbl_siswa SET kelas = CONCAT('XI ', SUBSTRING(kelas, 3)) WHERE kelas LIKE 'X %'");
-
-        String sqlUpdateTahun =
-                "UPDATE tbl_siswa SET tahun_ajaran = CONCAT(" +
-                        "   CAST(LEFT(tahun_ajaran, 4) AS UNSIGNED) + 1, " +
-                        "   '/', " +
-                        "   CAST(RIGHT(tahun_ajaran, 4) AS UNSIGNED) + 1 " +
-                        ") WHERE length(tahun_ajaran) = 9";
-        stmtEksekusi.executeUpdate(sqlUpdateTahun);
-
-        stmtEksekusi.executeUpdate("UPDATE tbl_siswa SET total_poin_aktif = 0");
-
-        conn.commit();
-        conn.setAutoCommit(true);
-        return true;
-
-    } catch (SQLException e) {
+    private void bersihkanFotoMasal(String namaTabel, String namaKolomPath) {
+        String sql = "SELECT " + namaKolomPath + " FROM " + namaTabel;
+        Statement stmt = null;
+        ResultSet rs = null;
         try {
-            conn.rollback();
-            conn.setAutoCommit(true);
-        } catch (SQLException ex) {
+            stmt = conn.createStatement();
+            rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                String path = rs.getString(1);
+                if (path != null && !path.isEmpty()) {
+                    try {
+                        java.io.File f = new java.io.File(path);
+                        if (f.exists()) {
+                            f.delete();
+                        }
+                    } catch (Exception e) {
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try { if(rs!=null) rs.close(); } catch(Exception e){}
+            try { if(stmt!=null) stmt.close(); } catch(Exception e){}
         }
-
-        JOptionPane.showMessageDialog(null, "Gagal Proses Kenaikan Kelas: " + e.getMessage());
-        e.printStackTrace();
-        return false;
-    } finally {
-        try { if (rs != null) rs.close(); } catch (Exception e) {}
-        try { if (stmtCari != null) stmtCari.close(); } catch (Exception e) {}
-        try { if (stmtEksekusi != null) stmtEksekusi.close(); } catch (Exception e) {}
     }
-}
+
+    public boolean prosesKenaikanKelas() {
+        String sqlCariLulus = "SELECT id_siswa FROM tbl_siswa WHERE kelas LIKE 'XII %' OR kelas LIKE '12 %'";
+
+        Statement stmtCari = null;
+        Statement stmtEksekusi = null;
+        ResultSet rs = null;
+
+        try {
+            bersihkanFotoMasal("tbl_histori_pelanggaran", "path_foto_bukti");
+            bersihkanFotoMasal("tbl_histori_pencapaian", "path_foto_bukti");
+
+            conn.setAutoCommit(false); 
+
+            stmtCari = conn.createStatement();
+            stmtEksekusi = conn.createStatement();
+            stmtEksekusi.executeUpdate("DELETE FROM tbl_histori_pelanggaran");
+            stmtEksekusi.executeUpdate("DELETE FROM tbl_histori_pencapaian");
+            stmtEksekusi.executeUpdate("DELETE FROM tbl_histori_konseling");
+            stmtEksekusi.executeUpdate("DELETE FROM tbl_siswa WHERE kelas LIKE 'XII %' OR kelas LIKE '12 %'");
+            stmtEksekusi.executeUpdate("UPDATE tbl_siswa SET kelas = CONCAT('XII ', SUBSTRING(kelas, 4)) WHERE kelas LIKE 'XI %'");
+            stmtEksekusi.executeUpdate("UPDATE tbl_siswa SET kelas = CONCAT('XI ', SUBSTRING(kelas, 3)) WHERE kelas LIKE 'X %'");
+
+            String sqlUpdateTahun =
+                    "UPDATE tbl_siswa SET tahun_ajaran = CONCAT(" +
+                            "   CAST(LEFT(tahun_ajaran, 4) AS UNSIGNED) + 1, " +
+                            "   '/', " +
+                            "   CAST(RIGHT(tahun_ajaran, 4) AS UNSIGNED) + 1 " +
+                            ") WHERE length(tahun_ajaran) = 9";
+            stmtEksekusi.executeUpdate(sqlUpdateTahun);
+
+            stmtEksekusi.executeUpdate("UPDATE tbl_siswa SET total_poin_aktif = 0");
+
+            conn.commit();
+            conn.setAutoCommit(true);
+            return true;
+
+        } catch (SQLException e) {
+            try {
+                conn.rollback();
+                conn.setAutoCommit(true);
+            } catch (SQLException ex) {
+            }
+            JOptionPane.showMessageDialog(null, "Gagal Proses: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        } finally {
+            try { if (rs != null) rs.close(); } catch (Exception e) {}
+            try { if (stmtCari != null) stmtCari.close(); } catch (Exception e) {}
+            try { if (stmtEksekusi != null) stmtEksekusi.close(); } catch (Exception e) {}
+        }
+    }
 
     public List<Siswa> getSiswaBermasalah() {
         List<Siswa> listSiswa = new ArrayList<>();
@@ -293,25 +320,47 @@ public class SiswaDAO {
     }
     
     public int recalculateTotalPoin(int idSiswa) {
-        int totalPoin = 0;
-        String sqlSum = "SELECT SUM(m.poin_pelanggaran) AS total " +
-                        "FROM tbl_histori_pelanggaran h " +
-                        "JOIN tbl_master_pelanggaran m ON h.id_pelanggaran = m.kode_pelanggaran " +
-                        "WHERE h.id_siswa = ?";
-        
+        int totalPoinAkhir = 0;
+        int totalPelanggaran = 0;
+        int totalPrestasi = 0;
+
+        String sqlPelanggaran = 
+                "SELECT SUM(m.poin_pelanggaran) AS total " +
+                "FROM tbl_histori_pelanggaran h " +
+                "JOIN tbl_master_pelanggaran m ON h.id_pelanggaran = m.kode_pelanggaran " +
+                "WHERE h.id_siswa = ?";
+
+        String sqlPrestasi = 
+                "SELECT SUM(m.poin_pengurang) AS total " +
+                "FROM tbl_histori_pencapaian h " +
+                "JOIN tbl_master_pencapaian m ON h.kode_pencapaian = m.kode_pencapaian " +
+                "WHERE h.id_siswa = ?";
+
         String sqlUpdate = "UPDATE tbl_siswa SET total_poin_aktif = ? WHERE id_siswa = ?";
 
         try {
-            PreparedStatement psSum = conn.prepareStatement(sqlSum);
-            psSum.setInt(1, idSiswa);
-            ResultSet rs = psSum.executeQuery();
-            
-            if (rs.next()) {
-                totalPoin = rs.getInt("total");
+            PreparedStatement psPel = conn.prepareStatement(sqlPelanggaran);
+            psPel.setInt(1, idSiswa);
+            ResultSet rsPel = psPel.executeQuery();
+            if (rsPel.next()) {
+                totalPelanggaran = rsPel.getInt("total");
+            }
+
+            PreparedStatement psPres = conn.prepareStatement(sqlPrestasi);
+            psPres.setInt(1, idSiswa);
+            ResultSet rsPres = psPres.executeQuery();
+            if (rsPres.next()) {
+                totalPrestasi = rsPres.getInt("total");
+            }
+
+            totalPoinAkhir = totalPelanggaran - totalPrestasi;
+
+            if (totalPoinAkhir < 0) {
+                totalPoinAkhir = 0;
             }
 
             PreparedStatement psUpdate = conn.prepareStatement(sqlUpdate);
-            psUpdate.setInt(1, totalPoin);
+            psUpdate.setInt(1, totalPoinAkhir);
             psUpdate.setInt(2, idSiswa);
             psUpdate.executeUpdate();
 
@@ -319,6 +368,6 @@ public class SiswaDAO {
             e.printStackTrace();
         }
         
-        return totalPoin;
+        return totalPoinAkhir;
     }
 }

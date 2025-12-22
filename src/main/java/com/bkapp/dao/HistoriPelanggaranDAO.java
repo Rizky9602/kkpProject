@@ -122,49 +122,43 @@ public class HistoriPelanggaranDAO {
     }
 
     public boolean deletePelanggaran(int idHistori) {
+        String pathFoto = "";
+        String sqlGet = "SELECT path_foto_bukti FROM tbl_histori_pelanggaran WHERE id_histori = ?";
+        
+        try {
+            PreparedStatement psGet = conn.prepareStatement(sqlGet);
+            psGet.setInt(1, idHistori);
+            ResultSet rs = psGet.executeQuery();
+            if (rs.next()) {
+                pathFoto = rs.getString("path_foto_bukti");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         String sql = "DELETE FROM tbl_histori_pelanggaran WHERE id_histori = ?";
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1, idHistori);
-            ps.executeUpdate();
+            int rows = ps.executeUpdate();
+
+            if (rows > 0 && pathFoto != null && !pathFoto.isEmpty()) {
+                try {
+                    java.io.File file = new java.io.File(pathFoto);
+                    if (file.exists()) {
+                        file.delete(); 
+                    }
+                } catch (Exception ex) {
+                    System.err.println("Gagal hapus file fisik: " + ex.getMessage());
+                }
+            }
+            
             return true;
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Gagal Hapus: " + e.getMessage());
             return false;
         }
     }
-    
-    // ... inside SiswaDAO class ...
 
-    public int recalculateTotalPoin(int idSiswa) {
-        int totalPoin = 0;
-        // Query to sum up points from violation history
-        String sqlSum = "SELECT SUM(m.poin_pelanggaran) AS total " +
-                        "FROM tbl_histori_pelanggaran h " +
-                        "JOIN tbl_master_pelanggaran m ON h.id_pelanggaran = m.kode_pelanggaran " +
-                        "WHERE h.id_siswa = ?";
-        
-        String sqlUpdate = "UPDATE tbl_siswa SET total_poin_aktif = ? WHERE id_siswa = ?";
 
-        try {
-            PreparedStatement psSum = conn.prepareStatement(sqlSum);
-            psSum.setInt(1, idSiswa);
-            ResultSet rs = psSum.executeQuery();
-            
-            if (rs.next()) {
-                totalPoin = rs.getInt("total");
-            }
-
-            PreparedStatement psUpdate = conn.prepareStatement(sqlUpdate);
-            psUpdate.setInt(1, totalPoin);
-            psUpdate.setInt(2, idSiswa);
-            psUpdate.executeUpdate();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        
-        return totalPoin;
-    }
-    
 }

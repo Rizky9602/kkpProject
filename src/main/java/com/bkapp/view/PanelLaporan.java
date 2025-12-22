@@ -37,6 +37,9 @@ public class PanelLaporan extends javax.swing.JPanel {
         cbPilihKelas.removeAllItems();
         cbPilihKelas.addItem("Semua Kelas");
 
+        tblLaporan.setFillsViewportHeight(true); 
+
+        
         for (String k : listKelas) {
             cbPilihKelas.addItem(k);
         }
